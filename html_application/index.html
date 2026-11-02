@@ -6453,7 +6453,7 @@ alert("iInputY: "+iInputY);
 		//mainImageTileHeroBody.style.visibility="visible";
 				
 		//removed by Mike, 20260918; from 20260917
-		//otherwise, hero continues to face the same direciton even after defeating the monster
+		//otherwise, hero continues to face the same direction even after defeating the monster
 		//bIsActionKeyControlPressed=true;	
 		
 		//edited by Mike, 20260914
@@ -11213,8 +11213,10 @@ if (fDifferenceInXPos!=0) {
 								}
 							}
 												
-							//added by Mike, 20260909
-							bIsActionKeyControlPressed=true;
+							//edited by Mike, 20261102; from 20260909
+							//hero already auto-faces enemy;
+							//bIsActionKeyControlPressed=true;
+
 							fHeroHitMonsterViewportX=fCurrViewportX;
 							fHeroHitMonsterViewportY=fCurrViewportY;
 
