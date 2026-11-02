@@ -2,11 +2,9 @@
 
 This is the GitHub repository of our entry for Game Off 2026 with the theme SHIFT.
 
-<!--
 ### ITCH.IO: PROTOTYPES
 
-1) 20260616; https://masarapmabuhay.itch.io/game-off-2025-post-test0
--->
+1) 20261102; https://masarapmabuhay.itch.io/game-off-2026-prototype1
 
 ## Related link
 
