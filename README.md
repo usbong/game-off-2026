@@ -6,6 +6,8 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 1) 20261102; https://masarapmabuhay.itch.io/game-off-2026-prototype1
 
+2) 20261103; https://masarapmabuhay.itch.io/game-off-2026-prototype2
+   
 ## Related link
 
 1) https://philnits.org/
