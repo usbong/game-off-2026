@@ -4725,11 +4725,13 @@ var bIsHeroFacingUp=true;//false;
 		myCanvasTint.style.top = (iVerticalOffsetInnerScreen+0)+"px";
 		myCanvasTint.style.left = iHorizontalOffset+"px";
 
+/*		//removed by Mike, 20261103; duplicate; extra;
 		//edited by Mike, 20261103; from 20260829
 		//mainImageTilePosX=iViewportMaxWidth/2-iImageFrameWidthLarge/2;
 		mainImageTilePosX=iViewportMaxWidth*0.5-iImageFrameWidthLarge/2;
 
 		mainImageTilePosY=iViewportMaxHeight/2-iImageFrameHeight;
+*/
 		
 		//added by Mike, 20261010
 		mainImageTilePosZ=mainImageTilePosY;
@@ -4983,7 +4985,8 @@ var bIsHeroFacingUp=true;//false;
 		//edited by Mike, 20261103; from 20260829
 		//mainImageTilePosX=iViewportMaxWidth/2-iImageFrameWidthLarge/2;
 		mainImageTilePosX=iViewportMaxWidth*0.5-iImageFrameWidthLarge/2;
-
+		
+		//edited by Mike, 20261103
 		mainImageTilePosY=iViewportMaxHeight/2-iImageFrameHeight;
 		
 		//added by Mike, 20261010
@@ -10730,7 +10733,7 @@ if (arrayWalkOnSnowEffectCount==1) {
 
 
 		var fDifferenceInXPos=0;
-		var fDifferenceInXPos=0;
+		var fDifferenceInYPos=0;
 
 		//added by Mike, 20260910
 		if (bHasHeroHitWall) {
@@ -17661,6 +17664,7 @@ if (fDifferenceInXPos!=0) {
 		//noted by Mike, 20261103; 
 		//should be equal to default value of unchanging mainImageTilePosX;
 		mainImageTileHeroBody.style.left=iViewportMaxWidth*0.5-iImageFrameWidthLarge/2;
+		
 		/*	//TODO: -update: this
 		mainImageTileHeroBody.style.left=fDynamicViewportX;
 		mainImageTilePosX=fDynamicViewportX;
