@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261104; from 20261103
+' @date updated: 20261105; from 20261104
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -25,7 +25,7 @@
   </head>
 
   <title>
-    Usbong Game Off 2025 - POST
+    Usbong Game Off 2026
   </title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -1564,8 +1564,11 @@ var iMonsterShakeOffsetHeight=iMonsterShakeOffsetHeightMax;
 const iHeroInvincibileCountMax=200;//100;//50;
 var iHeroInvincibileCount=iHeroInvincibileCountMax;
 
+//added by Mike, 20261105
+const iLifeBarWidthTotalPoints=10;
+
 //increase this per level-up
-var iCurrHeroLifeMaxDefault=10;//15;//20;
+var iCurrHeroLifeMaxDefault=10;//10;//15;//20;
 var iCurrHeroLifeMax=iCurrHeroLifeMaxDefault;//15;//20;
 var iCurrHeroLife=iCurrHeroLifeMax;
 var iCurrHeroLifeAnimationDelayCount=0;
@@ -1589,7 +1592,7 @@ var iCurrHeroLevel=0;
 
 //added by Mike, 20261104
 //increase this per level-up
-var iCurrOpponentLifeMaxDefault=10;//15;//20;
+var iCurrOpponentLifeMaxDefault=100;//10//15;//20;
 var iCurrOpponentLifeMax=iCurrHeroLifeMaxDefault;//15;//20;
 var iCurrOpponentLife=iCurrHeroLifeMax;
 var iCurrOpponentLifeAnimationDelayCount=0;
@@ -1694,8 +1697,9 @@ var iCurrHeroCoinCount=0;
 const DEFAULT_DEATH_COUNT_VAL=1;
 const BOSS_DEATH_COUNT_VAL=10;
 
-const iMonsterDeathCountToLevel1Min=8;
-var iMonsterDeathCountToLevel2Min=32;//24;
+//edited by Mike, 20261105
+const iMonsterDeathCountToLevel1Min=1;//8;
+var iMonsterDeathCountToLevel2Min=2;//32;//24;
 
 //const sOutpostStart="assets/images/bgImageOutpostStart.jpg";
 
@@ -2326,8 +2330,9 @@ const iKEY_A = 2;
 const iKEY_D = 3;
 
 const iKEY_SPACE = 4; //added by Mike, 20261010
+const iKEY_J = 5; //added by Mike, 20261105
 
-const iTotalKeyCount = 5;//4; //8; //12;
+const iTotalKeyCount = 6;//5;//4; //8; //12;
 const iDirectionTotalKeyCount = 4; //8
 
 //added by Mike, 20231125
@@ -2684,7 +2689,7 @@ var bIsHeroFacingUp=true;//false;
 	var iSetNum=0; //instead of random
 
 	//edited by Mike, 20260616; debug
-	const WRAITH_MONSTER_HP_MAX=10;//100;//4;//2;//10;//1;//2;//3;
+	const WRAITH_MONSTER_HP_MAX=50;//10;//100;//4;//2;//10;//1;//2;//3;
 
 	const RUNNING_WRAITH_MONSTER_HP_MAX=1;
 	const BOMB_MONSTER_HP_MAX=1;
@@ -2731,6 +2736,7 @@ var bIsHeroFacingUp=true;//false;
 
 
 	function executeStageTransition(iInputCurrMapLocation) {
+/*		//removed by Mike, 20261105
 		//OK;
 		//mainImageTilePosX=(iInnerHorizontalOffset+iImageFrameWidthDefault/2)+0;
 		mainImageTilePosX=0+iImageFrameWidthDefault/2;
@@ -2745,6 +2751,7 @@ var bIsHeroFacingUp=true;//false;
 		//edited by Mike, 20261023; from 20261012
 		//currMainImageTileHeightPosZ=mainImageTilePosY;
 		currMainImageTileHeightPosZ=mainImageTilePosY-0;
+*/
 
 		resetProjectile();	
 
@@ -3434,10 +3441,11 @@ var bIsHeroFacingUp=true;//false;
 		//added by Mike, 20251129
 		myCanvasContext.strokeStyle = 'black'; 
 		myCanvasContext.lineWidth = 1; 
-		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLifeMax, iHeroLifeBarHeight); 
+		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iLifeBarWidthTotalPoints, iHeroLifeBarHeight); 
 		
 		myCanvasContext.fillStyle = "#2d2622"; //"#736157"; //#ffffff; //"#ff0000";	
-		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLifeMax, iHeroLifeBarHeight);
+		
+		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
 				
 		
 		if (bIsFrameOnly) {
@@ -3463,7 +3471,7 @@ var bIsHeroFacingUp=true;//false;
 		//added by Mike, 20251111
 		myCanvasContext.strokeStyle = 'black'; 
 		myCanvasContext.lineWidth = 0.2; 
-		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLifeMax, iHeroLifeBarHeight); 
+		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iLifeBarWidthTotalPoints, iHeroLifeBarHeight); 
 		
 		//textLifeBarDiv.clientWidth
 /*
@@ -3503,6 +3511,7 @@ var bIsHeroFacingUp=true;//false;
 
 		if (iCurrHeroLife>=10) { //5) {
 			//myCanvasContext.fillStyle = "#00c7ff"; //sky blue
+			//myCanvasContext.fillStyle = "#ffff24"; //yellow
 			myCanvasContext.fillStyle = "#aa0000"; //dark red		
 		}
 		else if (iCurrHeroLife>=3) {//2) {
@@ -3552,14 +3561,24 @@ var bIsHeroFacingUp=true;//false;
 		//edited by Mike, 20261104
 		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLife, iHeroLifeBarHeight);
 		
-		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iCurrHeroLifeMax)-iHeroLifeBarWidth*iCurrHeroLife, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLife, iHeroLifeBarHeight);
+	
+		//edited by Mike, 20261105
+		//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iCurrHeroLifeMax)-iHeroLifeBarWidth*iCurrHeroLife, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLife, iHeroLifeBarHeight);
+
+		//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-iHeroLifeBarWidth*iCurrHeroLife, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLife, iHeroLifeBarHeight);
+
+		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, 0+iYPos, iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
 	}	
+
 
 	//added by Mike, 20261104
 	function drawOpponentLifeBar(myCanvasContext, iXPos, iYPos, bIsFrameOnly) {
-		//added by Mike, 20261104
+		//edited by Mike, 20261105; from 20261104
 		iCurrOpponentLife=arrayWraithMonsterCountId[0][MONSTER_CURRENT_HP];
-		//var iCurrOpponentLifeMax=10;
+		iCurrOpponentLifeMax=WRAITH_MONSTER_HP_MAX;
+		
+		//alert(iCurrOpponentLife);
+
 
 		var iHeroLifeBarWidth=12; //4
 		var iHeroLifeBarHeight=4;		
@@ -3579,10 +3598,14 @@ var bIsHeroFacingUp=true;//false;
 		//added by Mike, 20251129
 		myCanvasContext.strokeStyle = 'black'; 
 		myCanvasContext.lineWidth = 1; 
-		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrOpponentLifeMax, iHeroLifeBarHeight); 
+		
+		//myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrOpponentLifeMax, iHeroLifeBarHeight); 
+		
+		//10 points; display
+		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iLifeBarWidthTotalPoints, iHeroLifeBarHeight); 
 		
 		myCanvasContext.fillStyle = "#2d2622"; //"#736157"; //#ffffff; //"#ff0000";	
-		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrOpponentLifeMax, iHeroLifeBarHeight);
+		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
 				
 		
 		if (bIsFrameOnly) {
@@ -3609,7 +3632,11 @@ var bIsHeroFacingUp=true;//false;
 		//added by Mike, 20251111
 		myCanvasContext.strokeStyle = 'black'; 
 		myCanvasContext.lineWidth = 0.2; 
-		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrOpponentLifeMax, iHeroLifeBarHeight); 
+		
+		//edited by Mike, 20261105
+		//myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrOpponentLifeMax, iHeroLifeBarHeight);
+
+		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*10, iHeroLifeBarHeight);		
 		
 		//textLifeBarDiv.clientWidth
 /*
@@ -3695,7 +3722,15 @@ var bIsHeroFacingUp=true;//false;
 		
 		//myCanvasContext.fillRect(0+iXPos, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLife, iHeroLifeBarHeight);
 		
-		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrOpponentLife, iHeroLifeBarHeight);
+		//edited by Mike, 20261105
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iCurrOpponentLife, iHeroLifeBarHeight);
+
+		//alert(iCurrOpponentLife/iCurrOpponentLifeMax);
+
+		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*(iCurrOpponentLife/iCurrOpponentLifeMax)*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
+
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*(5), iHeroLifeBarHeight);
+
 	}	
 
 
@@ -4280,6 +4315,8 @@ var bIsHeroFacingUp=true;//false;
 		//textHeroComboStatusDiv.innerHTML = "Wx"+iCurrHeroWallBounceCount;		
 
 		//textHeroComboStatusDiv.innerHTML = "X"+fCurrViewportX;		
+
+		//textHeroComboStatusDiv.innerHTML = "X"+newMainImageTileProjectilePosX;		
 
 		//removed by Mike, 20261103; from 20261026
 		//textHeroComboStatusDiv.innerHTML = "Lx"+iCurrPlatformLevel;
@@ -4952,15 +4989,15 @@ var bIsHeroFacingUp=true;//false;
 		textContinueGameDiv.style.top= iVerticalOffsetInnerScreen+textContinueGameDiv.clientHeight*4+"px";		
 
 		//added by Mike, 20251121
-		textLevelUpLifeDiv.innerHTML = "INCREASE MAX HP";
+		textLevelUpLifeDiv.innerHTML = "INCREASE MAX DEFENSE";//"守備力アップ";
 		textLevelUpLifeDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-textLevelUpLifeDiv.clientWidth/2+"px";				
 		textLevelUpLifeDiv.style.top= iVerticalOffsetInnerScreen+textLevelUpLifeDiv.clientHeight*2+"px";						
 		
-		textLevelUpStaminaDiv.innerHTML = "INCREASE MAX STAMINA";
+		textLevelUpStaminaDiv.innerHTML = "INCREASE MAX STAMINA";//"スタミナアップ";
 		textLevelUpStaminaDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-textLevelUpStaminaDiv.clientWidth/2+"px";
 		textLevelUpStaminaDiv.style.top= iVerticalOffsetInnerScreen+textLevelUpStaminaDiv.clientHeight*4+"px";		
 
-		textLevelUpSpeedDiv.innerHTML = "INCREASE MAX SPEED";
+		textLevelUpSpeedDiv.innerHTML = "INCREASE MAX SPEED"; //"速度アップ";
 		textLevelUpSpeedDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-textLevelUpSpeedDiv.clientWidth/2+"px";
 		textLevelUpSpeedDiv.style.top= iVerticalOffsetInnerScreen+textLevelUpSpeedDiv.clientHeight*6+"px";		
 
@@ -6672,7 +6709,7 @@ alert("iInputY: "+iInputY);
 				
 		//removed by Mike, 20260918; from 20260917
 		//otherwise, hero continues to face the same direction even after defeating the monster
-		//bIsActionKeyControlPressed=true;	
+		//bIsActionKeyControlPressed=true;
 		
 		//edited by Mike, 20260914
 		//if (iHeroAttackAnimationDelayCount==0) {//iHeroAnimationDelayCountMax) {
@@ -8768,7 +8805,9 @@ alert("iInputY: "+iInputY);
 */
 
 	  //put this after
-  	  var iFrameX=0;
+	  //edited by Mike, 20261105
+  	  var iFrameX=iImageFrameWidthLarge*3; //0
+
   	  var iFrameY=iImageFrameHeightLarge*9;
 	
 	  //push the monster toward the opposite direction
@@ -8822,7 +8861,11 @@ alert("iInputY: "+iInputY);
 	  
 	  //inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.objectPosition = "-" + iFrameXOffset-iImageFrameWidthLarge*inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_COUNT] + "px -" + iFrameY + "px";	
 	  
-	  inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.objectPosition = "-" + 0 + "px -" + iFrameY + "px";							
+	  //edited by Mike, 20261105
+	  //inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.objectPosition = "-" + 0 + "px -" + iFrameY + "px";							
+
+	  inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.objectPosition = "-" + iFrameX + "px -" + iFrameY + "px";							
+
 	}
 
 	//added by Mike, 20260702
@@ -10351,31 +10394,37 @@ if (arrayWalkOnSnowEffectCount==1) {
 		//if (!bIsActionKeyPressed) {
 		//if (!bHasHeroHitMonster) {
 		if (!bIsLeftClickPressed) { //add this; otherwise, mouse movement isn't registered
-			if ((!arrayKeyPressed[iKEY_D]) && (!arrayKeyPressed[iKEY_A]) && (!arrayKeyPressed[iKEY_W]) && (!arrayKeyPressed[iKEY_S])) { 
+		
+			//added by Mike, 20261105
+			//if (!arrayKeyPressed[iKEY_J]) {
+			if (true) {
+		
+				if ((!arrayKeyPressed[iKEY_D]) && (!arrayKeyPressed[iKEY_A]) && (!arrayKeyPressed[iKEY_W]) && (!arrayKeyPressed[iKEY_S])) { 
 
-				//edited by Mike, 20261016
-				//resetProjectile();
+					//edited by Mike, 20261016
+					//resetProjectile();
 
-				if (bHasHeroHitWall) {
-					resetProjectile();
+					if (bHasHeroHitWall) {
+						resetProjectile();
+						
+	/*					//removed by Mike, 20261016
+						mainImageTileProjectileStepX=mainImageTileProjectileStepXMin;
+						mainImageTileProjectileStepY=mainImageTileProjectileStepYMin;
+	*/					
+					}
 					
-/*					//removed by Mike, 20261016
-					mainImageTileProjectileStepX=mainImageTileProjectileStepXMin;
-					mainImageTileProjectileStepY=mainImageTileProjectileStepYMin;
-*/					
-				}
-				
-				if (iCurrHeroWallBounceCount>0) {
-					resetProjectile();
-				}
+					if (iCurrHeroWallBounceCount>0) {
+						resetProjectile();
+					}
 
-				if (bIsHeroFalling) {
-					resetProjectile();
-				}
+					if (bIsHeroFalling) {
+						resetProjectile();
+					}
 
-				//edited by Mike, 20261015
-				if (!bIsHeroDeaccelerating) {
-					resetProjectile();
+					//edited by Mike, 20261015
+					if (!bIsHeroDeaccelerating) {
+						resetProjectile();
+					}
 				}
 			}
 		}
@@ -10436,6 +10485,14 @@ if (arrayWalkOnSnowEffectCount==1) {
 		if (bIsActionKeyFireballPressed) {
 			return;
 		}
+
+/*
+		//added by Mike, 20261105
+		if (arrayKeyPressed[iKEY_J]) {
+			processResultFromInput(fHeroCenterOriginX+0, fHeroCenterOriginY+0);
+			return;
+		}
+*/
 	
 		if ((arrayKeyPressed[iKEY_D]) && (arrayKeyPressed[iKEY_W])) { //key RIGHT; UP
 			processResultFromInput(fHeroCenterOriginX+mainImageTileProjectileStepX*iStepMultiplierX, fHeroCenterOriginY-mainImageTileProjectileStepY*iStepMultiplierY);
@@ -10943,6 +11000,47 @@ if (arrayWalkOnSnowEffectCount==1) {
 			return;
 		}		
 */		
+		//added by Mike, 20261105
+		//set boundaries;
+		if (fCurrViewportX<-iViewportMaxWidth/4) {
+			//if going to the left
+			if (newMainImageTileProjectilePosX<0) {
+				newMainImageTileProjectilePosX=0;
+
+				//resetProjectile();
+				//return;
+			}
+		}
+		else if (fCurrViewportX>iViewportMaxWidth/2) {
+			//if going to the right
+			if (newMainImageTileProjectilePosX>0) {
+				newMainImageTileProjectilePosX=0;
+
+				//resetProjectile();
+				//return;
+			}
+		}
+
+		if (fCurrViewportY<-iViewportMaxHeight/2) {
+			//if going up
+			if (newMainImageTileProjectilePosY<0) {
+				newMainImageTileProjectilePosY=0;
+
+				//resetProjectile();
+				//return;
+			}
+		}
+		else if (fCurrViewportY>iViewportMaxHeight/4) {
+			//if going down
+			if (newMainImageTileProjectilePosY>0) {
+				newMainImageTileProjectilePosY=0;
+				
+				//resetProjectile();
+				//return;
+			}
+		}
+
+
 
 		var fDifferenceInXPos=0;
 		var fDifferenceInYPos=0;
@@ -10995,6 +11093,7 @@ if (arrayWalkOnSnowEffectCount==1) {
 */
 			}
 		}
+		
 		
 			
 		fDifferenceInXPos=newMainImageTileProjectilePosX;	
@@ -11165,6 +11264,7 @@ if (fDifferenceInXPos!=0) {
 	
 	//OK if sprite images have the same height
 	function updateArrayActorsZIndex() {
+		
 		//var iCurrOutArraysActorsIndex=0;
 		var iCurrZIndex=iZIndexDefault;
 		
@@ -11256,6 +11356,12 @@ if (fDifferenceInXPos!=0) {
 		
 		//added by Mike, 20261013
 		var mainImageTileHeroBody = document.getElementById("mainImageTileImageHeroBodyId");	
+		
+		
+		//added by Mike, 20261105
+		if (iCurrOpponentLife<=0) {
+			mainImageTileHeroBody.style.zIndex=iCurrZIndex; 
+		}
 		
 		//alert(iCurrPlatformWallTopBgTileImageCountMax+0);
 
@@ -11466,6 +11572,15 @@ if (fDifferenceInXPos!=0) {
 		}
 
 
+/*		//TODO: -update: this
+		//added by Mike, 20261105
+		if (!arrayKeyPressed[iKEY_J]) {
+			updateHeroFacingDirectionTowardOpponent();		
+			updateHeroFacingDirection();
+			return;
+		}
+*/
+
 			bIsVisible=true;
 			if (inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.visibility=="hidden") {
 				bIsVisible=false;
@@ -11497,7 +11612,6 @@ if (fDifferenceInXPos!=0) {
 				//edited by Mike, 20260820; from 20260807
 				//keep the space
 				if (isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(mainImageTilePosX)+offsetX,parseFloat(mainImageTilePosY), inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75, iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75)) {
-				
 				
 					if (bHasFired) {
 						bHasAttacked=bHasFired;
@@ -17098,6 +17212,9 @@ if (fDifferenceInXPos!=0) {
 					arrayActors=[];
 					iArrayActorsCount=0;
 					
+					initBgTileMap(); //add the background tiles first
+					
+					
 					arrayActors[iArrayActorsCount]=mainImageTileHeroBody;//mainImageTile;
 					arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault+iArrayActorsCount;
 					arrayActors[iArrayActorsCount]["type"]=HERO_ARRAY_ACTOR_ROLE_TYPE;
@@ -17288,8 +17405,10 @@ if (fDifferenceInXPos!=0) {
 					var iStageOffsetY=iViewportMaxHeight/2;//-iImageFrameHeightLarge/2;//-iImageFrameWidth/2;
 */
 
-					//edited by Mike, 20261013; from 20261012
-					initBgTileMap();
+					//removed by Mike, 20261105; from 20261013
+					//initBgTileMap();
+
+
 
 
 /*					//removed by Mike, 20261102
@@ -17536,6 +17655,12 @@ if (fDifferenceInXPos!=0) {
 					//added by Mike, 20260617
 					else {
 						//alert("iCount!!! INACTIVE: "+iCount);
+						
+						//added by Mike, 20261105
+						//---------------------------------
+						executeStageTransition(53);
+						return;
+						//---------------------------------
 						
 						if (arrayWraithMonsterCountId[iCount][MONSTER_RESPAWN_WAIT_TIME]>WRAITH_MONSTER_RESPAWN_WAIT_TIME_MAX_INIT) {
 						
@@ -18389,12 +18514,20 @@ if (fDifferenceInXPos!=0) {
 				//edited by Mike, 20260916; from 20260915
 				//if (bHasHeroHitMonster) {
 				//if ((bHasFired) && (bHasAttacked) && (bHasHeroHitMonster)) {
+				//edited by Mike, 20261105
 				if ((bHasAttacked) && (bHasHeroHitMonster)) {
 					executeHeroAttackingAnimation();
 					iHeroAttackAnimationRecoveryCount=0;
-					
-					//bHasfired=false;
-					bIsHeroWalking=false; //added by Mike, 20260916
+				
+/*
+				if (arrayKeyPressed[iKEY_J]) {
+					//if (iHeroAttackAnimationDelayCount>=iHeroAttackAnimationDelayCountMax) {
+						executeHeroAttackingAnimation();
+						iHeroAttackAnimationRecoveryCount=0;
+*/						
+						//bHasfired=false;
+						bIsHeroWalking=false; //added by Mike, 20260916
+					//}
 				}
 				else {
 
@@ -19858,6 +19991,27 @@ alert("iXPos: "+iXPos);
 				arrayKeyPressedStored[iKEY_S]=true; //added by Mike, 20261028
 			}
 
+/*			//TODO: -update: this			
+			//added by Mike, 20261105
+			if (e.code==='KeyJ') {
+				bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
+
+				if (bHasReducedHeroManaOutput<=0) {
+					arrayKeyPressed[iKEY_J]=false;
+					arrayKeyPressedStored[iKEY_J]=false;
+				}
+				else {
+					arrayKeyPressed[iKEY_J]=true;
+					arrayKeyPressedStored[iKEY_J]=true;
+					
+					bHasFired=true;
+				}
+							
+				//bHasFired=true;
+				//processResultFromInput(fHeroCenterOriginX+0, fHeroCenterOriginY+0);
+			}
+*/
+
 			//added by Mike, 20261010
 			if (e.code==='Space') {
 				//edited by Mike, 20261012
@@ -19988,6 +20142,12 @@ alert("iXPos: "+iXPos);
 			if (e.code==='ArrowDown') {
 				arrayKeyPressed[iKEY_S]=false;
 				arrayKeyPressedStored[iKEY_S]=false; //added by Mike, 20261029
+			}
+
+			//added by Mike, 20261105
+			if (e.code==='KeyJ') {
+				arrayKeyPressed[iKEY_J]=false;
+				arrayKeyPressedStored[iKEY_J]=false;
 			}
 
 			//added by Mike, 20261010
@@ -21592,6 +21752,241 @@ function initTouchInput() {
   function initBgTileMap() {
 	iCurrNonDiagonalWallBgTileImageCountMax=0;	
 	iCurrWallBgTileImageCountMax=0;
+
+	//added by Mike, 20261105
+	var iStageOffsetX=0-iImageFrameWidthLarge;
+	var iStageOffsetY=0;
+
+	var iCurrBgTileImageColumn=0;
+	var iCurrBgTileImageRow=0;
+	
+	var currBgTileImageObject=null;
+
+	//TOP LEFT CORNER
+	iCurrBgTileImageColumn=0;
+	iCurrBgTileImageRow=0;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,0,0);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//LEFT SIDE
+	iCurrBgTileImageColumn=0;
+	iCurrBgTileImageRow=0+1;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,1,0);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//BOTTOM LEFT CORNER
+	iCurrBgTileImageColumn=0;
+	iCurrBgTileImageRow=0+2;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,2,0);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//TOP#1
+	iCurrBgTileImageColumn=0+1;
+	iCurrBgTileImageRow=0;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,0,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//TOP#2
+	iCurrBgTileImageColumn=0+2;
+	iCurrBgTileImageRow=0;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,0,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//TOP#3
+	iCurrBgTileImageColumn=0+3;
+	iCurrBgTileImageRow=0;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,0,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//TOP RIGHT CORNER
+	iCurrBgTileImageColumn=0+3.75;
+	iCurrBgTileImageRow=0;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,0,2);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//RIGHT#1
+	iCurrBgTileImageColumn=0+3.75;
+	iCurrBgTileImageRow=0+1;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,1,2);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//BOTTOM RIGHT CORNER
+	iCurrBgTileImageColumn=0+3.75;
+	iCurrBgTileImageRow=0+2;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,2,2);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//BOTTOM#1
+	iCurrBgTileImageColumn=0+3.75-1;
+	iCurrBgTileImageRow=0+2;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,2,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//BOTTOM#2
+	iCurrBgTileImageColumn=0+3.75-2;
+	iCurrBgTileImageRow=0+2;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,2,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//BOTTOM#3
+	iCurrBgTileImageColumn=0+3.75-3;
+	iCurrBgTileImageRow=0+2;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,2,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//CENTER#1
+	iCurrBgTileImageColumn=0+3.75-3;
+	iCurrBgTileImageRow=0+1;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,1,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//CENTER#2
+	iCurrBgTileImageColumn=0+3.75-2;
+	iCurrBgTileImageRow=0+1;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,1,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+
+	//CENTER#3
+	iCurrBgTileImageColumn=0+3.75-1;
+	iCurrBgTileImageRow=0+1;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,1,1);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;
+	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+	
   }
   
   //edited by Mike, 20261102; from 20261012
@@ -22595,309 +22990,309 @@ opting to put assets folder in "html_application" folder instead
 	<img id="coinImageId16" class="ImageCoinDisplayIcon" src="assets/images/coin.png?lastmod=20260727T1402">
 
 
-	<img id="bgTileImageId0" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1346">
-	<img id="bgTileImageId1" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId2" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId3" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId4" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId5" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId6" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId7" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId8" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId9" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId10" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId11" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId12" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId13" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId14" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId15" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId0" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1346">
+	<img id="bgTileImageId1" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId2" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId3" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId4" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId5" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId6" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId7" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId8" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId9" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId10" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId11" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId12" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId13" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId14" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId15" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId16" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId17" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId18" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId19" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId20" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId21" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId16" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId17" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId18" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId19" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId20" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId21" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId22" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId23" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId24" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId25" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId26" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId27" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId22" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId23" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId24" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId25" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId26" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId27" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId28" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId29" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId30" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId31" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId32" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId33" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId28" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId29" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId30" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId31" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId32" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId33" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId34" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId35" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId36" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId37" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId38" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId39" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId40" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId34" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId35" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId36" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId37" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId38" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId39" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId40" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId41" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId42" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId43" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId41" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId42" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId43" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId44" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId45" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId46" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId47" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId48" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId49" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId50" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId44" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId45" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId46" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId47" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId48" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId49" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId50" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId51" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId52" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId53" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId51" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId52" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId53" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId54" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId55" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId56" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId57" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId58" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId59" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId60" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId54" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId55" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId56" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId57" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId58" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId59" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId60" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId61" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId62" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId63" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId61" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId62" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId63" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId64" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId65" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId66" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId67" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId68" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId69" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId70" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId64" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId65" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId66" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId67" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId68" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId69" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId70" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
 
-	<img id="bgTileImageId71" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId72" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId73" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId71" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId72" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId73" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId74" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId75" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId76" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId77" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId78" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId79" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId70" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId74" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId75" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId76" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId77" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId78" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId79" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId70" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId71" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId72" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId73" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId71" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId72" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId73" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId74" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId75" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId76" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId77" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId78" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId79" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId80" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId74" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId75" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId76" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId77" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId78" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId79" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId80" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId81" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId82" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId83" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId84" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId85" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId86" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId87" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId88" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId89" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId90" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId81" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId82" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId83" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId84" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId85" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId86" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId87" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId88" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId89" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId90" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 	
-	<img id="bgTileImageId91" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId92" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId93" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId94" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId95" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId96" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId97" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId98" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId99" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId91" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId92" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId93" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId94" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId95" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId96" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId97" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId98" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId99" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
 <!-- 
 -->
-	<img id="bgTileImageId100" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId101" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId102" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId103" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId104" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId105" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId106" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId107" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId108" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId109" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId110" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId111" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId112" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId113" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId114" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId115" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId100" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId101" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId102" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId103" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId104" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId105" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId106" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId107" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId108" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId109" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId110" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId111" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId112" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId113" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId114" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId115" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId116" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId117" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId118" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId119" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId120" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId121" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId116" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId117" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId118" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId119" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId120" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId121" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId122" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId123" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId124" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId125" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId126" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId127" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId122" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId123" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId124" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId125" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId126" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId127" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId128" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId129" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId130" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId131" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId132" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId133" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId128" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId129" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId130" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId131" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId132" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId133" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId134" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId135" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId136" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId137" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId138" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId139" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId140" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId134" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId135" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId136" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId137" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId138" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId139" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId140" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId141" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId142" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId143" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId141" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId142" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId143" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId144" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId145" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId146" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId147" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId148" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId149" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId150" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId144" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId145" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId146" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId147" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId148" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId149" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId150" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId151" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId152" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId153" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId151" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId152" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId153" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId154" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId155" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId156" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId157" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId158" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId159" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId160" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId154" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId155" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId156" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId157" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId158" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId159" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId160" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId161" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId162" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId163" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId161" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId162" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId163" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId164" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId165" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId166" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId167" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId168" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId169" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId170" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId164" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId165" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId166" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId167" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId168" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId169" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId170" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId171" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId172" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId173" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId171" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId172" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId173" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId174" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId175" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId176" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId177" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId178" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId179" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId170" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId174" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId175" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId176" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId177" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId178" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId179" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId170" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId171" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId172" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId173" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId171" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId172" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId173" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId174" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId175" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId176" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId177" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId178" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId179" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId180" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId174" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId175" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId176" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId177" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId178" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId179" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId180" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId181" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId182" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId183" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId184" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId185" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId186" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId187" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId188" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId189" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId190" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId181" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId182" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId183" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId184" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId185" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId186" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId187" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId188" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId189" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId190" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 	
-	<img id="bgTileImageId191" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId192" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId193" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId194" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId195" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId196" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId197" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId198" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId199" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId191" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId192" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId193" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId194" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId195" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId196" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId197" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId198" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId199" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
 
-	<img id="bgTileImageId200" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId201" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId202" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId203" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId204" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId205" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId206" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId207" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId208" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId209" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId210" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId211" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId212" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId213" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId214" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId215" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId200" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId201" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId202" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId203" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId204" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId205" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId206" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId207" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId208" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId209" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId210" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId211" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId212" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId213" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId214" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId215" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId216" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId217" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId218" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId219" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId220" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId221" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId216" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId217" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId218" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId219" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId220" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId221" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId222" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId223" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId224" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId225" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId226" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId227" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId222" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId223" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId224" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId225" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId226" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId227" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId228" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId229" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId230" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId231" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId232" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId233" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId228" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId229" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId230" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId231" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId232" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId233" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
-	<img id="bgTileImageId234" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId235" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId236" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId237" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId238" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId239" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
-	<img id="bgTileImageId240" class="ImageBgTile" src="assets/images/isometricTileSample.png?lastmod=20260813T1303">
+	<img id="bgTileImageId234" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId235" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId236" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId237" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId238" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId239" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
+	<img id="bgTileImageId240" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 
 <!--
 -->
@@ -23032,7 +23427,7 @@ opting to put assets folder in "html_application" folder instead
 	<div id="textNewGameDivId" class="DivTextClickContinue">NEW GAME</div>
 	<div id="textContinueGameDivId" class="DivTextClickContinue">CONTINUE</div>
 
-	<div id="textLevelUpLifeDivId" class="DivTextClickContinue">INCREASE MAX HP</div>
+	<div id="textLevelUpLifeDivId" class="DivTextClickContinue">INCREASE MAX DEFENSE</div>
 	<div id="textLevelUpStaminaDivId" class="DivTextClickContinue">INCREASE MAX STAMINA</div>
 	<div id="textLevelUpSpeedDivId" class="DivTextClickContinue">INCREASE MAX SPEED</div>
 
