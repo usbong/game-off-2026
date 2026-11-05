@@ -4,9 +4,9 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 ### ITCH.IO: PROTOTYPES
 
-1) 20261102; https://masarapmabuhay.itch.io/game-off-2026-prototype1
+#### 1) 20261102; https://masarapmabuhay.itch.io/game-off-2026-prototype1
 
-2) 20261103-20261105; https://masarapmabuhay.itch.io/game-off-2026-prototype2
+#### 2) 20261103-20261105; https://masarapmabuhay.itch.io/game-off-2026-prototype2
 
 20261103: P1 auto-faces opponent   
 
@@ -19,7 +19,12 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 20261105: 
 1) Boundaries to prevent the P1 from wandering away;
 2) Functional level up upon defeating the Opponent;
-   
+
+
+#### 3) 20261105; https://masarapmabuhay.itch.io/game-off-2026-prototype3
+
+20261105: key input "J" to attack instead of P1 auto-attacking when near the Opponent
+
 ## Related link
 
 1) https://philnits.org/
