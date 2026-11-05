@@ -1510,6 +1510,9 @@ var bHasReleasedSpaceKey=true;
 //added by Mike, 20261026
 var bHasReleasedDirectionalKey=true;
 
+//added by Mike, 20261105
+var bHasReleasedKeyJ=true;
+
 //added by Mike, 20260910
 var bHasHeroHitWall=false;
 var bHasClickedWall=false; //added by Mike, 20260913
@@ -6388,6 +6391,17 @@ alert("iInputY: "+iInputY);
 		}
 */
 
+/*
+		//added by Mike, 20261105
+		if (bHasReleasedKeyJ) {				
+			if (iHeroAttackAnimationCount<=iHeroAttackAnimationCountMax) {
+			
+				//alert(iHeroAttackAnimationCount);
+				executeHeroAttackingAnimation();
+				return;
+			}
+		}
+*/
 	
 		//alert(iHeroWalkAnimationCount);
 		
@@ -6732,6 +6746,11 @@ alert("iInputY: "+iInputY);
 				iHeroAttackAnimationCount=0; //added by Mike, 20260722
 				bHasHeroHitMonster=false;
 				bHasAttacked=false;	
+
+				//added by Mike, 20261105
+				arrayKeyPressed[iKEY_J]=false;
+				arrayKeyPressedStored[iKEY_J]=false;					
+				bHasReleasedKeyJ=true;
 			}
 			else {
 				iHeroAttackAnimationCount++;
@@ -10396,8 +10415,8 @@ if (arrayWalkOnSnowEffectCount==1) {
 		if (!bIsLeftClickPressed) { //add this; otherwise, mouse movement isn't registered
 		
 			//added by Mike, 20261105
-			//if (!arrayKeyPressed[iKEY_J]) {
-			if (true) {
+			if (!arrayKeyPressed[iKEY_J]) {
+			//if (true) {
 		
 				if ((!arrayKeyPressed[iKEY_D]) && (!arrayKeyPressed[iKEY_A]) && (!arrayKeyPressed[iKEY_W]) && (!arrayKeyPressed[iKEY_S])) { 
 
@@ -10487,7 +10506,7 @@ if (arrayWalkOnSnowEffectCount==1) {
 		}
 
 /*
-		//added by Mike, 20261105
+		//removed by Mike, 20261105
 		if (arrayKeyPressed[iKEY_J]) {
 			processResultFromInput(fHeroCenterOriginX+0, fHeroCenterOriginY+0);
 			return;
@@ -11572,14 +11591,14 @@ if (fDifferenceInXPos!=0) {
 		}
 
 
-/*		//TODO: -update: this
+		//TODO: -update: this
 		//added by Mike, 20261105
 		if (!arrayKeyPressed[iKEY_J]) {
 			updateHeroFacingDirectionTowardOpponent();		
 			updateHeroFacingDirection();
 			return;
 		}
-*/
+
 
 			bIsVisible=true;
 			if (inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.visibility=="hidden") {
@@ -18515,22 +18534,22 @@ if (fDifferenceInXPos!=0) {
 				//if (bHasHeroHitMonster) {
 				//if ((bHasFired) && (bHasAttacked) && (bHasHeroHitMonster)) {
 				//edited by Mike, 20261105
+/*
 				if ((bHasAttacked) && (bHasHeroHitMonster)) {
 					executeHeroAttackingAnimation();
-					iHeroAttackAnimationRecoveryCount=0;
-				
-/*
+					iHeroAttackAnimationRecoveryCount=0;				
+*/
+
 				if (arrayKeyPressed[iKEY_J]) {
-					//if (iHeroAttackAnimationDelayCount>=iHeroAttackAnimationDelayCountMax) {
+					if (!bHasReleasedKeyJ) {				
 						executeHeroAttackingAnimation();
-						iHeroAttackAnimationRecoveryCount=0;
-*/						
+						//iHeroAttackAnimationRecoveryCount=0;
+						
 						//bHasfired=false;
-						bIsHeroWalking=false; //added by Mike, 20260916
-					//}
+						////bIsHeroWalking=false; //added by Mike, 20260916
+					}
 				}
 				else {
-
 					//added by Mike, 20251105
 					//iHeroAttackComboCount=0;
 					
@@ -18606,7 +18625,8 @@ if (fDifferenceInXPos!=0) {
 							//-----------------------------------
 						}
 					
-					iHeroAttackAnimationRecoveryCount++;
+					//removed by Mike, 20261105
+					//iHeroAttackAnimationRecoveryCount++;
 				}
 /*				
 			}
@@ -19517,6 +19537,7 @@ alert("iXPos: "+iXPos);
 		
 		bHasReleasedSpaceKey=true; //added by Mike, 20261012
 		bHasReleasedDirectionalKey=true; //added by Mike, 20261026
+		bHasReleasedKeyJ=true; //added by Mike, 20261105
 		
 		var myFavicon = document.getElementById("faviconImageId");						
 		var textStatusDiv = document.getElementById("textStatusDivId");	
@@ -19991,26 +20012,63 @@ alert("iXPos: "+iXPos);
 				arrayKeyPressedStored[iKEY_S]=true; //added by Mike, 20261028
 			}
 
-/*			//TODO: -update: this			
+			//TODO: -update: this			
 			//added by Mike, 20261105
 			if (e.code==='KeyJ') {
-				bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
+			
+				//if (bHasReleasedKeyJ) {
+				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0)) {
+				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && (!bIsHeroWalking)) {
+				
+				//TODO: -verify: this; quickly stop walking then attack; not accepted
+				if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && ((!bIsHeroWalking) || (bHasAttacked))) {
 
-				if (bHasReducedHeroManaOutput<=0) {
-					arrayKeyPressed[iKEY_J]=false;
-					arrayKeyPressedStored[iKEY_J]=false;
+				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && (iHeroAttackAnimationDelayCount==0)) {
+
+				
+				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && (iHeroAttackAnimationRecoveryCount==0)) {
+				
+					bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
+
+					if (bHasReducedHeroManaOutput<=0) {
+						arrayKeyPressed[iKEY_J]=false;
+						arrayKeyPressedStored[iKEY_J]=false;					
+						
+						bHasReleasedKeyJ=true;
+						bHasHeroHitMonster=false;
+					}
+					else {
+						arrayKeyPressed[iKEY_J]=true;
+						arrayKeyPressedStored[iKEY_J]=true;
+						
+						bHasFired=true;
+						bHasReleasedKeyJ=false;
+						
+						//alert(iHeroAttackAnimationRecoveryCount);
+						//iHeroAttackAnimationRecoveryCount=0;
+						
+/*					
+						if (iHeroAttackAnimationCount<=iHeroAttackAnimationCountMax) {
+						}
+						else {
+							iHeroAttackAnimationCount=0;
+						}
+*/						
+					}
 				}
+				//this also prevents rapid attack by doing a key press and hold
 				else {
-					arrayKeyPressed[iKEY_J]=true;
-					arrayKeyPressedStored[iKEY_J]=true;
-					
-					bHasFired=true;
+					arrayKeyPressed[iKEY_J]=false;
+					arrayKeyPressedStored[iKEY_J]=false;					
+
+					//bHasReleasedKeyJ=true;
+					bHasHeroHitMonster=false;
 				}
-							
+
 				//bHasFired=true;
 				//processResultFromInput(fHeroCenterOriginX+0, fHeroCenterOriginY+0);
 			}
-*/
+
 
 			//added by Mike, 20261010
 			if (e.code==='Space') {
@@ -20146,8 +20204,18 @@ alert("iXPos: "+iXPos);
 
 			//added by Mike, 20261105
 			if (e.code==='KeyJ') {
-				arrayKeyPressed[iKEY_J]=false;
-				arrayKeyPressedStored[iKEY_J]=false;
+//				if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount!=0)) {
+				if (iHeroAttackAnimationCount!=0) {
+					//executeHeroAttackingAnimation();
+				}
+				else {
+					arrayKeyPressed[iKEY_J]=false;
+					arrayKeyPressedStored[iKEY_J]=false;
+					
+					//added by Mike, 20261105
+					bHasHeroHitMonster=false;
+					bHasReleasedKeyJ=true;
+				}
 			}
 
 			//added by Mike, 20261010
