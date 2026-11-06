@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261105; from 20261104
+' @date updated: 20261106; from 20261105
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1414,6 +1414,10 @@ var bIsLevelUp=false;
 const iInputDelayAtLeveledUpCountMax=100;
 var iInputDelayAtLeveledUpCount=0;
 
+//added by Mike, 20261106
+var optionBgColorDefault="rgb(77, 77, 77)";//"#4d4d4d";
+var optionBgColorHover="rgb(255, 0, 0)";//"#ff0000";
+
 //added by Mike, 20260806
 var bIsRightClickHeld=false;
 
@@ -1447,7 +1451,7 @@ var bHasHeroHitACornerOfBGTile=false;
 var bHasReducedHeroManaOutput=false;
 
 //added by Mike, 20261017
-const iManaCostHeroMeleeAttack=2;//3;
+const iManaCostHeroMeleeAttack=4;//2;//3;
 const iManaCostHeroJump=3;
 const iManaCostHeroAccelerate=2;
 
@@ -2125,7 +2129,7 @@ const iHeroWalkManaCostDelayCountMax=3; //delay high enough that hero could reco
 var iHeroAttackAnimationCount=0;//-1; //0; //due to immediately +1 in execution;
 const iHeroAttackAnimationCountMax=3;//4;
 var iHeroAttackAnimationDelayCount=0;
-const iHeroAttackAnimationDelayCountMax=2;//2;//3;//5;
+const iHeroAttackAnimationDelayCountMax=1;//0;//2;//3;//5;
 
 var iHeroAttackAnimationRecoveryCount=0;
 const iHeroAttackAnimationRecoveryCountMax=0;//8;//10;
@@ -3121,7 +3125,6 @@ var bIsHeroFacingUp=true;//false;
 
 		mainImageTileProjectile.style.visibility="hidden";
 		bHasFired=false;		
-
 
 /*		
 		//added by Mike, 20260913
@@ -4345,7 +4348,8 @@ var bIsHeroFacingUp=true;//false;
 		
 		//textHeroComboStatusDiv.innerHTML = "Wx"+iCurrHeroWallBounceCount+"; "+newMainImageTileProjectilePosX;
 		
-		//textHeroComboStatusDiv.innerHTML = "Cx"+iCurrHeroComboCount+"; "+iHeroAttackAnimationDelayCount;				
+		//textHeroComboStatusDiv.innerHTML = "Cx"+iCurrHeroComboCount+"; "+iHeroAttackAnimationDelayCount;
+		textHeroComboStatusDiv.innerHTML = "Cx"+iCurrHeroComboCount;		
 	}
 	
 	function drawHeroCoinStatus(myCanvasContext, iXPos, iYPos) {		
@@ -6540,7 +6544,13 @@ alert("iInputY: "+iInputY);
 		}
 
 		//var iHeroFrameXOffset=0;
-		
+
+
+			//added by Mike, 202611016
+			//update hero's facing direction accordingly
+			updateHeroFacingDirectionTowardOpponent();
+
+			
 			
 			//edited by Mike, 20261015
 			if (!bIsActionKeyControlPressed) {
@@ -6551,18 +6561,19 @@ alert("iInputY: "+iInputY);
 				iHeroFrameY=iImageFrameHeightLarge*5;//1;//0;
 
 
+
 				iHeroFrameX=0;
 
 				iHeroFrameXOffset=0;
 
-				//edited by Mike, 20260827
+				//edited by Mike, 20261106; from 20260827
 				updateHeroFacingDirection();
-
+		
 			} //added by Mike, 20260827
 			else {
 				//added by Mike, 20260902
 				//consider putting in a reusable function
-
+				
 				//edited by Mike, 20261017
 				//!bIsHeroFacingUp
 				//if (iHeroFrameY/iImageFrameHeightLarge==6) { //row 6
@@ -6596,9 +6607,12 @@ alert("iInputY: "+iInputY);
 				}
 
 				//!bIsHeroFacingLeft
-				//edited by Mike, 20261102
+				//edited by Mike, 20261106; from 20261102
 				//if (iHeroFrameY/iImageFrameHeightLarge==1) {//0) { //row 1
-				if (iHeroFrameY/iImageFrameHeightLarge==12) {//0) { //row 1
+				//if (iHeroFrameY/iImageFrameHeightLarge==12) {//0) { //row 1
+
+				if ((iHeroFrameY/iImageFrameHeightLarge==12) ||
+					(iHeroFrameY/iImageFrameHeightLarge==1)) {
 
 					if (bIsHeroFacingUpOrDown) {
 						if (!bIsHeroFacingUp) {
@@ -6619,7 +6633,11 @@ alert("iInputY: "+iInputY);
 				} //bIsHeroFacingLeft
 				//edited by Mike, 20261102
 				//else if (iHeroFrameY/iImageFrameHeightLarge==0) {//1) { //row 0
-				else if (iHeroFrameY/iImageFrameHeightLarge==13) {//1) { //row 0
+				//edited by Mike, 20261106
+				//else if (iHeroFrameY/iImageFrameHeightLarge==13) {//1) { //row 0
+				else if ((iHeroFrameY/iImageFrameHeightLarge==13) ||
+						(iHeroFrameY/iImageFrameHeightLarge==0)) {
+
 					if (bIsHeroFacingUpOrDown) {
 						if (!bIsHeroFacingUp) {
 							iHeroFrameY=iImageFrameHeightLarge*2;
@@ -6717,6 +6735,7 @@ alert("iInputY: "+iInputY);
 		var mainImageTileHeroBody0 = document.getElementById("mainImageTileImageHeroBodyId0");
 		var mainImageTileHeroBody1 = document.getElementById("mainImageTileImageHeroBodyId1");
 		var mainImageTileHeroBody2 = document.getElementById("mainImageTileImageHeroBodyId2");
+
 		
 		//edited by Mike, 20251105; from 20251104
 		//mainImageTileHeroBody.style.visibility="visible";
@@ -6725,7 +6744,8 @@ alert("iInputY: "+iInputY);
 		//otherwise, hero continues to face the same direction even after defeating the monster
 		//bIsActionKeyControlPressed=true;
 		
-		//edited by Mike, 20260914
+		
+		//edited by Mike, 20261106; from 20260914
 		//if (iHeroAttackAnimationDelayCount==0) {//iHeroAnimationDelayCountMax) {
 		if (iHeroAttackAnimationDelayCount>=iHeroAttackAnimationDelayCountMax) {
 		
@@ -6750,6 +6770,10 @@ alert("iInputY: "+iInputY);
 				//added by Mike, 20261105
 				arrayKeyPressed[iKEY_J]=false;
 				arrayKeyPressedStored[iKEY_J]=false;					
+				
+				//edited by Mike, 20261106
+				//if removed; could be unresponsive at times though;
+				//note if added; check the combo counter instead; to avoid instant death; hold; double damage;
 				bHasReleasedKeyJ=true;
 			}
 			else {
@@ -6761,7 +6785,9 @@ alert("iInputY: "+iInputY);
 			
 			//faster; initial combos;
 			if (iCurrHeroComboCount<3) {
+				//edited by Mike, 20261106
 				iHeroAttackAnimationDelayCount++;
+				//iHeroAttackAnimationDelayCount+=3;
 			}
 		}
 
@@ -11591,6 +11617,7 @@ if (fDifferenceInXPos!=0) {
 		}
 
 
+/*		//removed by Mike, 20261106
 		//TODO: -update: this
 		//added by Mike, 20261105
 		if (!arrayKeyPressed[iKEY_J]) {
@@ -11598,7 +11625,7 @@ if (fDifferenceInXPos!=0) {
 			updateHeroFacingDirection();
 			return;
 		}
-
+*/
 
 			bIsVisible=true;
 			if (inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.visibility=="hidden") {
@@ -11630,17 +11657,30 @@ if (fDifferenceInXPos!=0) {
 
 				//edited by Mike, 20260820; from 20260807
 				//keep the space
-				if (isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(mainImageTilePosX)+offsetX,parseFloat(mainImageTilePosY), inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75, iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75)) {
-				
+				//edited by Mike, 20261106
+				//if (isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(mainImageTilePosX)+offsetX,parseFloat(mainImageTilePosY), inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75, iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75)) {
+
+				if (isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(mainImageTilePosX)+offsetX,parseFloat(mainImageTilePosY), inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iImageFrameWidthLarge*0.85, iImageFrameHeightLarge*0.75, iImageFrameWidthLarge*0.85, iImageFrameHeightLarge*0.75)) {
+
+/*					//edited by Mike, 20261106
 					if (bHasFired) {
 						bHasAttacked=bHasFired;
 					}
+*/
 
-					//edited by Mike, 20260619; from 20260616
-					if (bHasAttacked && isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(mainImageTilePosX)+offsetX,parseFloat(mainImageTilePosY), inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75, iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75)) {
+					//TODO: -update: this
+					//added by Mike, 20261105
+					if (arrayKeyPressed[iKEY_J]) {
+						updateHeroFacingDirectionTowardOpponent();		
+						updateHeroFacingDirection();
+						bHasAttacked=bHasFired;
+					}
+
+					//edited by Mike, 20261106; from 20260619
+					//if (bHasAttacked && isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(mainImageTilePosX)+offsetX,parseFloat(mainImageTilePosY), inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75, iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75)) {
 					
-					//alert("DITO!!!: "+iCount);
-					
+					if (bHasAttacked && isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(mainImageTilePosX)+offsetX,parseFloat(mainImageTilePosY), inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iImageFrameWidthLarge*0.85, iImageFrameHeightLarge*0.75, iImageFrameWidthLarge*0.85, iImageFrameHeightLarge*0.75)) {
+				
 					if (iHeroAttackAnimationCount!=0) {
 						return;
 					}
@@ -11659,11 +11699,13 @@ if (fDifferenceInXPos!=0) {
 						//edited by Mike, 20260704; from 20260627
 						//var bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
 						//var bHasReducedHeroManaOutput=false;//0;
-						bHasReducedHeroManaOutput=false;
+						//bHasReducedHeroManaOutput=false;
 						
 						//no need to reduce multiple times if multiple enemies are hit at the same time
 						if ((bHasFired) && (bHasAttacked)){ 
-							bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
+						//if ((bHasFired) && (bHasAttacked) && (iHeroAttackAnimationCount==0)){ 
+														
+							//bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
 /*
 							//noted by Mike, 20260704; for debug
 							if (bHasReducedHeroManaOutput) {
@@ -11671,6 +11713,7 @@ if (fDifferenceInXPos!=0) {
 								return;
 							}
 */
+							
 							if (iCurrHeroMana>0) {
 								if (inputArrayWraithMonsterWithIdCount[MONSTER_CURRENT_HP]>0) {
 									inputArrayWraithMonsterWithIdCount[MONSTER_CURRENT_HP]--;
@@ -11753,10 +11796,11 @@ if (fDifferenceInXPos!=0) {
 							//------------------------------
 						}
 
+/*
 						if (!bHasReducedHeroManaOutput) {
 							return;
 						}
-
+*/
 
 						bHasHeroHitMonster=true;
 						
@@ -11852,8 +11896,8 @@ if (fDifferenceInXPos!=0) {
 								//alert("DITO!");
 
 																	
-								//edited by Mike, 20261102; from 20260909
-								bIsActionKeyControlPressed=false;
+								//removed by Mike, 20261106; from 20261102
+								//bIsActionKeyControlPressed=false;
 
 								iCurrMonsterDeathCount++;
 
@@ -11883,7 +11927,6 @@ if (fDifferenceInXPos!=0) {
 					}
 				}
 			}
-			
 		//}
 	}
 
@@ -17232,7 +17275,22 @@ if (fDifferenceInXPos!=0) {
 					iArrayActorsCount=0;
 					
 					initBgTileMap(); //add the background tiles first
-					
+
+					//--------------------------------
+					//added by Mike, 20261106
+					//P1 starting position;
+
+					bIsHeroFacingLeftOrRight=true;;	
+					bIsHeroFacingLeft=false;
+					bIsHeroFacingUpOrDown=true;;	
+					bIsHeroFacingUp=true;
+/*
+					updateHeroFacingDirection();
+					updateHeroFacingDirectionTowardOpponent();					
+*/
+					bIsActionKeyControlPressed=false;
+					bHasReleasedKeyJ=true;
+					//--------------------------------
 					
 					arrayActors[iArrayActorsCount]=mainImageTileHeroBody;//mainImageTile;
 					arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault+iArrayActorsCount;
@@ -18385,8 +18443,12 @@ if (fDifferenceInXPos!=0) {
 					mainImageTileProjectileStepY=mainImageTileProjectileStepYMax;					
 					mainImageTileProjectileStepX=mainImageTileProjectileStepXMax;
 */
+				//edited by Mike, 20261106
+				//executeHeroWalkingAnimation();
 					
+				if (!arrayKeyPressed[iKEY_J]) {
 					executeHeroWalkingAnimation();
+				}
 					
 
 				//}
@@ -18541,7 +18603,7 @@ if (fDifferenceInXPos!=0) {
 */
 
 				if (arrayKeyPressed[iKEY_J]) {
-					if (!bHasReleasedKeyJ) {				
+					if (!bHasReleasedKeyJ) {
 						executeHeroAttackingAnimation();
 						//iHeroAttackAnimationRecoveryCount=0;
 						
@@ -19539,6 +19601,41 @@ alert("iXPos: "+iXPos);
 		bHasReleasedDirectionalKey=true; //added by Mike, 20261026
 		bHasReleasedKeyJ=true; //added by Mike, 20261105
 		
+		//added by Mike, 20261106
+		//---------------------------------------
+		bHasHeroHitMonster=false;
+		arrayKeyPressed[iKEY_J]=false;
+		arrayKeyPressedStored[iKEY_J]=false;					
+		
+		hasInitMapLocation=false;
+
+		//--------------------------------
+		//added by Mike, 20261106
+		//P1 starting position;
+
+		bIsHeroFacingLeftOrRight=true;;	
+		bIsHeroFacingLeft=false;
+		bIsHeroFacingUpOrDown=true;;	
+		bIsHeroFacingUp=true;
+/*		
+		updateHeroFacingDirection();
+		updateHeroFacingDirectionTowardOpponent();	
+*/
+		bIsActionKeyControlPressed=false;
+		bHasReleasedKeyJ=true;
+		//--------------------------------
+
+		//directional keys can be used in combination with keyJ,
+		arrayKeyPressed[iKEY_D]=false; 
+		arrayKeyPressedStored[iKEY_D]=false; 
+		arrayKeyPressed[iKEY_A]=false; 
+		arrayKeyPressedStored[iKEY_A]=false; 
+		arrayKeyPressed[iKEY_W]=false; 
+		arrayKeyPressedStored[iKEY_W]=false; 
+		arrayKeyPressed[iKEY_S]=false; 
+		arrayKeyPressedStored[iKEY_S]=false; 
+		//---------------------------------------
+		
 		var myFavicon = document.getElementById("faviconImageId");						
 		var textStatusDiv = document.getElementById("textStatusDivId");	
 		var textNewGameDiv = document.getElementById("textNewGameDivId");
@@ -19556,8 +19653,6 @@ alert("iXPos: "+iXPos);
 		var bossBattleBgImageBeach = document.getElementById("bossBattleBgImageBeachId");
 
 		var heroAttackEffectImage = document.getElementById("heroAttackEffectImageId");	
-
-		
 		
 		myFavicon.style.visibility="hidden";	
 		textStatusDiv.style.visibility="hidden";
@@ -19899,16 +19994,162 @@ alert("iXPos: "+iXPos);
 	function initKeyboardInput() {
 		var mainImageTileFireballProjectileHold = document.getElementById("mainImageTileFireballProjectileHoldImageId");
 
+		//added by Mike, 20261106
+		var textNewGameDiv = document.getElementById("textNewGameDivId");
+		var textContinueGameDiv = document.getElementById("textContinueGameDivId");
+
+		var textLevelUpLifeDiv = document.getElementById("textLevelUpLifeDivId");
+		var textLevelUpStaminaDiv = document.getElementById("textLevelUpStaminaDivId");
+		var textLevelUpSpeedDiv = document.getElementById("textLevelUpSpeedDivId");
+
 		//document.body.onkeydown = function(e){	
 		window.addEventListener('keydown', (e) => {
 			
 			//alert(e.keyCode);
 			//alert(e.code);
 			
-			//added by Mike, 20261020
-			if ((bIsGameOver) || (!bHasPressedStart) || (!bHasViewedHowToPlayGuide)) {
+			//edited by Mike, 20261106; from 20261020
+			//if ((bIsGameOver) || (!bHasPressedStart) || (!bHasViewedHowToPlayGuide)) {
+			if ((!bHasPressedStart) || (!bHasViewedHowToPlayGuide)) {
 				return;
 			}
+			
+			//debug
+			if (e.code==='KeyP') {
+				bIsLevelUp=true;
+			}
+			
+			//added by Mike, 20261106
+			if (bIsLevelUp) {
+				if ((e.code==='KeyW') || (e.code==='ArrowUp')) {
+					if (((textLevelUpLifeDiv.style.backgroundColor).trim().length===0) && 
+						((textLevelUpStaminaDiv.style.backgroundColor).trim().length===0) &&
+						((textLevelUpSpeedDiv.style.backgroundColor).trim().length===0)) {
+
+						//alert(textLevelUpLifeDiv.style.backgroundColor);
+						textLevelUpLifeDiv.style.backgroundColor=optionBgColorHover;//"#ff0000"; //hover
+					}
+					else {
+						if (textLevelUpLifeDiv.style.backgroundColor===optionBgColorHover) {
+							textLevelUpLifeDiv.style.backgroundColor=optionBgColorHover;
+							textLevelUpStaminaDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpSpeedDiv.style.backgroundColor=optionBgColorDefault;
+						}
+						else if (textLevelUpStaminaDiv.style.backgroundColor===optionBgColorHover) {
+							textLevelUpLifeDiv.style.backgroundColor=optionBgColorHover;
+							textLevelUpStaminaDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpSpeedDiv.style.backgroundColor=optionBgColorDefault;
+						}
+						else if (textLevelUpSpeedDiv.style.backgroundColor===optionBgColorHover) {
+							textLevelUpLifeDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpStaminaDiv.style.backgroundColor=optionBgColorHover;
+							textLevelUpSpeedDiv.style.backgroundColor=optionBgColorDefault;
+						}
+					}
+				}
+				else if ((e.code==='KeyS') || (e.code==='ArrowDown')) {
+				
+					//alert(textLevelUpSpeedDiv.style.backgroundColor);
+				
+					if (((textLevelUpLifeDiv.style.backgroundColor).trim().length===0) && 
+						((textLevelUpStaminaDiv.style.backgroundColor).trim().length===0) &&
+						((textLevelUpSpeedDiv.style.backgroundColor).trim().length===0)) {
+						textLevelUpSpeedDiv.style.backgroundColor=optionBgColorHover;//"#ff0000"; //hover
+					}
+					else {
+						if (textLevelUpLifeDiv.style.backgroundColor===optionBgColorHover) {
+							textLevelUpLifeDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpStaminaDiv.style.backgroundColor=optionBgColorHover;
+							textLevelUpSpeedDiv.style.backgroundColor=optionBgColorDefault;
+						}
+						else if (textLevelUpStaminaDiv.style.backgroundColor===optionBgColorHover) {
+							textLevelUpLifeDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpStaminaDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpSpeedDiv.style.backgroundColor=optionBgColorHover;
+						}
+						else if (textLevelUpSpeedDiv.style.backgroundColor===optionBgColorHover) {
+							textLevelUpLifeDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpStaminaDiv.style.backgroundColor=optionBgColorDefault;
+							textLevelUpSpeedDiv.style.backgroundColor=optionBgColorHover;
+						}
+					}
+				}
+				else if ((e.code==='KeyA') || (e.code==='ArrowLeft') || (e.code==='KeyD') || (e.code==='ArrowRight')) {				
+					if (((textLevelUpLifeDiv.style.backgroundColor).trim().length===0) && 
+						((textLevelUpStaminaDiv.style.backgroundColor).trim().length===0) &&
+						((textLevelUpSpeedDiv.style.backgroundColor).trim().length===0)) {
+						textLevelUpStaminaDiv.style.backgroundColor=optionBgColorHover;
+					}
+				}
+				else if ((e.code==='KeyJ') || (e.code==='Enter')) {
+				
+					hasInitMapLocation=false;
+				
+					if (textLevelUpLifeDiv.style.backgroundColor===optionBgColorHover) {
+						executeHeroLeveledUp(HP_STAT_ID);
+					}
+					else if (textLevelUpStaminaDiv.style.backgroundColor===optionBgColorHover) {
+						executeHeroLeveledUp(STAMINA_STAT_ID);
+					}
+					else if (textLevelUpSpeedDiv.style.backgroundColor===optionBgColorHover) {
+						executeHeroLeveledUp(SPEED_STAT_ID);
+					}
+				}
+				
+				return;
+			}
+			//added by Mike, 20261106
+			else if (bIsGameOver) {
+				if ((e.code==='KeyW') || (e.code==='ArrowUp')) {
+					if (((textNewGameDiv.style.backgroundColor).trim().length===0) && 
+						((textContinueGameDiv.style.backgroundColor).trim().length===0)) {
+
+						//alert(textLevelUpLifeDiv.style.backgroundColor);
+						textNewGameDiv.style.backgroundColor=optionBgColorHover;//"#ff0000"; //hover
+					}
+					else {
+						textNewGameDiv.style.backgroundColor=optionBgColorHover;
+						textContinueGameDiv.style.backgroundColor=optionBgColorDefault;
+					}
+				}
+				else if ((e.code==='KeyS') || (e.code==='ArrowDown')) {
+				
+					//alert(textLevelUpSpeedDiv.style.backgroundColor);
+				
+					if (((textNewGameDiv.style.backgroundColor).trim().length===0) && 
+						((textContinueGameDiv.style.backgroundColor).trim().length===0)) {
+						textContinueGameDiv.style.backgroundColor=optionBgColorHover;//"#ff0000"; //hover
+					}
+					else {
+						textNewGameDiv.style.backgroundColor=optionBgColorDefault;
+						textContinueGameDiv.style.backgroundColor=optionBgColorHover;
+					}
+				}
+				else if ((e.code==='KeyA') || (e.code==='ArrowLeft') || (e.code==='KeyD') || (e.code==='ArrowRight')) {				
+/*
+					if (((textLevelUpLifeDiv.style.backgroundColor).trim().length===0) && 
+						((textLevelUpStaminaDiv.style.backgroundColor).trim().length===0) &&
+						((textLevelUpSpeedDiv.style.backgroundColor).trim().length===0)) {
+						textLevelUpStaminaDiv.style.backgroundColor=optionBgColorHover;
+					}
+*/					
+				}
+				else if ((e.code==='KeyJ') || (e.code==='Enter')) {
+				
+					hasInitMapLocation=false;
+				
+					if (textNewGameDiv.style.backgroundColor===optionBgColorHover) {
+						executeHeroContinue(false);
+					}
+					else if (textContinueGameDiv.style.backgroundColor===optionBgColorHover) {
+						executeHeroContinue(true);	
+					}
+				}
+				
+				return;
+			}
+
+
 						
 			if (e.keyCode==70) { //key f
 				bIsActionKeyFireballPressed=true;
@@ -20021,7 +20262,12 @@ alert("iXPos: "+iXPos);
 				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && (!bIsHeroWalking)) {
 				
 				//TODO: -verify: this; quickly stop walking then attack; not accepted
-				if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && ((!bIsHeroWalking) || (bHasAttacked))) {
+				//edited by Mike, 20261106
+				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && ((!bIsHeroWalking) || (bHasAttacked))) {
+				
+				bIsHeroWalking=false;
+
+				if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0)) {
 
 				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && (iHeroAttackAnimationDelayCount==0)) {
 
@@ -20030,7 +20276,11 @@ alert("iXPos: "+iXPos);
 				
 					bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
 
-					if (bHasReducedHeroManaOutput<=0) {
+
+					//alert(bHasReducedHeroManaOutput);
+
+					if (iCurrHeroMana<=0) {
+					//if (!bHasReducedHeroManaOutput) {
 						arrayKeyPressed[iKEY_J]=false;
 						arrayKeyPressedStored[iKEY_J]=false;					
 						
@@ -20043,17 +20293,6 @@ alert("iXPos: "+iXPos);
 						
 						bHasFired=true;
 						bHasReleasedKeyJ=false;
-						
-						//alert(iHeroAttackAnimationRecoveryCount);
-						//iHeroAttackAnimationRecoveryCount=0;
-						
-/*					
-						if (iHeroAttackAnimationCount<=iHeroAttackAnimationCountMax) {
-						}
-						else {
-							iHeroAttackAnimationCount=0;
-						}
-*/						
 					}
 				}
 				//this also prevents rapid attack by doing a key press and hold
@@ -20061,7 +20300,10 @@ alert("iXPos: "+iXPos);
 					arrayKeyPressed[iKEY_J]=false;
 					arrayKeyPressedStored[iKEY_J]=false;					
 
+					//edited by Mike, 20261106
 					//bHasReleasedKeyJ=true;
+					bHasReleasedKeyJ=false;
+
 					bHasHeroHitMonster=false;
 				}
 
@@ -20069,6 +20311,19 @@ alert("iXPos: "+iXPos);
 				//processResultFromInput(fHeroCenterOriginX+0, fHeroCenterOriginY+0);
 			}
 
+
+/*			//removed by Mike, 20261106
+			if ((!bHasReleasedKeyJ) && (iHeroAttackAnimationCount!=0)) {
+				//added by Mike, 20261106
+				//directional keys can be used in combination with keyJ,
+				//before setting them to false;
+				arrayKeyPressedStored[iKEY_D]=false; 
+				arrayKeyPressedStored[iKEY_A]=false; 
+				arrayKeyPressedStored[iKEY_W]=false; 
+				arrayKeyPressedStored[iKEY_S]=false; 
+				bIsHeroWalking=false;
+			}
+*/
 
 			//added by Mike, 20261010
 			if (e.code==='Space') {
