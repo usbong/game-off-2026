@@ -21,11 +21,13 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 2) Functional level up upon defeating the Opponent;
 
 
-#### 3) 20261105-20261107; https://masarapmabuhay.itch.io/game-off-2026-prototype3
+#### 3) 20261105-20261108; https://masarapmabuhay.itch.io/game-off-2026-prototype3
 
 20261105: key input "J" to attack instead of P1 auto-attacking when near the Opponent
 
 20261106-20261107: Fixed clunky controls related to how long P1 held "J", etc; simple control mechanism with choices; Coins come out upon hitting the Opponent.
+
+20261108: Coins jump out from the Opponent and are affected by gravity.
 
 ## Related link
 
