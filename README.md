@@ -27,7 +27,7 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 20261106-20261107: Fixed clunky controls related to how long P1 held "J", etc; simple control mechanism with choices; Coins come out upon hitting the Opponent.
 
-20261108: Coins jump out from the Opponent and are affected by gravity.
+20261108: Coins jump out from the Opponent and are affected by gravity. P1 or Opponent gives out the sound of squeezed bicycle horn when hit.
 
 ## Related link
 
