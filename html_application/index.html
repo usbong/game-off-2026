@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261107; from 20261106
+' @date updated: 20261108; from 20261107
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1401,6 +1401,13 @@ const iColumnCountMax=6;//10;
 //column, row
 var arrayHasVisitedRoom = [[],[],[],[],[],[]];
 
+//added by Mike, 20261108
+const fDefaultObjectPosX=-999999;
+const fDefaultObjectPosY=-999999;
+
+const fDefaultObjectPosXMin=-900000;
+const fDefaultObjectPosYMin=-900000;
+
 //added by Mike, 20260907
 var bIsMobile=false;
 var bIsUsingAppleWebKit=false;
@@ -1944,8 +1951,17 @@ var iCoinAnimationDelayCount=0;
 const iCoinAnimationDelayCountMax=10;//1;
 
 var iCurrCoinCount=0;
-//edited by Mike, 20261107
-const iCurrCoinCountMax=16;//16+1; //+1 for display icon
+//edited by Mike, 20261108; from 20261107
+const iCurrCoinCountMax=26;//16;//16+1; //+1 for display icon
+
+/*	//buggy
+const imageCoinStyle = {
+	position: 'absolute',
+	clip: 'rect(0px,32px,96px,0px)',
+	visibility: 'hidden',
+	z-index: '3'
+};
+*/
 
 //added by Mike, 20260730
 var iBgTileImageAnimationCount=-1; //0; //due to immediately +1 in execution;
@@ -2621,10 +2637,11 @@ var bIsHeroFacingUp=true;//false;
 	var arrayMiniBossMonsterCountId = [[],[],[],[],[],[],[],[],[],[],[],[]]; //[],[],[],[],[],[]
 	const iMiniBossMonsterCountMax = 12;//6;
 
-	//added by Mike, 20260727
-	var arrayCoinCountId = [[],[],[],[],[],[],[],[],[],[]];
-	const iCoinCountMax=10;
-
+	//edited by Mike, 20261108; from 20260727
+	//26
+	var arrayCoinCountId = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],
+						    [],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],
+							[],[],[],[],[],[]];
 	
 	const MONSTER_OBJECT=0;
 	const MONSTER_IS_ACTIVE=1;	
@@ -4379,7 +4396,7 @@ var bIsHeroFacingUp=true;//false;
 		//textHeroComboStatusDiv.innerHTML = "Cx"+iCurrHeroComboCount;		
 		
 		//textHeroComboStatusDiv.innerHTML = "Kx"+iHasHeldKeyJ;		
-		textHeroComboStatusDiv.innerHTML = "Dx"+iHeroAttackAnimationDelayCountMaxOffset;		
+		//textHeroComboStatusDiv.innerHTML = "Dx"+iHeroAttackAnimationDelayCountMaxOffset;		
 	}
 	
 	function drawHeroCoinStatus(myCanvasContext, iXPos, iYPos) {		
@@ -5987,11 +6004,66 @@ alert("iInputY: "+iInputY);
 		snowEffectImage.style.top = iInputY+"px";
 	}	
 
-	//added by Mike, 20260727
-	function setCoinPosition(iInputX, iInputY, iCount) {
-		
-		var coinImage = document.getElementById("coinImageId"+iCount);
+	//added by Mike, 20261108
+	function processCoinOut(iMonsterImageTilePosX,iMonsterImageTilePosY) {
+		if (iCurrCoinCount<iCurrCoinCountMax) {
+		}
+		else {
+			for (iCount=0; iCount<iCurrCoinCountMax; iCount++) {
 
+				//alert("DITO"+arrayCoinCountId[iCount][MONSTER_POSX]);
+
+				//do this, because fDefaultObjectPosX could be -999910.5;
+				//instead of -999999; after coming out;
+				if ((arrayCoinCountId[iCount][MONSTER_POSX]<=fDefaultObjectPosXMin) && (arrayCoinCountId[iCount][MONSTER_POSY]<=fDefaultObjectPosYMin)) {
+					iCurrCoinCount=iCount;
+					break;
+				}
+			}
+		}
+
+		if (iCurrCoinCount==iCurrCoinCountMax) {
+			return;
+		}
+
+
+			arrayCoinCountId[iCurrCoinCount][MONSTER_POSX]=iMonsterImageTilePosX+iImageFrameWidthLarge/3;
+			arrayCoinCountId[iCurrCoinCount][MONSTER_POSY]=iMonsterImageTilePosY-iImageFrameWidthLarge/2;
+			
+			setCoinPosition(arrayCoinCountId[iCurrCoinCount][MONSTER_POSX],arrayCoinCountId[iCurrCoinCount][MONSTER_POSY],iCurrCoinCount); 
+
+			//buggy
+//setCoinPosition(arrayCoinCountId[iCurrCoinCount][MONSTER_POSX],arrayCoinCountId[iCurrCoinCount][MONSTER_POSY],arrayCoinCountId[iCurrCoinCount][MONSTER_OBJECT]); 
+			
+			//arrayCoinCountId[iCurrCoinCount][MONSTER_OBJECT]=currCoinImageObject;
+							
+			if (iCurrCoinCount%2==0) { //go to the right
+				arrayCoinCountId[iCurrCoinCount][MONSTER_STEPX]=1;
+			}
+			else { //go to the left
+				arrayCoinCountId[iCurrCoinCount][MONSTER_STEPX]=-1;
+			}
+			
+			//TODO: -reconsider using non-random;
+			//pick a number [0, 5]
+			//var iRandNum=Math.floor(Math.random() * 6);
+			arrayCoinCountId[iCurrCoinCount][MONSTER_STEPY]=Math.floor(Math.random()*2)+2;
+
+			arrayCoinCountId[iCurrCoinCount][MONSTER_DEATH_ANIMATION_START_X]=iMonsterImageTilePosX;
+			arrayCoinCountId[iCurrCoinCount][MONSTER_DEATH_ANIMATION_START_Y]=iMonsterImageTilePosY;
+
+			arrayCoinCountId[iCurrCoinCount][MONSTER_GRAVITY_MULTIPLIER]=-1;			
+
+			arrayCoinCountId[iCurrCoinCount][MONSTER_IS_FACING_UP]=true;			
+
+			iCurrCoinCount++;
+		//}
+	}
+
+	//edited by Mike, 20261108; from 20260727
+	function setCoinPosition(iInputX, iInputY, iCount) {		
+		coinImage = document.getElementById("coinImageId"+iCount);
+		
 /*		//removed by Mike, 20260730; consider using checkVisibility(...); //visibilityProperty
 		if (coinImage.style.visibility=="visible") {
 		  return;
@@ -6004,17 +6076,36 @@ alert("iInputY: "+iInputY);
 		iCoinAnimationDelayCount=iCoinAnimationDelayCountMax;
 
 		iCoinAnimationCount=-1; //0;
-/*
-alert("iInputX: "+iInputX);
-alert("iInputY: "+iInputY);
-*/
+
 		coinImage.style.left = iInputX+"px";
 		coinImage.style.top = iInputY+"px";
-
 		
 		//added by Mike, 20260728
 		return coinImage;
 	}	
+
+/*	buggy
+	//edited by Mike, 20261108; from 20260727
+	function setCoinPosition(iInputX, iInputY, coinImageObject) {		
+		//coinImage = document.getElementById("coinImageId"+iCount);
+		
+		coinImage = coinImageObject;
+		
+		coinImage.style.objectPosition = "-" + 0 + "px -" + 0 + "px";
+
+		coinImage.style.visibility="visible";
+
+		iCoinAnimationDelayCount=iCoinAnimationDelayCountMax;
+
+		iCoinAnimationCount=-1; //0;
+
+		coinImage.style.left = iInputX+"px";
+		coinImage.style.top = iInputY+"px";
+		
+		//added by Mike, 20260728
+		return coinImage;
+	}	
+*/
 
 	//edited by Mike, 20260822; from 20260730
 	//function setBgTileImagePosition(iInputX, iInputY, iCount) {
@@ -10061,6 +10152,51 @@ alert("iInputY: "+iInputY);
 		snowEffectImage.style.top=iSnowEffectPosY+"px";
 	}
 
+	//added by Mike, 20261108
+	function updateCoin(iCurrCoinCountInput) {
+		
+/*	
+		arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSX]=0;
+		arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]=0;
+		arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPX]=2;
+		arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPY]=2;		
+*/
+		//alert(arrayCoinCountId[iCurrCoinCount][MONSTER_POSX]);
+
+		if ((arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSX]==fDefaultObjectPosX) && (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]==fDefaultObjectPosY)) {
+			return;
+		}
+
+		//added by Mike, 20261108
+		//no need to do this for coin icon display;
+		if (iCurrCoinCountInput!=iCurrCoinCountMax) {	
+
+			arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSX]+=arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPX];
+
+			arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]+=arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPY]*arrayCoinCountId[iCurrCoinCountInput][MONSTER_GRAVITY_MULTIPLIER];
+						
+			if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_IS_FACING_UP]) {
+				if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]<arrayCoinCountId[iCurrCoinCountInput][MONSTER_DEATH_ANIMATION_START_Y]-iImageFrameWidthLarge*0.75) {
+					arrayCoinCountId[iCurrCoinCountInput][MONSTER_GRAVITY_MULTIPLIER]*=-1;
+
+					arrayCoinCountId[iCurrCoinCountInput][MONSTER_IS_FACING_UP]=false;
+				}
+			}
+			else {
+				if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]>arrayCoinCountId[iCurrCoinCountInput][MONSTER_DEATH_ANIMATION_START_Y]) {
+					arrayCoinCountId[iCurrCoinCountInput][MONSTER_GRAVITY_MULTIPLIER]=0;
+					arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPX]=0;
+					arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPY]=0;
+				}
+			}
+						
+			arrayCoinCountId[iCurrCoinCountInput][MONSTER_OBJECT].style.left=arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSX]+"px";
+			
+			arrayCoinCountId[iCurrCoinCountInput][MONSTER_OBJECT].style.top=arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]+"px";
+		}
+	}
+
+
 	//added by Mike, 20260727
 	function drawCoin(iCurrCoinCountInput) {
 		var coinImage = document.getElementById("coinImageId"+iCurrCoinCountInput);
@@ -10088,7 +10224,7 @@ alert("iInputY: "+iInputY);
 
 		coinImage.style.visibility="visible";
 
-		if (iCurrCoinCountInput==16) {
+		if (iCurrCoinCountInput==iCurrCoinCountMax) { //16) {
 			if (iCoinAnimationDelayCount==iCoinAnimationDelayCountMax) {
 				iCoinAnimationCount=(iCoinAnimationCount+1)%iCoinAnimationCountMax;//5; //last hidden
 
@@ -10105,32 +10241,6 @@ alert("iInputY: "+iInputY);
 		else {
 			iCoinAnimationCount=0;
 		}		
-
-/*		
-		//move the snow toward the bottom-left
-		iSnowEffectPosX=parseInt(snowEffectImage.style.left);
-		iSnowEffectPosY=parseInt(snowEffectImage.style.top);
-		
-		let iWrapOffsetX=iViewportMaxWidth/2;
-		let iWrapOffsetY=iViewportMaxHeight/4;
-		
-		if (iSnowEffectPosX<0) {
-			iSnowEffectPosX=iViewportMaxWidth;
-		}
-		//add randomizing movement
-		//iSnowEffectPosX--;
-		//increase 5 to speed-up
-		iSnowEffectPosX-=window.parseInt(Math.random()*5)%5;
-		
-		if (iSnowEffectPosY>iViewportMaxHeight-iWrapOffsetY) {
-			iSnowEffectPosY=0-iImageFrameHeightDefault-iWrapOffsetY;
-		}
-		iSnowEffectPosY+=window.parseInt(Math.random()*5)%5;
-		//iSnowEffectPosY++;
-		
-		snowEffectImage.style.left=iSnowEffectPosX+"px";
-		snowEffectImage.style.top=iSnowEffectPosY+"px";
-*/		
 	}
 
 
@@ -10819,18 +10929,8 @@ if (arrayWalkOnSnowEffectCount==1) {
 
 		//added by Mike, 20261107
 		//alert(iCurrCoinCount);
+		processCoinOut(iMonsterImageTilePosX,iMonsterImageTilePosY);
 
-		if (iCurrHeroCoinCount<iCurrCoinCountMax) {
-			var currCoinImageObject=setCoinPosition(iMonsterImageTilePosX,iMonsterImageTilePosY,iCurrHeroCoinCount); 
-			//iCurrHeroCoinCount++;
-/*			
-			arrayActors[iArrayActorsCount]=currCoinImageObject;
-			arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault+iArrayActorsCount;
-			arrayActors[iArrayActorsCount]["type"]=ITEM_ARRAY_ACTOR_ROLE_TYPE;
-			iArrayActorsCount++;					
-*/			
-		}
-		
 		
 /*		//edited by Mike, 20260721
 		var myAudioEffectSwordOut = document.getElementById("myAudioEffectSwordOutId");
@@ -11275,6 +11375,14 @@ if (fDifferenceInXPos!=0) {
 
 					//added by Mike, 20260805
 					arrayWraithMonsterCountId[arrayActors[iCount]["iCount"]][MONSTER_POSY]=fActorPosYUpdated;
+					arrayActors[iCount].style.top=fActorPosYUpdated+"px";
+				}
+				else if (arrayActors[iCount]["type"]==ITEM_ARRAY_ACTOR_ROLE_TYPE) {
+					arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSX]=fActorPosXUpdated;
+					arrayActors[iCount].style.left=fActorPosXUpdated+"px";
+					
+					arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSY]=fActorPosYUpdated;
+					
 					arrayActors[iCount].style.top=fActorPosYUpdated+"px";
 				}
 				else if (arrayActors[iCount]["type"]==FIREBALL_ARRAY_ACTOR_ROLE_TYPE) {
@@ -15750,13 +15858,22 @@ if (fDifferenceInXPos!=0) {
 				
 					iCurrHeroCoinCount++;
 				}
-*/												
+*/										
+				arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSX]=fDefaultObjectPosX;
+				arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSY]=fDefaultObjectPosY;
+
+				coinImage.style.left=arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSX]+"px";
+				coinImage.style.top=arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSY]+"px";
+
+
+/*		
 				coinImage.style.left="-999999px";
 				coinImage.style.top="-999999px";
-
-				iCurrHeroCoinCount++;
 				
 				coinImage.style.visibility="hidden";
+*/
+
+				iCurrHeroCoinCount++;
 
 				//alert(iCount);
 
@@ -17526,11 +17643,51 @@ if (fDifferenceInXPos!=0) {
 					//initBgTileMap();
 
 
-
-
 					//edited by Mike, 20261107; from 20261102
 					iCurrCoinCount=0;
+	
+					//added by Mike, 20261108
+					for (iCurrCoinCountTemp=0; iCurrCoinCountTemp<iCurrCoinCountMax; iCurrCoinCountTemp++) {
+/*
+						const tempObject = new Image();
+						tempObject.src = "assets/images/coin.png";
+						//tempObject.style="ImageCoin";
+						
+						Object.assign(tempObject.style, imageCoinStyle);
+						
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_OBJECT]=tempObject;
 					
+						var currCoinImageObject=setCoinPosition(arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSX],arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSY],arrayCoinCountId[iCurrCoinCountTemp][MONSTER_OBJECT]); 
+*/
+
+						var currCoinImageObject=setCoinPosition(0+fDefaultObjectPosX,0+fDefaultObjectPosY,iCurrCoinCountTemp);							
+						
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_OBJECT]=currCoinImageObject;
+											
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSX]=fDefaultObjectPosX;
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSY]=fDefaultObjectPosY;
+										
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_STEPX]=2;
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_STEPY]=2;
+
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_DEATH_ANIMATION_START_X]=fDefaultObjectPosX;
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_DEATH_ANIMATION_START_Y]=fDefaultObjectPosY;
+
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_GRAVITY_MULTIPLIER]=-1;
+						
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_IS_FACING_UP]=true;			
+						//---
+						arrayActors[iArrayActorsCount]=currCoinImageObject;
+						arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault+iArrayActorsCount;
+						
+						arrayActors[iArrayActorsCount]["type"]=ITEM_ARRAY_ACTOR_ROLE_TYPE;
+						arrayActors[iArrayActorsCount]["iCount"]=iCurrCoinCountTemp;
+						iArrayActorsCount++;					
+						//----------------------------------
+					}
+					
+
+/*	
 					for (iCurrCoinRow=0; iCurrCoinRow<4; iCurrCoinRow++) {
 						for (iCurrCoinColumn=0; iCurrCoinColumn<4; iCurrCoinColumn++) {
 						
@@ -17538,7 +17695,11 @@ if (fDifferenceInXPos!=0) {
 							
 							//var currCoinImageObject=setCoinPosition(0+iViewportMaxWidth*0.80+iCurrCoinColumn*16+iCoinOffsetX,0+iViewportMaxHeight*0.10+iCurrCoinRow*48,iCurrCoinCount);							
 
-							var currCoinImageObject=setCoinPosition(0-999999,0-999999,iCurrCoinCount);							
+							//var currCoinImageObject=setCoinPosition(0-999999,0-999999,iCurrCoinCount);							
+
+							//added by Mike, 20261108
+							var currCoinImageObject=setCoinPosition(0+fDefaultObjectPosX,0+fDefaultObjectPosY,iCurrCoinCount);							
+							//---
 
 							//alert(iCurrCoinCount);
 							//alert(iArrayActorsCount);
@@ -17551,22 +17712,21 @@ if (fDifferenceInXPos!=0) {
 							arrayActors[iArrayActorsCount]["type"]=ITEM_ARRAY_ACTOR_ROLE_TYPE;
 							iArrayActorsCount++;					
 							//----------------------------------
-
+							
 							iCurrCoinCount++;
 						}
 					}
-										
-					//setCoinPosition(0+iViewportMaxWidth/2-iImageFrameWidthDefault*2,0+iViewportMaxHeight*0.01,16); //display icon
-					//edited by Mike, 20260809
-					//setCoinPosition(0+iViewportMaxWidth*0.02,0+iViewportMaxHeight*0.87-iImageFrameHeightDefault,16); //display icon
+*/
+					
+					//added by Mike, 20261108
+					//iCurrCoinCount=0; //reset back to zero at the start
+					
+					//alert(iCurrCoinCountTemp);
+					//alert(iCurrCoinCountMax);
+					
+					var displayCoinIconImageObject=setCoinPosition(0+iImageFrameWidthDefault*0.5, 0+iViewportMaxHeight-iImageFrameHeightLarge-iImageFrameHeightDefault*0.5,iCurrCoinCountMax); 
 
-					
-					//edited by Mike, 20260921
-					//setCoinPosition(0+iViewportMaxWidth*0.02,0+iViewportMaxHeight-iImageFrameHeightLarge*1.25+iImageFrameHeightLarge*0.04,16); //display icon
-					
-					
-					setCoinPosition(0+iImageFrameWidthDefault*0.5, 0+iViewportMaxHeight-iImageFrameHeightLarge-iImageFrameHeightDefault*0.5,16); 
-
+					arrayCoinCountId[iCurrCoinCountMax][MONSTER_OBJECT]=displayCoinIconImageObject;
 
 					//added by Mike, 20260822; from 20260805
 					var impactParticleEffectImage = document.getElementById("impactParticleEffectImageId");
@@ -17942,15 +18102,16 @@ if (fDifferenceInXPos!=0) {
 					executeSnowEffect(iCurrSnowEffectCount);
 				}
 
+				//iCurrCoinCountTemp
+
 				//edited by Mike, 20261107; from 20260727
 				for (iCurrCoinCountTemp=0; iCurrCoinCountTemp<iCurrCoinCountMax; iCurrCoinCountTemp++) {
-				
+					updateCoin(iCurrCoinCountTemp);
 					drawCoin(iCurrCoinCountTemp);
-
-					if (iCurrCoinCountTemp!=16) {
-						verifyHeroCollideWithCoin(iCurrCoinCountTemp);
-					}
+					verifyHeroCollideWithCoin(iCurrCoinCountTemp);
 				}
+		
+				drawCoin(iCurrCoinCountMax); //added by Mike, 20261108; display icon only;
 				
 
 /*				
@@ -23412,9 +23573,20 @@ opting to put assets folder in "html_application" folder instead
 	<img id="coinImageId14" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
 	<img id="coinImageId15" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
 
-	<!-- display icon only -->
-	<img id="coinImageId16" class="ImageCoinDisplayIcon" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId16" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId17" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId18" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId19" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId20" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
 
+	<img id="coinImageId21" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId22" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId23" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId24" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+	<img id="coinImageId25" class="ImageCoin" src="assets/images/coin.png?lastmod=20260727T1402">
+
+	<!-- display icon only -->
+	<img id="coinImageId26" class="ImageCoinDisplayIcon" src="assets/images/coin.png?lastmod=20260727T1402">
 
 	<img id="bgTileImageId0" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1346">
 	<img id="bgTileImageId1" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
