@@ -21,13 +21,15 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 2) Functional level up upon defeating the Opponent;
 
 
-#### 3) 20261105-20261108; https://masarapmabuhay.itch.io/game-off-2026-prototype3
+#### 3) 20261105-20261109; https://masarapmabuhay.itch.io/game-off-2026-prototype3
 
 20261105: key input "J" to attack instead of P1 auto-attacking when near the Opponent
 
 20261106-20261107: Fixed clunky controls related to how long P1 held "J", etc; simple control mechanism with choices; Coins come out upon hitting the Opponent.
 
 20261108: Coins jump out from the Opponent and are affected by gravity. P1 or Opponent gives out the sound of squeezed bicycle horn when hit.
+
+20261109: Mouse left-click now also does exactly what pressing "J" on the keyboard does. P2 could also make use of the "Enter" key on the numberpad to do the same thing for his character. I've added "Skel" (a "Drudge Skeleton") as one of the characters in the roster. Updating the faces, which were ruined after scaling to `96x96px` from `64x64px`, took as long as `1.5 hrs`. Meanwhile, the coin's image sprite is still undergoing testing. The marking inside is supposed to be an hourglass, only it currently looks like Spider-man's face.
 
 ## Related link
 
