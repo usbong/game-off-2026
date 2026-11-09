@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261108; from 20261107
+' @date updated: 20261109; from 20261108
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -4606,7 +4606,9 @@ var bIsHeroFacingUp=true;//false;
 
 		var myCanvasGridContext = myCanvasGrid.getContext("2d");
 		myCanvasGrid.style.opacity=0.5;//0.1;
-		drawGrid(myCanvasGridContext,0,0);
+		
+		//removed by Mike, 20261109; debug
+		//drawGrid(myCanvasGridContext,0,0);
 	
 		//removed by Mike, 20260907
 		//forceLandscape();
@@ -20198,6 +20200,53 @@ alert("iXPos: "+iXPos);
 */		
 	}	
 
+	//added by Mike, 20261109
+	function processKeyUpKeyJ() {
+		//let the attack animation finish first;
+		if (iHeroAttackAnimationCount>iHeroAttackAnimationCountMax) {
+			arrayKeyPressed[iKEY_J]=false;
+			arrayKeyPressedStored[iKEY_J]=false;
+
+			//added by Mike, 20261105
+			bHasHeroHitMonster=false;
+			bHasReleasedKeyJ=true;
+		}
+
+		iHasHeldKeyJ=0;
+	}
+	
+	//added by Mike, 20261109
+	function processKeyDownKeyJ() {
+		bIsHeroWalking=false;
+		
+		if (bHasReleasedKeyJ) {
+			if (iHeroAttackAnimationCount>iHeroAttackAnimationCountMax) {
+				
+				bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
+
+				//alert(bHasReducedHeroManaOutput);
+
+				if (iCurrHeroMana<=0) {
+				//if (!bHasReducedHeroManaOutput) {
+					arrayKeyPressed[iKEY_J]=false;
+					arrayKeyPressedStored[iKEY_J]=false;					
+					
+					bHasReleasedKeyJ=true;
+					bHasHeroHitMonster=false;
+				}
+				else {
+					arrayKeyPressed[iKEY_J]=true;
+					arrayKeyPressedStored[iKEY_J]=true;
+					
+					bHasFired=true;
+					bHasReleasedKeyJ=false;
+					
+					iHeroAttackAnimationCount=0; //added by Mike, 20261107
+				}
+			}
+		}
+	}
+
 	//added by Mike, 20231125
 	function initKeyboardInput() {
 		var mainImageTileFireballProjectileHold = document.getElementById("mainImageTileFireballProjectileHoldImageId");
@@ -20307,8 +20356,9 @@ alert("iXPos: "+iXPos);
 						textLevelUpStaminaDiv.style.backgroundColor=optionBgColorHover;
 					}
 				}
-				else if ((e.code==='KeyJ') || (e.code==='Enter')) {
-				
+				//edited by Mike, 20261109
+				//else if ((e.code==='KeyJ') || (e.code==='Enter')) {
+				else if ((e.code==='KeyJ') || (e.code==='Enter') || (e.code==='NumpadEnter')) {
 					hasInitMapLocation=false;
 				
 					if (textLevelUpLifeDiv.style.backgroundColor===optionBgColorHover) {
@@ -20368,8 +20418,8 @@ alert("iXPos: "+iXPos);
 					}
 */					
 				}
-				else if ((e.code==='KeyJ') || (e.code==='Enter')) {
-				
+				//else if ((e.code==='KeyJ') || (e.code==='Enter')) {
+				else if ((e.code==='KeyJ') || (e.code==='Enter') || (e.code==='NumpadEnter')) {
 					hasInitMapLocation=false;
 				
 					if (textNewGameDiv.style.backgroundColor===optionBgColorHover) {
@@ -20487,68 +20537,12 @@ alert("iXPos: "+iXPos);
 				arrayKeyPressedStored[iKEY_S]=true; //added by Mike, 20261028
 			}
 
-			//TODO: -update: this			
-			//added by Mike, 20261105
-			if (e.code==='KeyJ') {
-			
-				//if (bHasReleasedKeyJ) {
-				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0)) {
-				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && (!bIsHeroWalking)) {
-				
-				//TODO: -verify: this; quickly stop walking then attack; not accepted
-				//edited by Mike, 20261106
-				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0) && ((!bIsHeroWalking) || (bHasAttacked))) {
-				
-				bIsHeroWalking=false;
-				
-				//alert(bHasReleasedKeyJ);
-
-				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount==0)) {
-				if (bHasReleasedKeyJ) {
-				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount!=0)) {
-				//if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount>iHeroAttackAnimationCountMax)) {
-				
-					if (iHeroAttackAnimationCount>iHeroAttackAnimationCountMax) {
-						
-						bHasReducedHeroManaOutput=reduceHeroMana(iManaCostHeroMeleeAttack);
-
-						//alert(bHasReducedHeroManaOutput);
-
-						if (iCurrHeroMana<=0) {
-						//if (!bHasReducedHeroManaOutput) {
-							arrayKeyPressed[iKEY_J]=false;
-							arrayKeyPressedStored[iKEY_J]=false;					
-							
-							bHasReleasedKeyJ=true;
-							bHasHeroHitMonster=false;
-						}
-						else {
-							arrayKeyPressed[iKEY_J]=true;
-							arrayKeyPressedStored[iKEY_J]=true;
-							
-							bHasFired=true;
-							bHasReleasedKeyJ=false;
-							
-							iHeroAttackAnimationCount=0; //added by Mike, 20261107
-						}
-					}
-	/*
-					//this also prevents rapid attack by doing a key press and hold
-					else {
-						arrayKeyPressed[iKEY_J]=false;
-						arrayKeyPressedStored[iKEY_J]=false;					
-
-						//edited by Mike, 20261106
-						//bHasReleasedKeyJ=true;
-						bHasReleasedKeyJ=false;
-
-						bHasHeroHitMonster=false;
-					}
-	*/
-				}
-
-				//bHasFired=true;
-				//processResultFromInput(fHeroCenterOriginX+0, fHeroCenterOriginY+0);
+			//edited by Mike, 20261109; from 20261105
+			//if (e.code==='KeyJ') {
+			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			//TODO: -update: if only for One Player or Two Players
+			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+				processKeyDownKeyJ();
 			}
 
 
@@ -20565,12 +20559,15 @@ alert("iXPos: "+iXPos);
 			}
 */
 
-			//added by Mike, 20261010
+			//edited by Mike, 20261109; from 20261010
+			//for P1 special
 			if (e.code==='Space') {
 				//edited by Mike, 20261012
 				//arrayKeyPressed[iKEY_SPACE]=true;
 
 				if (bHasReleasedSpaceKey) {
+					//removed by Mike, 20261109
+/*
 					//edited by Mike, 20261014
 					if (!bIsHeroJumping) {
 						arrayKeyPressed[iKEY_SPACE]=true;
@@ -20585,10 +20582,10 @@ alert("iXPos: "+iXPos);
 							arrayKeyPressed[iKEY_A]=arrayKeyPressedStored[iKEY_A]; 
 							arrayKeyPressed[iKEY_W]=arrayKeyPressedStored[iKEY_W]; 
 							arrayKeyPressed[iKEY_S]=arrayKeyPressedStored[iKEY_S]; 
-/*
-							bIsHeroJumping=true;
-							bIsHeroFalling=true;
-*/							
+
+							////bIsHeroJumping=true;
+							////bIsHeroFalling=true;
+							
 							bHasHeroHitWall=false;
 						}
 						else {
@@ -20598,6 +20595,8 @@ alert("iXPos: "+iXPos);
 							arrayKeyPressedStored[iKEY_S]=false; 
 						}
 					}
+*/
+
 				}
 
 				bHasReleasedSpaceKey=false; //added by Mike, 20261012
@@ -20605,6 +20604,9 @@ alert("iXPos: "+iXPos);
 				e.preventDefault(); //added by Mike, 20261017
 			}
 
+			//for P2 special
+			if (e.code==='Numpad0') {
+			}
 
 			//added by Mike, 20261026
 			if ((arrayKeyPressed[iKEY_D]) || (arrayKeyPressed[iKEY_A]) || (arrayKeyPressed[iKEY_W]) || (arrayKeyPressed[iKEY_S])) { 
@@ -20697,19 +20699,11 @@ alert("iXPos: "+iXPos);
 				arrayKeyPressedStored[iKEY_S]=false; //added by Mike, 20261029
 			}
 
-			//added by Mike, 20261105
-			if (e.code==='KeyJ') {
-
-				//alert("DITO!!");
-
+			//edited by Mike, 20261109; from 20261105
+			//if (e.code==='KeyJ') {
+			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+					processKeyUpKeyJ();
 /*
-//				if ((bHasReleasedKeyJ) && (iHeroAttackAnimationCount!=0)) {
-				if (iHeroAttackAnimationCount!=0) {
-					//executeHeroAttackingAnimation();
-				}
-				else {
-*/				
-
 					//let the attack animation finish first;
 					if (iHeroAttackAnimationCount>iHeroAttackAnimationCountMax) {
 						arrayKeyPressed[iKEY_J]=false;
@@ -20719,26 +20713,13 @@ alert("iXPos: "+iXPos);
 						bHasHeroHitMonster=false;
 						bHasReleasedKeyJ=true;
 					}
-/*
-					else {
-						if (iHasHeldKeyJ>=5) {
-							arrayKeyPressed[iKEY_J]=false;
-							arrayKeyPressedStored[iKEY_J]=false;
 
-							//added by Mike, 20261105
-							bHasHeroHitMonster=false;
-							bHasReleasedKeyJ=true;
-						}
-					}
-*/
 					iHasHeldKeyJ=0;
-
-/*
-				}
-*/				
+*/					
 			}
 
 			//added by Mike, 20261010
+			//for P1 special
 			if (e.code==='Space') {
 				arrayKeyPressed[iKEY_SPACE]=false;
 				arrayKeyPressedStored[iKEY_SPACE]=false; //added by Mike, 20261029
@@ -20747,6 +20728,11 @@ alert("iXPos: "+iXPos);
 				
 				e.preventDefault(); //added by Mike, 20261021SS
 			}
+			
+			//for P2 special
+			if (e.code==='Numpad0') {
+			}
+
 			
 			//added by Mike, 20260924
 			var fDifferenceInXPos=Math.abs(fCurrViewportX-fHeroHitMonsterViewportX);
@@ -20875,6 +20861,91 @@ alert("iXPos: "+iXPos);
 					else {
 						summonEffectsSniperShotTarget.style.visibility="hidden";
 					}
+
+
+					//added by Mike, 20261109
+						if (bIsGameOver) {
+							var textNewGameDiv = document.getElementById("textNewGameDivId");
+							var textContinueGameDiv = document.getElementById("textContinueGameDivId");
+
+							textNewGameDiv.style.visibility="visible";
+							textContinueGameDiv.style.visibility="visible";
+													
+							//alert("iXPos"+iXPos);
+													
+							if (isPointsOfRectIntersectingPointsOfRectDoor(iXPos,iYPos, parseInt(textNewGameDiv.style.left),parseInt(textNewGameDiv.style.top),textNewGameDiv.clientWidth,textNewGameDiv.clientHeight)) {
+							
+								//executeHeroContinue(false);
+	
+								textNewGameDiv.style.backgroundColor=optionBgColorHover;
+								textContinueGameDiv.style.backgroundColor=optionBgColorDefault;
+	
+								return;
+							}
+							else if (isPointsOfRectIntersectingPointsOfRectDoor(iXPos,iYPos, parseInt(textContinueGameDiv.style.left),parseInt(textContinueGameDiv.style.top),textContinueGameDiv.clientWidth,textContinueGameDiv.clientHeight)) {
+							
+								//executeHeroContinue(true);
+
+								textNewGameDiv.style.backgroundColor=optionBgColorDefault;
+								textContinueGameDiv.style.backgroundColor=optionBgColorHover;
+							
+								return;
+							}
+
+							return;
+						}
+						//added by Mike, 20251121
+						else if (bIsLevelUp) {
+							var textLevelUpLifeDiv = document.getElementById("textLevelUpLifeDivId");
+							var textLevelUpStaminaDiv = document.getElementById("textLevelUpStaminaDivId");
+							var textLevelUpSpeedDiv = document.getElementById("textLevelUpSpeedDivId");
+
+							textLevelUpLifeDiv.style.visibility="visible";
+							textLevelUpStaminaDiv.style.visibility="visible";
+							textLevelUpSpeedDiv.style.visibility="visible";
+						
+							
+							//alert("iXPos"+iXPos);
+													
+							if (isPointsOfRectIntersectingPointsOfRectDoor(iXPos,iYPos, parseInt(textLevelUpLifeDiv.style.left),parseInt(textLevelUpLifeDiv.style.top),textLevelUpLifeDiv.clientWidth,textLevelUpLifeDiv.clientHeight)) {
+							
+								//executeHeroContinue(false);
+								//executeHeroLeveledUp(HP_STAT_ID);
+
+								textLevelUpLifeDiv.style.backgroundColor=optionBgColorHover;
+								textLevelUpStaminaDiv.style.backgroundColor=optionBgColorDefault;
+								textLevelUpSpeedDiv.style.backgroundColor=optionBgColorDefault;
+							
+								return;
+							}
+							else if (isPointsOfRectIntersectingPointsOfRectDoor(iXPos,iYPos, parseInt(textLevelUpStaminaDiv.style.left),parseInt(textLevelUpStaminaDiv.style.top),textLevelUpStaminaDiv.clientWidth,textLevelUpStaminaDiv.clientHeight)) {
+							
+								//executeHeroContinue(true);
+								//executeHeroLeveledUp(STAMINA_STAT_ID);
+
+								textLevelUpLifeDiv.style.backgroundColor=optionBgColorDefault;
+								textLevelUpStaminaDiv.style.backgroundColor=optionBgColorHover;
+								textLevelUpSpeedDiv.style.backgroundColor=optionBgColorDefault;
+							
+								return;
+							}
+							else if (isPointsOfRectIntersectingPointsOfRectDoor(iXPos,iYPos, parseInt(textLevelUpSpeedDiv.style.left),parseInt(textLevelUpSpeedDiv.style.top),textLevelUpSpeedDiv.clientWidth,textLevelUpSpeedDiv.clientHeight)) {
+							
+								//executeHeroContinue(true);
+								//executeHeroLeveledUp(SPEED_STAT_ID);
+
+								textLevelUpLifeDiv.style.backgroundColor=optionBgColorDefault;
+								textLevelUpStaminaDiv.style.backgroundColor=optionBgColorDefault;
+								textLevelUpSpeedDiv.style.backgroundColor=optionBgColorHover;
+							
+								return;
+							}
+							
+							return;
+						}
+
+
+
 					break;
 			}
 		});
@@ -20978,12 +21049,8 @@ document.body.addEventListener('gestureend', function (e) {
 					//edited by Mike, 20260806
 					else { //if 1; left-click
 					//if (event.which===1) { //left-click
-/*
-        //edited by Mike, 20230423
-        alert("iXPos: "+iXPos);
-        alert("iYPos: "+iYPos);
-*/
-
+					
+			//removed by Mike, 20261109
 			//edited by Mike, 20260913; from 20260911
 			//if (bHasHeroHitWall) {
 				if (iCurrHeroWallBounceCount>0) {
@@ -20993,10 +21060,10 @@ document.body.addEventListener('gestureend', function (e) {
 				}
 			//}
 				
-				
-				//added by Mike, 20260924
+/*				
+				//removed by Mike, 20261109; from 20260924
 				bIsLeftClickPressed=true;
-						
+*/						
 						if (bIsGameOver) {
 							var textNewGameDiv = document.getElementById("textNewGameDivId");
 							var textContinueGameDiv = document.getElementById("textContinueGameDivId");
@@ -21201,8 +21268,10 @@ document.body.addEventListener('gestureend', function (e) {
 
 						//alert("DITO!!");
 
-						//added by Mike, 20231107
-						processResultFromInput(iXPos, iYPos);
+						//edited by Mike, 20261109; from 20231107
+						//processResultFromInput(iXPos, iYPos);
+						processKeyDownKeyJ();
+
 					
 						//alert(">>>>>: "+iCurrMapLocation);
 					}
@@ -21217,7 +21286,11 @@ document.body.addEventListener('gestureend', function (e) {
 			//last accessed: 20221122
 			switch(event.pointerType) {
 				case 'mouse':
-				case 'touch': //added by Mike, 20260907
+				case 'touch': //edited by Mike, 20261109; from 20260907
+				
+					processKeyUpKeyJ();
+				
+/*					//removed by Mike, 20261109
 					//note: ZOOM function causes position ERROR via screenX
 					var iXPos = event.clientX;//screenX;
 
@@ -21228,7 +21301,6 @@ document.body.addEventListener('gestureend', function (e) {
 					//added by Mike, 20260929
 					iXPos=iXPos/fInitialScale;
 					iYPos=iYPos/fInitialScale;
-
 
 					if (event.which===3) { //right-click
 						processResultFromInput(iXPos, iYPos);
@@ -21252,21 +21324,7 @@ document.body.addEventListener('gestureend', function (e) {
 					
 						break;
 					}		
-					
-					//added by Mike, 20260924
-					//bIsLeftClickPressed=false;
 
-/*					
-					//removed by Mike, 20260909; from 20260827
-					if (!bIsActionKeyPressed) {
-						bIsActionKeyControlPressed=false;
-					}
-*/					
-					//alert(newMainImageTileProjectilePosX);
-/*
-					alert("fCurrViewportX: "+fCurrViewportX);
-					alert("fHeroHitMonsterViewportX: "+fHeroHitMonsterViewportX);
-*/					
 					var fDifferenceInXPos=Math.abs(fCurrViewportX-fHeroHitMonsterViewportX);
 					
 					var fDifferenceInYPos=Math.abs(fCurrViewportY-fHeroHitMonsterViewportY);
@@ -21280,7 +21338,7 @@ document.body.addEventListener('gestureend', function (e) {
 							bIsActionKeyControlPressed=false;
 						}
 					}
-					
+*/					
 			}
 		});
 
@@ -23460,11 +23518,11 @@ opting to put assets folder in "html_application" folder instead
 		<img id="runningWraithMonsterImageId2" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 		<img id="runningWraithMonsterImageId3" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 -->
-		<img id="wraithMonsterImageId0" class="ImageHeroBody" src="assets/images/inputImageLarge2026Boxer.png?lastmod=20260903T1556">
-		<img id="wraithMonsterImageId1" class="ImageHeroBody" src="assets/images/inputImageLarge2026Boxer.png?lastmod=20260903T1556">
+		<img id="wraithMonsterImageId0" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId1" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
 
-		<img id="wraithMonsterImageId2" class="ImageHeroBody" src="assets/images/inputImageLarge2026Boxer.png?lastmod=20260903T1556">
-		<img id="wraithMonsterImageId3" class="ImageHeroBody" src="assets/images/inputImageLarge2026Boxer.png?lastmod=20260903T1556">
+		<img id="wraithMonsterImageId2" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId3" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
 
 		<img id="runningWraithMonsterImageId0" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 		<img id="runningWraithMonsterImageId1" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
