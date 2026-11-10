@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261109; from 20261108
+' @date updated: 20261110; from 20261109
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1739,6 +1739,9 @@ const sAudioEffectActionSwordSlice ="assets/audio/usbongGameOff2025SwordSlice.mp
 //edited by Mike, 20261108; from 20260702
 //const sAudioEffectActionPunchSandBag ="assets/audio/usbongSoundEffectSandBag.mp3";
 const sAudioEffectActionPunchSqueeze ="assets/audio/usbongSoundEffectSqueeze.mp3";
+
+//added by Mike, 20261110
+const sAudioEffectCoin ="assets/audio/usbongSoundEffectCoin.mp3";
 
 //OK; short
 //const sAudioEffectActionSwordSlice ="assets/audio/usbongGameOff2025Hit.mp3";
@@ -15868,6 +15871,17 @@ if (fDifferenceInXPos!=0) {
 				coinImage.style.left=arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSX]+"px";
 				coinImage.style.top=arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSY]+"px";
 
+				//added by Mike, 20261110
+				//------------------------
+				var myAudioEffectCoin = document.getElementById("myAudioEffectCoinId");
+				myAudioEffectCoin.setAttribute("src", sAudioEffectCoin);
+
+				fMyAudioEffectCoinVolume=1.0;
+				myAudioEffectCoin.volume=fMyAudioEffectCoinVolume;
+				myAudioEffectCoin.loop=false;
+				myAudioEffectCoin.play();				
+				//------------------------
+
 
 /*		
 				coinImage.style.left="-999999px";
@@ -20216,7 +20230,7 @@ alert("iXPos: "+iXPos);
 	}
 	
 	//added by Mike, 20261109
-	function processKeyDownKeyJ() {
+	function processKeyDownKeyJ(e) {
 		bIsHeroWalking=false;
 		
 		if (bHasReleasedKeyJ) {
@@ -20245,6 +20259,8 @@ alert("iXPos: "+iXPos);
 				}
 			}
 		}
+		
+		e.preventDefault(); //added by Mike, 20261110
 	}
 
 	//added by Mike, 20231125
@@ -20515,6 +20531,8 @@ alert("iXPos: "+iXPos);
 			if (e.code==='ArrowRight') {
 				arrayKeyPressed[iKEY_D]=true;
 				arrayKeyPressedStored[iKEY_D]=true; //added by Mike, 20261028
+
+				e.preventDefault(); //added by Mike, 20261110
 			}
 			//else if (e.keyCode==37) { //key LEFT
 			//edited by Mike, 20261010
@@ -20522,12 +20540,16 @@ alert("iXPos: "+iXPos);
 			if (e.code==='ArrowLeft') {
 				arrayKeyPressed[iKEY_A]=true;
 				arrayKeyPressedStored[iKEY_A]=true; //added by Mike, 20261028
+
+				e.preventDefault(); //added by Mike, 20261110
 			}
 			
 			//if (e.keyCode==38) { //key UP
 			if (e.code==='ArrowUp') {
 				arrayKeyPressed[iKEY_W]=true;
 				arrayKeyPressedStored[iKEY_W]=true; //added by Mike, 20261028
+
+				e.preventDefault(); //added by Mike, 20261110
 			}
 			//else if (e.keyCode==40) { //key DOWN
 			//edited by Mike, 20261010
@@ -20535,6 +20557,8 @@ alert("iXPos: "+iXPos);
 			if (e.code==='ArrowDown') {
 				arrayKeyPressed[iKEY_S]=true;
 				arrayKeyPressedStored[iKEY_S]=true; //added by Mike, 20261028
+				
+				e.preventDefault(); //added by Mike, 20261110
 			}
 
 			//edited by Mike, 20261109; from 20261105
@@ -20542,7 +20566,7 @@ alert("iXPos: "+iXPos);
 			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 			//TODO: -update: if only for One Player or Two Players
 			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
-				processKeyDownKeyJ();
+				processKeyDownKeyJ(e);
 			}
 
 
@@ -20606,6 +20630,8 @@ alert("iXPos: "+iXPos);
 
 			//for P2 special
 			if (e.code==='Numpad0') {
+
+				e.preventDefault(); //added by Mike, 20261110
 			}
 
 			//added by Mike, 20261026
@@ -21270,7 +21296,7 @@ document.body.addEventListener('gestureend', function (e) {
 
 						//edited by Mike, 20261109; from 20231107
 						//processResultFromInput(iXPos, iYPos);
-						processKeyDownKeyJ();
+						processKeyDownKeyJ(e);
 
 					
 						//alert(">>>>>: "+iCurrMapLocation);
@@ -24167,6 +24193,10 @@ opting to put assets folder in "html_application" folder instead
 	</audio><br/>
 
 	<audio id="myAudioEffectPunchSandBagId" class="myAudio" src="" type="audio/x-m4a">
+	  Your browser does not support the audio tag.
+	</audio><br/>
+
+	<audio id="myAudioEffectCoinId" class="myAudio" src="" type="audio/x-m4a">
 	  Your browser does not support the audio tag.
 	</audio><br/>
 
