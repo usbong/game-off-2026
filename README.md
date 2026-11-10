@@ -21,7 +21,7 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 2) Functional level up upon defeating the Opponent;
 
 
-#### 3) 20261105-20261109; https://masarapmabuhay.itch.io/game-off-2026-prototype3
+#### 3) 20261105-20261110; https://masarapmabuhay.itch.io/game-off-2026-prototype3
 
 20261105: key input "J" to attack instead of P1 auto-attacking when near the Opponent
 
@@ -30,6 +30,8 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 20261108: Coins jump out from the Opponent and are affected by gravity. P1 or Opponent gives out the sound of squeezed bicycle horn when hit.
 
 20261109: Mouse left-click now also does exactly what pressing "J" on the keyboard does. P2 could also make use of the "Enter" key on the numberpad to do the same thing for his character. I've added "Skel" (a "Drudge Skeleton") as one of the characters in the roster. Updating the faces, which were ruined after scaling to `96x96px` from `64x64px`, took as long as `1.5 hrs`. Meanwhile, the coin's image sprite is still undergoing testing. The marking inside is supposed to be an hourglass, only it currently looks like Spider-man's face.
+
+20261110: Sound now comes out whenever P1 collects a coin. I've also disabled the default behavior of the arrow keys and the numpad keys, because I noticed that on itch.io, these keys also scroll the page or move out of full screen mode. I then updated the image sprites for our new character, "Einstein;" however, getting only the animation sprites for movement without the attacks or when getting hit already took me an afternoon totaling to `2hrs`.
 
 ## Related link
 
