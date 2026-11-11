@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261110; from 20261109
+' @date updated: 20261111; from 20261110
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1752,14 +1752,20 @@ const sAudioEffectActionSwordOut ="assets/audio/usbongGameOff2025SwordOut.mp3";
 
 const sAudioEffectGrassCut ="assets/audio/usbongGameOff2023TapLoudEdited.mp3";
 
-const sAudioIntroBGM="assets/audio/usbongGameOff2025Problem.mp3";
-const sAudioHurryBGM="assets/audio/usbongGameOff2025HurryDrum7.mp3";
+
+//edited by Mike, 20261111
+//const sAudioIntroBGM="assets/audio/usbongGameOff2025Problem.mp3";
+//const sAudioDrumbeatBGM="assets/audio/usbongGameOff2025HurryDrum7.mp3";
+
+const sAudioIntroBGM="assets/audio/usbongGameOff2026Drumbeat.mp3";
+const sAudioDrumbeatBGM="assets/audio/usbongGameOff2026Drumbeat.mp3";
+
 
 const sAudioBGM="assets/audio/usbongGameOff2024CaveBGMV22.mp3";
 
-const sAudioBGMPart2="assets/audio/usbongGameOff2024CaveBadBGMV10.mp3";
+const sAudioBGMPart2="assets/audio/usbongGameOff2026StagePart2.mp3";
 
-const sAudioBGMPart3="assets/audio/usbongGameOff2024CaveFantasyBGM.mp3";
+const sAudioBGMPart3="assets/audio/usbongGameOff2026StagePart3.mp3";
 
 const sAudioEffectSolved ="assets/audio/UsbongGameOff2024TuneSolved.mp3";
 
@@ -1776,6 +1782,9 @@ var myAudioPart2;
 var myAudioPart3;
 var myAudioBossScreech;
 var myAudioWater;
+
+//added by Mike, 20261111
+var myAudioIntroBGM;
 
 /*
 var iAnimationCount=-1;//0; start at -1
@@ -3921,6 +3930,23 @@ var bIsHeroFacingUp=true;//false;
 			//iCurrHeroLifeToBeDeducted=0;
 		}
 		
+		//added by Mike, 20261111
+		if (iCurrHeroLife<=iCurrHeroLifeMax/2) {	
+			////if (!myAudioPart2.paused) {
+			////	myAudioPart3.play();
+			////}
+/*
+			if (!myAudioPart3.paused) {
+				myAudioPart3.pause();
+			}
+			else if (!myAudioPart2.paused) {
+				myAudioPart2.pause();
+			}
+*/
+			myAudioPart3.pause();
+			myAudioPart2.pause();
+		}
+		
 		//added by Mike, 20251124
 		iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLife+iCurrHeroLifeToBeDeducted;
 	
@@ -4662,21 +4688,21 @@ var bIsHeroFacingUp=true;//false;
 
 
 		
-/*		//edited by Mike, 20260615; debug		
+		//edited by Mike, 20261111; from 20260615; debug		
 		bHasPressedStart=false;
   		bHasViewedHowToPlayGuide=false;
 		bHasViewedTitle=false;
 		bIsMissionDone=false;
 		bIsMissionStarted=false;	
 		bHasViewedMissionIntro=false;
-*/
+/*
 		bHasPressedStart=true;
   		bHasViewedHowToPlayGuide=true;
 		bHasViewedTitle=true;
 		bIsMissionDone=false;
 		bIsMissionStarted=false;	
 		bHasViewedMissionIntro=true;
-
+*/
 		bIsShowingStage1End=false;
 		bIsShowingStage2End=false;
 		bIsShowingStage3End=false;
@@ -4789,6 +4815,8 @@ var bIsHeroFacingUp=true;//false;
 
 		var bgImageMoon = document.getElementById("bgImageMoonId");			
 		var bgImageWallOne = document.getElementById("bgImageWallId0");	
+
+
 /*		
 		var bgImageWallPartTwo = document.getElementById("bgImageWallId1");			
 		var bgImageWallPartThree = document.getElementById("bgImageWallId2");			
@@ -5076,7 +5104,7 @@ var bIsHeroFacingUp=true;//false;
 			}
 		}			
 		
-
+/*
 		//------------
 		//note: not played during onLoad(), unless in ITCH.IO...
 		myAudio = document.getElementById("myAudioId");
@@ -5090,12 +5118,12 @@ var bIsHeroFacingUp=true;//false;
 
 		//alert("DITO");	
 		//-----------		
-		
+*/		
 
 		myAudioPart2 = document.getElementById("myAudioPart2Id");		
 		myAudioPart2.setAttribute("src", sAudioBGMPart2);
 
-		var fMyAudioPart2Volume=1.0;//0.4;
+		var fMyAudioPart2Volume=0.6;//0.4;
 		myAudioPart2.volume=fMyAudioPart2Volume;
 		myAudioPart2.loop=true;		
 		//myAudioPart2.play();
@@ -5111,7 +5139,8 @@ var bIsHeroFacingUp=true;//false;
 		//myAudioPart3.play();
 
 		//-----------		
-			
+
+/*			
 		myAudioBossScreech = document.getElementById("myAudioBossScreechId");		
 		myAudioBossScreech.setAttribute("src", sAudioEffectBossScreech);
 
@@ -5129,6 +5158,17 @@ var bIsHeroFacingUp=true;//false;
 		myAudioWater.loop=false;		
 		//myAudioBossScreech.play();		
 		//-----------		
+*/
+		
+		//added by Mike, 20261111
+		myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
+		myAudioIntroBGM.setAttribute("src", sAudioIntroBGM);
+
+		var fMyAudioIntroBGMVolume=1.0;//0.6;
+		myAudioIntroBGM.volume=fMyAudioIntroBGMVolume;
+		myAudioIntroBGM.loop=true;
+		//myAudioIntroBGM.play();
+
 		
 		//note: set this here;
 		keyImageTile.style.objectPosition = "-" + iImageFrameWidthDefault*0 + "px -" + iImageFrameHeight*3 + "px";
@@ -6059,6 +6099,9 @@ alert("iInputY: "+iInputY);
 			arrayCoinCountId[iCurrCoinCount][MONSTER_DEATH_ANIMATION_START_Y]=iMonsterImageTilePosY;
 
 			arrayCoinCountId[iCurrCoinCount][MONSTER_GRAVITY_MULTIPLIER]=-1;			
+			
+			//added by Mike, 20261111
+			arrayCoinCountId[iCurrCoinCount][MONSTER_ANIMATION_COUNT]=Math.floor(Math.random()*iCoinAnimationCountMax);			
 
 			arrayCoinCountId[iCurrCoinCount][MONSTER_IS_FACING_UP]=true;			
 
@@ -8063,7 +8106,9 @@ alert("iInputY: "+iInputY);
 				
 				//if (myAudioBossScreech.currentTime==0) {
 				if (iBossMonsterHitAnimationCount%iBossMonsterHitAnimationCountMax==0) {
+/*
 					myAudioBossScreech.play();
+*/					
 				}
 			}
 			else {
@@ -10203,21 +10248,9 @@ alert("iInputY: "+iInputY);
 	}
 
 
-	//added by Mike, 20260727
-	function drawCoin(iCurrCoinCountInput) {
+	//added by Mike, 20261111
+	function drawCoinDisplayIcon(iCurrCoinCountInput) {
 		var coinImage = document.getElementById("coinImageId"+iCurrCoinCountInput);
-
-		//var coinDisplayIconImage = document.getElementById("coinImageId16");
-		
-/*		//removed by Mike, 20260727
-		if ((bIsGameOver) || (bIsLevelUp) || (bIsShowingStage1End) || (bIsShowingStage2End) || (bIsShowingStage3End) || (bIsShowingStage1Start) || (bIsShowingStage2Start) || (bIsShowingStage3Start)) {
-
-			coinImage.style.visibility="hidden";
-			return;
-		}
-*/
-
-//alert("iCurrSnowEffectCount: "+iCurrSnowEffectCount)
 
 		if (coinImage.style.visibility=="hidden") {
 			return;
@@ -10246,6 +10279,79 @@ alert("iInputY: "+iInputY);
 		}
 		else {
 			iCoinAnimationCount=0;
+		}		
+	}
+
+
+
+	//added by Mike, 20260727
+	//function drawCoin(iCurrCoinCountInput) {
+	function drawCoin(arrayCoinCountObject) {
+
+		//var coinImage = document.getElementById("coinImageId"+iCurrCoinCountInput);
+
+		//var coinDisplayIconImage = document.getElementById("coinImageId16");
+		
+/*		//removed by Mike, 20260727
+		if ((bIsGameOver) || (bIsLevelUp) || (bIsShowingStage1End) || (bIsShowingStage2End) || (bIsShowingStage3End) || (bIsShowingStage1Start) || (bIsShowingStage2Start) || (bIsShowingStage3Start)) {
+
+			coinImage.style.visibility="hidden";
+			return;
+		}
+*/
+
+//alert("iCurrSnowEffectCount: "+iCurrSnowEffectCount)
+
+		if (arrayCoinCountObject[MONSTER_OBJECT].style.visibility=="hidden") {
+			return;
+		}
+
+		if (iCurrMapLocation>62) { //after the portal
+			arrayCoinCountObject[MONSTER_OBJECT].style.visibility="hidden";
+			return;
+		}
+
+		arrayCoinCountObject[MONSTER_OBJECT].style.visibility="visible";
+
+
+
+/*		//edited by Mike, 20261111
+		if (iCurrCoinCountInput==iCurrCoinCountMax) { //16) {
+			if (iCoinAnimationDelayCount==iCoinAnimationDelayCountMax) {
+				//edited by Mike, 20261111
+				iCoinAnimationCount=(iCoinAnimationCount+1)%iCoinAnimationCountMax;//5; //last hidden
+				
+				iCoinAnimationDelayCount=0;
+			}
+			else {
+				iCoinAnimationDelayCount++;
+			}
+		}
+		
+		if (iCoinAnimationCount<iCoinAnimationCountMax) {
+			coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + 0 + "px";
+		}
+		else {
+			iCoinAnimationCount=0;
+		}		
+*/
+
+
+		if (arrayCoinCountObject[MONSTER_ANIMATION_DELAY_COUNT]==iCoinAnimationDelayCountMax) {
+			arrayCoinCountObject[MONSTER_ANIMATION_COUNT]=(arrayCoinCountObject[MONSTER_ANIMATION_COUNT]+1)%iCoinAnimationCountMax;//5; //last hidden
+			
+			arrayCoinCountObject[MONSTER_ANIMATION_DELAY_COUNT]=0;
+		}
+		else {
+			arrayCoinCountObject[MONSTER_ANIMATION_DELAY_COUNT]++;
+		}
+
+			
+		if (arrayCoinCountObject[MONSTER_ANIMATION_COUNT]<iCoinAnimationCountMax) {
+			arrayCoinCountObject[MONSTER_OBJECT].style.objectPosition = "-" + iImageCoinAnimationWidth*arrayCoinCountObject[MONSTER_ANIMATION_COUNT] + "px -" + 0 + "px";
+		}
+		else {
+			arrayCoinCountObject[MONSTER_ANIMATION_COUNT]=0;
 		}		
 	}
 
@@ -10925,7 +11031,16 @@ if (arrayWalkOnSnowEffectCount==1) {
 	
 
 	function monsterHitByHero(mainImageTilePosX, mainImageTilePosY, iMonsterImageTilePosX, iMonsterImageTilePosY) {	
+
+		//added by Mike, 20261111
+		//------------------------------
+		if (!myAudioPart2.paused) {
+			myAudioPart3.play();
+		}
 	
+		myAudioPart2.play();
+		//------------------------------
+		
 		resetProjectile();
 
 		//added by Mike, 20251128
@@ -11077,7 +11192,9 @@ if (arrayWalkOnSnowEffectCount==1) {
 			//heroHitByMonster(mainImageTilePosX,mainImageTilePosY, batMonsterImageTilePosX,batMonsterImageTilePosY);
 			
 			if (!bIsHeroInRiver) {
+/*
 				myAudioWater.play();
+*/				
 			}
 			
 			bIsHeroInRiver=true;	
@@ -11114,7 +11231,9 @@ if (arrayWalkOnSnowEffectCount==1) {
 			if (isPointsOfRectIntersectingPointsOfRectMonster(inputArraySnakeMonsterWithIdCount[MONSTER_POSX],inputArraySnakeMonsterWithIdCount[MONSTER_POSY], iRiverImagePosX+iRiverImagePosXOffset, iRiverImagePosY+iRiverImagePosYOffset,iImageFrameWidth, iImageFrameHeight, iRiverImageFrameWidth, iRiverImageFrameHeight)) {	
 				
 				if (!inputArraySnakeMonsterWithIdCount[MONSTER_IS_IN_RIVER]) {
+/*
 					myAudioWater.play();
+*/					
 				}
 				inputArraySnakeMonsterWithIdCount[MONSTER_IS_IN_RIVER]=true;	
 			}
@@ -11384,12 +11503,16 @@ if (fDifferenceInXPos!=0) {
 					arrayActors[iCount].style.top=fActorPosYUpdated+"px";
 				}
 				else if (arrayActors[iCount]["type"]==ITEM_ARRAY_ACTOR_ROLE_TYPE) {
-					arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSX]=fActorPosXUpdated;
-					arrayActors[iCount].style.left=fActorPosXUpdated+"px";
-					
-					arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSY]=fActorPosYUpdated;
-					
-					arrayActors[iCount].style.top=fActorPosYUpdated+"px";
+					//edited by Mike, 20261111
+					//still pulls the coin downward somewhat
+					if (arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_GRAVITY_MULTIPLIER]==0) {
+						arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSX]=fActorPosXUpdated;
+						arrayActors[iCount].style.left=fActorPosXUpdated+"px";
+						
+						arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSY]=fActorPosYUpdated;
+						
+						arrayActors[iCount].style.top=fActorPosYUpdated+"px";
+					}
 				}
 				else if (arrayActors[iCount]["type"]==FIREBALL_ARRAY_ACTOR_ROLE_TYPE) {
 					mainImageTileFireballProjectilePosX=fActorPosXUpdated;
@@ -15882,7 +16005,6 @@ if (fDifferenceInXPos!=0) {
 				myAudioEffectCoin.play();				
 				//------------------------
 
-
 /*		
 				coinImage.style.left="-999999px";
 				coinImage.style.top="-999999px";
@@ -16529,7 +16651,8 @@ if (fDifferenceInXPos!=0) {
 				fCurrBgImageMoonOpacity=0.5;
 			}
 
-			bgImageMoon.style.opacity=fCurrBgImageMoonOpacity;//"0.5";
+			//removed by Mike, 20261111
+			//bgImageMoon.style.opacity=fCurrBgImageMoonOpacity;//"0.5";
 		
 		
 			bossBattleBgImageBeach.style.visibility = "hidden";
@@ -16554,25 +16677,28 @@ if (fDifferenceInXPos!=0) {
 
 			switch (iCurrMissionIntroPage) {
 				case 0:
-					sText = "The generosity of the Empire hardly extends to the far reaches of the galaxy. <br/><br/>Distant from imperial affairs, the people of the Outer Waves have learned to survive without relying on the help of the Empire.";
+					//edited by Mike, 20261111
+					//sText = "The generosity of the Empire hardly extends to the far reaches of the galaxy. <br/><br/>Distant from imperial affairs, the people of the Outer Waves have learned to survive without relying on the help of the Empire.";
 					
-					bgImageMoon.style.visibility="visible";
+					sText = "INVITATION: <br/><br/>COMPETE FOR THE LEGENDARY *POWER SHIFT GLOVE*!";
+					
+					//bgImageMoon.style.visibility="visible";
 					break;
 				case 1:
-					sText = "Meanwhile, the creatures of the Undead continue to advance, bringing death in the service of their malevolent Lord...";
+					sText = "IT'S YOURS IF YOU WIN! <br/><br/> -RED SPIDER";
 
-					bgImageMoon.style.visibility="visible";
+					//bgImageMoon.style.visibility="visible";
 					break;
 				case 2:
-					sText = "What was that!";
+					sText = "THE *POWER SHIFT GLOVE*!!!";
 
-					bgImageMoon.style.visibility="hidden";
+					//bgImageMoon.style.visibility="hidden";
 					break;
 				case 3:
-					sText = "An explosion!";
+					sText = "INCREDIBLE POWER TO WHOEVER WINS!";
 					break;
 				case 4:
-					sText = "Hurry! Take this message and bring it to the Emperor!";
+					sText = "BUT WHY IS RED SPIDER GIVING IT AWAY? ...";
 					break;
 			}
 
@@ -17405,7 +17531,7 @@ if (fDifferenceInXPos!=0) {
 		switch(iCurrMapLocation) {
 			case 53:
 				//myAudio.play();
-				
+								
 				//bossBattleBgImageBeach.setAttribute("src", sZombieStage);
 				//bossBattleBgImageBeach.setAttribute("src", sSnowStage2);
 
@@ -17422,6 +17548,9 @@ if (fDifferenceInXPos!=0) {
 				var myCanvasTint = document.getElementById("myCanvasTintId");
 
 				if (!hasInitMapLocation) {				
+					//added by Mike, 20261111
+					myAudioIntroBGM.play();
+								
 					//added by Mike, 20260802
 					myCanvasTint.style.visibility="visible";
 					fCurrCanvasTintOpacity=1.0;					
@@ -17686,6 +17815,10 @@ if (fDifferenceInXPos!=0) {
 										
 						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_STEPX]=2;
 						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_STEPY]=2;
+
+						//added by Mike, 20261111
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_ANIMATION_COUNT]=0; 
+						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_ANIMATION_DELAY_COUNT]=0; 
 
 						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_DEATH_ANIMATION_START_X]=fDefaultObjectPosX;
 						arrayCoinCountId[iCurrCoinCountTemp][MONSTER_DEATH_ANIMATION_START_Y]=fDefaultObjectPosY;
@@ -18090,6 +18223,7 @@ if (fDifferenceInXPos!=0) {
 							
 							//added by Mike, 20260918
 							arrayWraithMonsterCountId[iCount][MONSTER_GRAVITY_MULTIPLIER]=1;
+							
 						}						
 						arrayWraithMonsterCountId[iCount][MONSTER_RESPAWN_WAIT_TIME]++;
 					}
@@ -18121,15 +18255,19 @@ if (fDifferenceInXPos!=0) {
 
 				//iCurrCoinCountTemp
 
+
 				//edited by Mike, 20261107; from 20260727
 				for (iCurrCoinCountTemp=0; iCurrCoinCountTemp<iCurrCoinCountMax; iCurrCoinCountTemp++) {
 					updateCoin(iCurrCoinCountTemp);
-					drawCoin(iCurrCoinCountTemp);
+					
+					//drawCoin(iCurrCoinCountTemp);
+					drawCoin(arrayCoinCountId[iCurrCoinCountTemp]);
+					
 					verifyHeroCollideWithCoin(iCurrCoinCountTemp);
 				}
 		
-				drawCoin(iCurrCoinCountMax); //added by Mike, 20261108; display icon only;
-				
+				drawCoinDisplayIcon(iCurrCoinCountMax); //added by Mike, 20261108; display icon only;
+				//drawCoin(arrayCoinCountId[iCurrCoinCountMax]);
 
 /*				
 				alert("iCurrBgTileImageCount: "+iCurrBgTileImageCount);
@@ -20003,10 +20141,12 @@ alert("iXPos: "+iXPos);
 */
 
 			bHasPlayedSolvedTune=false;			
-			
+
+/*			
 			//myAudio.play();
 			myAudioPart2.pause();
 			myAudioPart3.pause();
+*/
 
 			for (iRowCount=0; iRowCount<iRowCountMax; iRowCount++) {				
 				for (iColumnCount=0; iColumnCount<iColumnCountMax; iColumnCount++) {
@@ -20231,6 +20371,14 @@ alert("iXPos: "+iXPos);
 	
 	//added by Mike, 20261109
 	function processKeyDownKeyJ(e) {
+/*		//TODO: -update: this
+		//added by Mike, 20261111
+		if ((!bHasPressedStart) || (!bHasViewedHowToPlayGuide)) {
+			//processLeftClickStartScreens();
+			return;
+		}
+*/
+
 		bIsHeroWalking=false;
 		
 		if (bHasReleasedKeyJ) {
@@ -20280,6 +20428,16 @@ alert("iXPos: "+iXPos);
 			
 			//alert(e.keyCode);
 			//alert(e.code);
+			
+			
+			//added by Mike, 20261111; from 20261109
+			//if (e.code==='KeyJ') {
+			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			//TODO: -update: if only for One Player or Two Players
+			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+				processKeyDownKeyJ(e);
+			}
+
 			
 			//edited by Mike, 20261106; from 20261020
 			//if ((bIsGameOver) || (!bHasPressedStart) || (!bHasViewedHowToPlayGuide)) {
@@ -20561,13 +20719,15 @@ alert("iXPos: "+iXPos);
 				e.preventDefault(); //added by Mike, 20261110
 			}
 
-			//edited by Mike, 20261109; from 20261105
+/*
+			//removed by Mike, 20261111; from 20261109
 			//if (e.code==='KeyJ') {
 			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 			//TODO: -update: if only for One Player or Two Players
 			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 				processKeyDownKeyJ(e);
 			}
+*/
 
 
 /*			//removed by Mike, 20261106
@@ -21056,18 +21216,17 @@ document.body.addEventListener('gestureend', function (e) {
 
 
 					//alert(event.which);
-					
+
+/*	//removed by Mike, 20261111					
 					if (event.which===3) { //right-click
 						//alert("HERE!!");
 						bIsActionKeyPressed=true;
 						bIsActionKeyFireballPressed=true;
 						bIsRightClickHeld=true;
 	
-/*
-						if ((!bIsGameOver) && (bHasPressedStart) && (!bIsMissionDone)) {
-							executeHeroFireballProjectileHoldAnimation();
-						}					
-*/
+						////if ((!bIsGameOver) && (bHasPressedStart) && (!bIsMissionDone)) {
+						////	executeHeroFireballProjectileHoldAnimation();
+						////}					
 						
 						//processResultFromInput(iXPos, iYPos);
 						//break;						
@@ -21075,6 +21234,8 @@ document.body.addEventListener('gestureend', function (e) {
 					//edited by Mike, 20260806
 					else { //if 1; left-click
 					//if (event.which===1) { //left-click
+*/
+					if (event.which===1) { //left-click
 					
 			//removed by Mike, 20261109
 			//edited by Mike, 20260913; from 20260911
@@ -21162,146 +21323,12 @@ document.body.addEventListener('gestureend', function (e) {
 							
 							return;
 						}
-						
-
-					//added by Mike, 20231122
-					if (bHasPressedStart) {
-						
-						if (iInputDelayCount<iInputDelayCountMax) {
-							//iInputDelayCount++;
-							return;
-						}
-						
-						var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
-						var myAudioHurryBGM = document.getElementById("myAudioHurryBGMId");
-
-
-
-			
-						  //alert(">");
-						  if (!bHasViewedHowToPlayGuide) {
-							bHasViewedHowToPlayGuide=true;
-							playSolvedTune();
-							
-							iInputDelayCount=0;
-
-							myAudio.pause();	
-							
-							//--------------------
-							//var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
-
-							myAudioIntroBGM.setAttribute("src", sAudioIntroBGM);
-
-							//fMyAudioEffectVolume=0.2;
-							fMyAudioIntroBGMVolume=0.6;
-							myAudioIntroBGM.volume=fMyAudioIntroBGMVolume;
-							myAudioIntroBGM.loop=true;
-							myAudioIntroBGM.play();		
-							//--------------------							
-							
-							return;
-						  }
-						  else {
-							  if (!bHasViewedMissionIntro) {
-
-								if (iCurrMissionIntroPage<iCurrMissionIntroPageMax-1) {
-									sCurrText="";
-									iCurrTextCharacterCountEffectDelayCount=0;
-									iCurrTextCharacterCount=0;
-									iCurrMissionIntroPage++;
-									
-									//alert(iCurrMissionIntroPage);
-									
-									if (iCurrMissionIntroPage==1) {
-										fCurrDivStoryOpacity=0;
-									}
-									else if ((iCurrMissionIntroPage==2) || (iCurrMissionIntroPage==4)){
-
-										myAudioIntroBGM.pause();	
-
-										//--------------------
-										//var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
-
-										if (!myAudioHurryBGM.paused) {
-										}
-										else {
-											myAudioHurryBGM.setAttribute("src", sAudioHurryBGM);
-
-											//fMyAudioEffectVolume=0.2;
-											fMyAudioHurryBGMVolume=0.6;
-											myAudioHurryBGM.volume=fMyAudioHurryBGMVolume;
-											myAudioHurryBGM.loop=true;
-											myAudioHurryBGM.play();		
-										}
-
-										//--------------------
-										var myAudioEffectCannonFire = document.getElementById("myAudioEffectCannonFireId");
-
-										myAudioEffectCannonFire.setAttribute("src", sAudioEffectActionCannonFire);
-
-										//fMyAudioEffectVolume=0.2;
-										fMyAudioEffectCannonFireVolume=1.0;
-										myAudioEffectCannonFire.volume=fMyAudioEffectCannonFireVolume;
-										myAudioEffectCannonFire.loop=false;
-										myAudioEffectCannonFire.play();		
-										//--------------------
-									}									
-									return;
-								}
-								else {
-									bHasViewedMissionIntro=true;
-									return;
-								}
-							  }
-							  else if (iCurrMapLocation==61) {
-									iCurrMapLocation=62;
-									
-									return;
-							  }
-							  else if (iCurrMapLocation==63) {
-									iCurrMapLocation=64;
-									
-									return;
-							  }
-							  
-							  /*
-							  else if ((iCurrMapLocation==61) && (bIsShowingStage1End)) {
-							  //else if (iCurrMapLocation==61) {
-
-									bIsShowingStage1End=false;
-									bIsShowingStage2Start=true;
-									
-									//note will not show the "portal" text anymore;
-									//error if removed;
-									iCurrMapLocation=62;
-									
-									return;
-							  }*/
-							  /*
-							  else if ((iCurrMapLocation==63) && (bIsShowingStage2Start)) {
-									bIsShowingStage2Start=false;
-									//iCurrMapLocation=64;
-									return;
-							  }*/
-						  }
-						}
-						else {
-						  bHasPressedStart=true;
-						  playSolvedTune();
-						  iInputDelayCount=0;
-						  return;
-						}
-
-						//alert("DITO!!");
-
-						//edited by Mike, 20261109; from 20231107
-						//processResultFromInput(iXPos, iYPos);
-						processKeyDownKeyJ(e);
-
 					
-						//alert(">>>>>: "+iCurrMapLocation);
-					}
+					//added by Mike, 20261111
+					processLeftClickStartScreens();
+
 					break;
+				}
 			}
 		});
 		
@@ -21453,6 +21480,149 @@ function initTouchInput() {
 	});
 }
 */
+
+  //added by Mike, 20261111
+  function processLeftClickStartScreens() {  
+  		//added by Mike, 20231122
+		if (bHasPressedStart) {
+			
+			if (iInputDelayCount<iInputDelayCountMax) {
+				//iInputDelayCount++;
+				return;
+			}
+			
+			//var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
+	/*						
+			var myAudioHurryBGM = document.getElementById("myAudioHurryBGMId");
+	*/
+
+
+
+			  //alert(">");
+			  if (!bHasViewedHowToPlayGuide) {
+				bHasViewedHowToPlayGuide=true;
+				playSolvedTune();
+				
+				iInputDelayCount=0;
+
+	/*
+				myAudio.pause();	
+				
+				//--------------------
+				//var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
+
+				myAudioIntroBGM.setAttribute("src", sAudioIntroBGM);
+
+				//fMyAudioEffectVolume=0.2;
+				fMyAudioIntroBGMVolume=0.6;
+				myAudioIntroBGM.volume=fMyAudioIntroBGMVolume;
+				myAudioIntroBGM.loop=true;
+				myAudioIntroBGM.play();		
+				//--------------------							
+	*/							
+				return;
+			  }
+			  else {
+				  if (!bHasViewedMissionIntro) {
+
+					if (iCurrMissionIntroPage<iCurrMissionIntroPageMax-1) {
+						sCurrText="";
+						iCurrTextCharacterCountEffectDelayCount=0;
+						iCurrTextCharacterCount=0;
+						iCurrMissionIntroPage++;
+						
+						//alert(iCurrMissionIntroPage);
+						
+						if (iCurrMissionIntroPage==1) {
+							fCurrDivStoryOpacity=0;
+						}
+						else if ((iCurrMissionIntroPage==2) || (iCurrMissionIntroPage==4)){
+	/*
+							myAudioIntroBGM.pause();	
+
+							//--------------------
+							//var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
+
+							if (!myAudioHurryBGM.paused) {
+							}
+							else {
+								myAudioHurryBGM.setAttribute("src", sAudioDrumbeatBGM);
+
+								//fMyAudioEffectVolume=0.2;
+								fMyAudioHurryBGMVolume=0.6;
+								myAudioHurryBGM.volume=fMyAudioHurryBGMVolume;
+								myAudioHurryBGM.loop=true;
+								myAudioHurryBGM.play();		
+							}
+
+							//--------------------
+							var myAudioEffectCannonFire = document.getElementById("myAudioEffectCannonFireId");
+
+							myAudioEffectCannonFire.setAttribute("src", sAudioEffectActionCannonFire);
+
+							//fMyAudioEffectVolume=0.2;
+							fMyAudioEffectCannonFireVolume=1.0;
+							myAudioEffectCannonFire.volume=fMyAudioEffectCannonFireVolume;
+							myAudioEffectCannonFire.loop=false;
+							myAudioEffectCannonFire.play();		
+							//--------------------
+	*/
+						}									
+						return;
+					}
+					else {
+						bHasViewedMissionIntro=true;
+						return;
+					}
+				  }
+				  else if (iCurrMapLocation==61) {
+						iCurrMapLocation=62;
+						
+						return;
+				  }
+				  else if (iCurrMapLocation==63) {
+						iCurrMapLocation=64;
+						
+						return;
+				  }
+				  
+				  /*
+				  else if ((iCurrMapLocation==61) && (bIsShowingStage1End)) {
+				  //else if (iCurrMapLocation==61) {
+
+						bIsShowingStage1End=false;
+						bIsShowingStage2Start=true;
+						
+						//note will not show the "portal" text anymore;
+						//error if removed;
+						iCurrMapLocation=62;
+						
+						return;
+				  }*/
+				  /*
+				  else if ((iCurrMapLocation==63) && (bIsShowingStage2Start)) {
+						bIsShowingStage2Start=false;
+						//iCurrMapLocation=64;
+						return;
+				  }*/
+			  }
+			}
+			else {
+			  bHasPressedStart=true;
+			  playSolvedTune();
+			  iInputDelayCount=0;
+			  return;
+			}
+
+			//alert("DITO!!");
+
+			//removed by Mike, 20261111; from 20261109
+			//processResultFromInput(iXPos, iYPos);
+			//processKeyDownKeyJ(event);
+		
+			//alert(">>>>>: "+iCurrMapLocation);
+//		}
+  }
 
   //added by Mike, 20221123
   //@return bool
@@ -24058,12 +24228,12 @@ opting to put assets folder in "html_application" folder instead
 	<div id="divTransitionEffectId" class="myDivTransitionEffect"></div>
 
 		
-	<img id="howToPlayGuideImageId" class="ImageHowToPlayGuide" src="assets/images/gameOff2025HowToPlay.jpg">
+	<img id="howToPlayGuideImageId" class="ImageHowToPlayGuide" src="assets/images/gameOff2026HowToPlay.jpg">
 		
-	<img id="howToPlayGuideImageFrame2Id" class="ImageHowToPlayGuide" src="assets/images/gameOff2025HowToPlayFrame2.jpg">
+	<img id="howToPlayGuideImageFrame2Id" class="ImageHowToPlayGuide" src="assets/images/gameOff2026HowToPlayFrame2.jpg">
 	
 	<!-- ImageTitle-->
-	<img id="titleImageId" class="ImageHowToPlayGuide" src="assets/images/gameOff2025TitleBG.jpg">
+	<img id="titleImageId" class="ImageHowToPlayGuide" src="assets/images/gameOff2026TitleBG.png">
 <!--
 	<img id="titleImageFrame2Id" class="ImageHowToPlayGuide" src="assets/images/gameOff2025TitleBG.jpg">
 -->
@@ -24075,9 +24245,16 @@ opting to put assets folder in "html_application" folder instead
 
 <!-- ImageBossBattleBg -->
 
+<!--
 	<img id="bgImageMoonId" class="ImageLastBossStageBg" src="assets/images/bgImageMoon.jpg?lastmod=20251130T1730">
 
 	<img id="bgImageWallId0" class="ImageWallFrame1" src="assets/images/wall.png?lastmod=20251130T0919">
+	
+-->
+	<img id="bgImageMoonId" class="ImageLastBossStageBg" src="">
+	<img id="bgImageWallId0" class="ImageWallFrame1" src="">
+	
+	
 <!--
 	<img id="bgImageWallId1" class="ImageWallFrame1" src="assets/images/wall.png?lastmod=20251130T0919">
 	<img id="bgImageWallId2" class="ImageWallFrame1" src="assets/images/wall.png?lastmod=20251130T0919">
@@ -24144,7 +24321,7 @@ opting to put assets folder in "html_application" folder instead
 	//usbongGameOff2023AudioEffectsCannon
 -->
 
-  <audio id="myAudioIntroBGMId" class="myAudio" src="assets/audio/usbongGameOff2025Problem.mp3" type="audio/x-m4a" controls loop>
+  <audio id="myAudioIntroBGMId" class="myAudio" src="assets/audio/usbongGameOff2026Drumbeat.mp3" type="audio/x-m4a" controls loop>
 	  Your browser does not support the audio tag.
 	</audio><br/>
 
