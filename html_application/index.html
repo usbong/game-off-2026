@@ -19907,6 +19907,8 @@ alert("iXPos: "+iXPos);
 	}
 
 	function executeHeroContinue(bIsContinue) {
+		hasInitMapLocation=false; //added by Mike, 20261111
+	
 		//CONTINUE
 		iCurrHeroLife=iCurrHeroLifeMax;
 		iCurrHeroMana=iCurrHeroManaMax;
@@ -20171,6 +20173,9 @@ alert("iXPos: "+iXPos);
 			iCurrHeroManaToBeDeductedAnimation=0;
 			iCurrHeroManaToBeDeductedAnimationMain=0;
 */
+			//added by Mike, 20261111
+			mainImageTileProjectileVelocityY=mainImageTileProjectileVelocityYDefault;
+			mainImageTileProjectileVelocityX=mainImageTileProjectileVelocityXDefault;
 		}
 
 		//added by Mike, 20261009
@@ -20185,9 +20190,10 @@ alert("iXPos: "+iXPos);
 		mainImageTileProjectileStepYMax=mainImageTileProjectileStepYMaxDefault;
 		mainImageTileProjectileStepXMax=mainImageTileProjectileStepXMaxDefault;
 
+/*		//removed by Mike, 20261111
 		mainImageTileProjectileVelocityY=mainImageTileProjectileVelocityYDefault;
 		mainImageTileProjectileVelocityX=mainImageTileProjectileVelocityXDefault;
-
+*/
 		mainImageTileProjectileStepYMin=mainImageTileProjectileVelocityY;
 		mainImageTileProjectileStepXMin=mainImageTileProjectileVelocityX;
 
@@ -20198,6 +20204,8 @@ alert("iXPos: "+iXPos);
 	
 	//added by Mike, 20251121
 	function executeHeroLeveledUp(iChosenStat) {
+		hasInitMapLocation=false; //added by Mike, 20261111
+	
 		//max 2 level-ups only;
 		switch (iChosenStat) {
 			case HP_STAT_ID:
@@ -20371,13 +20379,10 @@ alert("iXPos: "+iXPos);
 	
 	//added by Mike, 20261109
 	function processKeyDownKeyJ(e) {
-/*		//TODO: -update: this
 		//added by Mike, 20261111
-		if ((!bHasPressedStart) || (!bHasViewedHowToPlayGuide)) {
-			//processLeftClickStartScreens();
+		if (processLeftClickStartScreens()) {
 			return;
-		}
-*/
+		}		
 
 		bIsHeroWalking=false;
 		
@@ -20435,8 +20440,11 @@ alert("iXPos: "+iXPos);
 			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 			//TODO: -update: if only for One Player or Two Players
 			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
-				processKeyDownKeyJ(e);
+				if (processLeftClickStartScreens()) {
+					return;
+				}		
 			}
+
 
 			
 			//edited by Mike, 20261106; from 20261020
@@ -20455,6 +20463,10 @@ alert("iXPos: "+iXPos);
 			
 			//added by Mike, 20261106
 			if (bIsLevelUp) {
+				textLevelUpLifeDiv.style.visibility="visible";
+				textLevelUpStaminaDiv.style.visibility="visible";
+				textLevelUpSpeedDiv.style.visibility="visible";			
+			
 				if ((e.code==='KeyW') || (e.code==='ArrowUp')) {
 					if (((textLevelUpLifeDiv.style.backgroundColor).trim().length===0) && 
 						((textLevelUpStaminaDiv.style.backgroundColor).trim().length===0) &&
@@ -20533,7 +20545,7 @@ alert("iXPos: "+iXPos);
 				//edited by Mike, 20261109
 				//else if ((e.code==='KeyJ') || (e.code==='Enter')) {
 				else if ((e.code==='KeyJ') || (e.code==='Enter') || (e.code==='NumpadEnter')) {
-					hasInitMapLocation=false;
+					//hasInitMapLocation=false; //removed by Mike, 20261111
 				
 					if (textLevelUpLifeDiv.style.backgroundColor===optionBgColorHover) {
 						executeHeroLeveledUp(HP_STAT_ID);
@@ -20594,7 +20606,7 @@ alert("iXPos: "+iXPos);
 				}
 				//else if ((e.code==='KeyJ') || (e.code==='Enter')) {
 				else if ((e.code==='KeyJ') || (e.code==='Enter') || (e.code==='NumpadEnter')) {
-					hasInitMapLocation=false;
+					//hasInitMapLocation=false; //removed by Mike, 20261111
 				
 					if (textNewGameDiv.style.backgroundColor===optionBgColorHover) {
 						executeHeroContinue(false);
@@ -20719,15 +20731,13 @@ alert("iXPos: "+iXPos);
 				e.preventDefault(); //added by Mike, 20261110
 			}
 
-/*
-			//removed by Mike, 20261111; from 20261109
+			//edited by Mike, 20261111; from 20261109
 			//if (e.code==='KeyJ') {
 			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 			//TODO: -update: if only for One Player or Two Players
 			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 				processKeyDownKeyJ(e);
 			}
-*/
 
 
 /*			//removed by Mike, 20261106
@@ -21323,10 +21333,16 @@ document.body.addEventListener('gestureend', function (e) {
 							
 							return;
 						}
-					
-					//added by Mike, 20261111
-					processLeftClickStartScreens();
+	
 
+					//added by Mike, 20261111
+					if (processLeftClickStartScreens()) {
+						return;
+					}
+
+
+					processKeyDownKeyJ(event);
+					
 					break;
 				}
 			}
@@ -21488,7 +21504,7 @@ function initTouchInput() {
 			
 			if (iInputDelayCount<iInputDelayCountMax) {
 				//iInputDelayCount++;
-				return;
+				return true;
 			}
 			
 			//var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
@@ -21520,7 +21536,7 @@ function initTouchInput() {
 				myAudioIntroBGM.play();		
 				//--------------------							
 	*/							
-				return;
+				return true;
 			  }
 			  else {
 				  if (!bHasViewedMissionIntro) {
@@ -21568,22 +21584,22 @@ function initTouchInput() {
 							//--------------------
 	*/
 						}									
-						return;
+						return true;
 					}
 					else {
 						bHasViewedMissionIntro=true;
-						return;
+						return true;
 					}
 				  }
 				  else if (iCurrMapLocation==61) {
 						iCurrMapLocation=62;
 						
-						return;
+						return true;
 				  }
 				  else if (iCurrMapLocation==63) {
 						iCurrMapLocation=64;
 						
-						return;
+						return true;
 				  }
 				  
 				  /*
@@ -21611,7 +21627,7 @@ function initTouchInput() {
 			  bHasPressedStart=true;
 			  playSolvedTune();
 			  iInputDelayCount=0;
-			  return;
+			  return true;
 			}
 
 			//alert("DITO!!");
@@ -21622,6 +21638,7 @@ function initTouchInput() {
 		
 			//alert(">>>>>: "+iCurrMapLocation);
 //		}
+			return false;
   }
 
   //added by Mike, 20221123
