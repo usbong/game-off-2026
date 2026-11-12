@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261111; from 20261110
+' @date updated: 20261112; from 20261111
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1526,6 +1526,11 @@ var bHasReleasedKeyJ=true;
 
 var iHasHeldKeyJ=0;
 
+//added by Mike, 20261112
+var iHeroLifeBarWidth=12; //4
+var iHeroLifeBarHeight=6;//8; //4		
+var iHeroLifeBarSpacing=0;//1;
+
 //added by Mike, 20260910
 var bHasHeroHitWall=false;
 var bHasClickedWall=false; //added by Mike, 20260913
@@ -1767,6 +1772,8 @@ const sAudioBGMPart2="assets/audio/usbongGameOff2026StagePart2.mp3";
 
 const sAudioBGMPart3="assets/audio/usbongGameOff2026StagePart3.mp3";
 
+const sAudioBGMPart4="assets/audio/usbongGameOff2026StagePart4.mp3";
+
 const sAudioEffectSolved ="assets/audio/UsbongGameOff2024TuneSolved.mp3";
 
 const sAudioEffectShortLightningBlast ="assets/audio/usbongGameOff2025ShortLightningBlast.mp3";
@@ -1780,6 +1787,7 @@ const sAudioEffectWater ="assets/audio/usbongGameOff2024WaterOKV2.mp3";
 var myAudio;
 var myAudioPart2;
 var myAudioPart3;
+var myAudioPart4; //last accessed: 20261112
 var myAudioBossScreech;
 var myAudioWater;
 
@@ -2321,6 +2329,10 @@ const iMonsterAttackDamageBat=iMonsterAttackDamageDefault;
 const iSniperShotAttackDamage=10;
 const iFireballAttackDamage=1;
 
+//added by Mike, 20261112
+const iHeroAttackDamageDefault=1;//2; //1
+var iHeroAttackDamage=iHeroAttackDamageDefault;
+
 
 var iCurrTextCharacterCount=0;
 var iCurrTextCharacterCountMax=0;
@@ -2731,8 +2743,8 @@ var bIsHeroFacingUp=true;//false;
 	//added by Mike, 20260618
 	var iSetNum=0; //instead of random
 
-	//edited by Mike, 20260616; debug
-	const WRAITH_MONSTER_HP_MAX=50;//10;//100;//4;//2;//10;//1;//2;//3;
+	//edited by Mike, 20261112; from 20260616; debug
+	const WRAITH_MONSTER_HP_MAX=10;//50;//10;//100;//4;//2;//10;//1;//2;//3;
 
 	const RUNNING_WRAITH_MONSTER_HP_MAX=1;
 	const BOMB_MONSTER_HP_MAX=1;
@@ -3486,9 +3498,11 @@ var bIsHeroFacingUp=true;//false;
 	}
 
 	function drawHeroLifeBar(myCanvasContext, iXPos, iYPos, bIsFrameOnly) {
+/*		//removed by Mike, 20261112
 		var iHeroLifeBarWidth=12; //4
-		var iHeroLifeBarHeight=4;		
+		var iHeroLifeBarHeight=8; //4		
 		var iHeroLifeBarSpacing=0;//1;
+*/
 		
 		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
 		
@@ -3529,11 +3543,13 @@ var bIsHeroFacingUp=true;//false;
 		else {
 			iCurrHeroLifeToBeDeductedAnimationDelayCount++;
 		}
-		
-		//added by Mike, 20251111
+
+/*		
+		//removed by Mike, 20261112; from 20251111
 		myCanvasContext.strokeStyle = 'black'; 
 		myCanvasContext.lineWidth = 0.2; 
 		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iLifeBarWidthTotalPoints, iHeroLifeBarHeight); 
+*/
 		
 		//textLifeBarDiv.clientWidth
 /*
@@ -3556,9 +3572,12 @@ var bIsHeroFacingUp=true;//false;
 		//myCanvasContext.fillStyle = 'yellow';
 		myCanvasContext.fillStyle = "#ee0000"
 
-		var iLifeBarRedFillOffsetY=4;
+		//edited by Mike, 20261112
+		var iLifeBarRedFillOffsetY=0;//iHeroLifeBarHeight;//4;
 
-		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrHeroLifeToBeDeductedAnimationMain+iCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrHeroLifeToBeDeductedAnimationMain+iCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+
+		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iCurrHeroLifeMax)-(iHeroLifeBarWidth*(iCurrHeroLifeToBeDeductedAnimationMain+iCurrHeroLifeToBeDeductedAnimation)), 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrHeroLifeToBeDeductedAnimationMain+iCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
 
 		//myCanvasContext.fillRect(0+iXPos, 0+iYPos, iHeroLifeBarWidth*(iCurrHeroLifeMax), iHeroLifeBarHeight);
 
@@ -3630,22 +3649,29 @@ var bIsHeroFacingUp=true;//false;
 		//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-iHeroLifeBarWidth*iCurrHeroLife, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLife, iHeroLifeBarHeight);
 
 		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, 0+iYPos, iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
+		
+		//added by Mike, 20261112
+		myCanvasContext.strokeStyle = 'black'; 
+		myCanvasContext.lineWidth = 0.2; 
+		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*iLifeBarWidthTotalPoints, iHeroLifeBarHeight); 
+
 	}	
 
 
 	//added by Mike, 20261104
 	function drawOpponentLifeBar(myCanvasContext, iXPos, iYPos, bIsFrameOnly) {
-		//edited by Mike, 20261105; from 20261104
+/*
+		//removed by Mike, 20261112; from 20261105
 		iCurrOpponentLife=arrayWraithMonsterCountId[0][MONSTER_CURRENT_HP];
 		iCurrOpponentLifeMax=WRAITH_MONSTER_HP_MAX;
-		
+*/		
 		//alert(iCurrOpponentLife);
 
-
+/*		//removed by Mike, 20261112
 		var iHeroLifeBarWidth=12; //4
 		var iHeroLifeBarHeight=4;		
 		var iHeroLifeBarSpacing=0;//1;
-		
+*/		
 		
 		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
 		
@@ -3680,7 +3706,7 @@ var bIsHeroFacingUp=true;//false;
 		if (iCurrOpponentLifeToBeDeductedAnimationDelayCount==iCurrOpponentLifeToBeDeductedAnimationDelayCountMax) {
 			if (iCurrOpponentLifeToBeDeductedAnimation>0) {
 				
-				//alert(iCurrHeroLifeToBeDeductedAnimation);
+				//alert(iCurrOpponentLifeToBeDeductedAnimation);
 				
 				iCurrOpponentLifeToBeDeductedAnimation--;
 			}
@@ -3689,6 +3715,7 @@ var bIsHeroFacingUp=true;//false;
 		}
 		else {
 			iCurrOpponentLifeToBeDeductedAnimationDelayCount++;
+			
 		}
 		
 		//added by Mike, 20251111
@@ -3713,7 +3740,7 @@ var bIsHeroFacingUp=true;//false;
 		if (iCurrOpponentLifeToBeDeductedAnimation<0) {
 			iCurrOpponentLifeToBeDeductedAnimation=0;
 		}
-
+		
 	    if (iCurrOpponentLifeToBeDeductedAnimationMain<0) {
 			iCurrOpponentLifeToBeDeductedAnimationMain=0;
 		}
@@ -3721,12 +3748,12 @@ var bIsHeroFacingUp=true;//false;
 		//myCanvasContext.fillStyle = 'yellow';
 		myCanvasContext.fillStyle = "#ee0000"
 
-		var iLifeBarRedFillOffsetY=4;
+		var iLifeBarRedFillOffsetY=0;//4;
+
+		//edited by Mike, 20261112
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrOpponentLifeToBeDeductedAnimationMain+iCurrOpponentLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
 
 		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrOpponentLifeToBeDeductedAnimationMain+iCurrOpponentLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
-		
-		//myCanvasContext.fillRect(0+iXPos, 0+iYPos, iHeroLifeBarWidth*(iCurrHeroLifeMax), iHeroLifeBarHeight);
-
 		//---------------------------------
 
 
@@ -3764,6 +3791,7 @@ var bIsHeroFacingUp=true;//false;
 				myCanvasContext.fillStyle = "#ff0000"; //red		
 			}
 */
+
 			//Game Off 2021; TUGON
 			if (iCurrOpponentLifeAnimationDelayCount<10) {//5) {
 				//myCanvasContext.fillStyle = "#ff0000"; //red	
@@ -3789,6 +3817,7 @@ var bIsHeroFacingUp=true;//false;
 
 		//alert(iCurrOpponentLife/iCurrOpponentLifeMax);
 
+		//debug
 		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*(iCurrOpponentLife/iCurrOpponentLifeMax)*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
 
 		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroLifeBarWidth*(5), iHeroLifeBarHeight);
@@ -3908,6 +3937,8 @@ var bIsHeroFacingUp=true;//false;
 			return;
 		}
 */			
+
+		//alert(iCurrHeroLife);
 			
 		//iCurrHeroMana-=3;
 		iCurrHeroLifeToBeDeducted+=iAmount*3;
@@ -3920,7 +3951,10 @@ var bIsHeroFacingUp=true;//false;
 			iCurrHeroLife=0;
 			iCurrHeroLifeToBeDeducted=0;
 			//iCurrHeroManaToBeDeductedAnimation=0;
-			iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+
+			//edited by Mike, 20261112
+			//iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+			iCurrHeroLifeToBeDeductedAnimationMain=0;
 			return false;
 		}
 
@@ -3943,6 +3977,7 @@ var bIsHeroFacingUp=true;//false;
 				myAudioPart2.pause();
 			}
 */
+			myAudioPart4.pause(); //added by Mike, 20261112
 			myAudioPart3.pause();
 			myAudioPart2.pause();
 		}
@@ -3964,6 +3999,72 @@ var bIsHeroFacingUp=true;//false;
 		
 		return true;
 	}
+
+
+
+	//edited by Mike, 20251112
+	function reduceOpponentLifeBar(iAmount) {
+/*	
+		iCurrHeroLife-=iAmount;
+		
+		if (iCurrHeroLife<0) {
+			iCurrHeroLife=0;
+			return;
+		}
+*/			
+
+		//alert("DITO!!");
+			
+		//iCurrHeroMana-=3;
+		iCurrOpponentLifeToBeDeducted+=iAmount*3;
+		
+		if (iCurrOpponentLifeToBeDeducted>iCurrOpponentLifeMax) {
+			iCurrOpponentLifeToBeDeducted=iCurrOpponentLifeMax;
+		}
+		
+		if (iCurrOpponentLife-iCurrOpponentLifeToBeDeducted<=0) {
+			iCurrOpponentLife=0;
+			iCurrOpponentLifeToBeDeducted=0;
+			//iCurrHeroManaToBeDeductedAnimation=0;
+
+			//edited by Mike, 20261112
+			iCurrOpponentLifeToBeDeductedAnimationMain=0;//iCurrOpponentLifeMax;
+			return false;
+		}
+
+
+		if (iCurrOpponentLifeToBeDeducted>0) {
+			iCurrOpponentLife-=iCurrOpponentLifeToBeDeducted;
+			//iCurrHeroLifeToBeDeducted=0;
+		}
+		
+		//added by Mike, 20261111
+		if (iCurrOpponentLife<=iCurrOpponentLifeMax/2) {	
+			myAudioPart4.pause(); //added by Mike, 20261112
+			myAudioPart3.pause();
+			myAudioPart2.pause();
+		}
+		
+		//added by Mike, 20251124
+		iCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLife+iCurrOpponentLifeToBeDeducted;
+	
+		iCurrOpponentProjectileLifeAnimationDelayCount=0;
+		iCurrOpponentLifeToBeDeductedAnimation+=iCurrOpponentLifeToBeDeducted;
+		
+		//iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax-iCurrHeroLifeToBeDeductedAnimation;
+		
+		iCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLifeToBeDeductedAnimationMain-iCurrOpponentLifeToBeDeductedAnimation;
+		
+/*		
+		alert("iCurrHeroLifeToBeDeductedAnimation: "+iCurrHeroLifeToBeDeductedAnimation);
+		alert("iCurrHeroLifeToBeDeductedAnimationMain: "+iCurrHeroLifeToBeDeductedAnimationMain);
+*/		
+		
+		return true;
+	}
+
+
+
 
 	//edited by Mike, 20251123
 	//TODO: -update: this
@@ -4059,9 +4160,12 @@ var bIsHeroFacingUp=true;//false;
 		//var mainImageTileFireballProjectile = document.getElementById("mainImageTileFireballProjectileImageId");
 
 		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
+		
+		//added by Mike, 20261112; adjust y pos;
+		iYPos-=2;
 
 		var iHeroManaBarWidth=4;
-		var iHeroManaBarHeight=4;		
+		var iHeroManaBarHeight=5;//8;//4;		
 
 		var iHeroManaBarSpacing=0;//1;
 		var iHeroManaBarPaddingX=2;
@@ -5139,6 +5243,15 @@ var bIsHeroFacingUp=true;//false;
 		//myAudioPart3.play();
 
 		//-----------		
+		
+		//added by Mike, 20261112
+		myAudioPart4 = document.getElementById("myAudioPart4Id");		
+		myAudioPart4.setAttribute("src", sAudioBGMPart4);
+
+		var fMyAudioPart4Volume=0.5;//0.4;
+		myAudioPart4.volume=fMyAudioPart4Volume;
+		myAudioPart4.loop=true;		
+
 
 /*			
 		myAudioBossScreech = document.getElementById("myAudioBossScreechId");		
@@ -9106,8 +9219,6 @@ alert("iInputY: "+iInputY);
 					//---------------------------------------
 					//if (inputArrayWraithMonsterWithIdCount[MONSTER_CURRENT_STATE]==ATTACKING_STATE) {
 
-
-
 						heroHitByMonster(mainImageTilePosX,mainImageTilePosY, inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iMonsterAttackDamageWraith);
 						
 						setExplosionEffectPosition(mainImageTilePosX+iImageFrameWidthLarge/2,mainImageTilePosY+iImageFrameHeightLarge/2);
@@ -10870,7 +10981,7 @@ if (arrayWalkOnSnowEffectCount==1) {
 	function heroHitByMonster(mainImageTilePosX, mainImageTilePosY, iMonsterImageTilePosX, iMonsterImageTilePosY, iMonsterAttackDamage) {				
 		/*var mainImageTileHeroBody = document.getElementById("mainImageTileImageHeroBodyId");
 		*/
-		
+
 		if (iHeroInvincibileCount<iHeroInvincibileCountMax) {
 			return;
 		}
@@ -10888,6 +10999,7 @@ if (arrayWalkOnSnowEffectCount==1) {
 */		
 		//alert(iMonsterAttackDamage);
 
+		//edited by Mike, 20261112
 		reduceHeroLifeBar(iMonsterAttackDamage);
 				
 		iHeroInvincibileCount=0;
@@ -10945,13 +11057,13 @@ if (arrayWalkOnSnowEffectCount==1) {
 		myAudioEffectSwordSlice.loop=false;
 		myAudioEffectSwordSlice.play();				
 */
-		var myAudioEffectPunchSandBag = document.getElementById("myAudioEffectPunchSandBagId");
-		myAudioEffectPunchSandBag.setAttribute("src", sAudioEffectActionPunchSqueeze);
+		var myAudioEffectPunchSqueeze = document.getElementById("myAudioEffectPunchSqueezeId");
+		myAudioEffectPunchSqueeze.setAttribute("src", sAudioEffectActionPunchSqueeze);
 
-		fMyAudioEffectPunchSandBagVolume=1.0;
-		myAudioEffectPunchSandBag.volume=fMyAudioEffectPunchSandBagVolume;
-		myAudioEffectPunchSandBag.loop=false;
-		myAudioEffectPunchSandBag.play();				
+		fmyAudioEffectPunchSqueezeVolume=1.0;
+		myAudioEffectPunchSqueeze.volume=fmyAudioEffectPunchSqueezeVolume;
+		myAudioEffectPunchSqueeze.loop=false;
+		myAudioEffectPunchSqueeze.play();				
 
 
 /*
@@ -10976,6 +11088,7 @@ if (arrayWalkOnSnowEffectCount==1) {
 		bIsHeroAttacked=true;
 		bIsExecutingShake=true;
 
+		//edited by Mike, 20261112
 		reduceHeroLifeBar(iMonsterAttackDamage);
 				
 		iHeroInvincibileCount=0;
@@ -11020,20 +11133,23 @@ if (arrayWalkOnSnowEffectCount==1) {
 		myAudioEffectSwordOut.loop=false;
 		myAudioEffectSwordOut.play();
 */		
-		var myAudioEffectPunchSandBag = document.getElementById("myAudioEffectPunchSandBagId");
-		myAudioEffectPunchSandBag.setAttribute("src", sAudioEffectActionPunchSqueeze);
+		var myAudioEffectPunchSqueeze = document.getElementById("myAudioEffectPunchSqueezeId");
+		myAudioEffectPunchSqueeze.setAttribute("src", sAudioEffectActionPunchSqueeze);
 
-		fMyAudioEffectPunchSandBagVolume=1.0;
-		myAudioEffectPunchSandBag.volume=fMyAudioEffectPunchSandBagVolume;
-		myAudioEffectPunchSandBag.loop=false;
-		myAudioEffectPunchSandBag.play();	
+		fmyAudioEffectPunchSqueezeVolume=1.0;
+		myAudioEffectPunchSqueeze.volume=fmyAudioEffectPunchSqueezeVolume;
+		myAudioEffectPunchSqueeze.loop=false;
+		myAudioEffectPunchSqueeze.play();	
 	}
 	
 
 	function monsterHitByHero(mainImageTilePosX, mainImageTilePosY, iMonsterImageTilePosX, iMonsterImageTilePosY) {	
 
-		//added by Mike, 20261111
+		//edited by Mike, 20261112; from 20261111
 		//------------------------------
+		if (!myAudioPart3.paused) {
+			myAudioPart4.play();
+		}
 		if (!myAudioPart2.paused) {
 			myAudioPart3.play();
 		}
@@ -11052,6 +11168,8 @@ if (arrayWalkOnSnowEffectCount==1) {
 		//alert(iCurrCoinCount);
 		processCoinOut(iMonsterImageTilePosX,iMonsterImageTilePosY);
 
+		//added by Mike, 20261112
+		reduceOpponentLifeBar(iHeroAttackDamage);
 		
 /*		//edited by Mike, 20260721
 		var myAudioEffectSwordOut = document.getElementById("myAudioEffectSwordOutId");
@@ -11063,13 +11181,13 @@ if (arrayWalkOnSnowEffectCount==1) {
 		myAudioEffectSwordOut.loop=false;
 		myAudioEffectSwordOut.play();
 */		
-		var myAudioEffectPunchSandBag = document.getElementById("myAudioEffectPunchSandBagId");
-		myAudioEffectPunchSandBag.setAttribute("src", sAudioEffectActionPunchSqueeze);
+		var myAudioEffectPunchSqueeze = document.getElementById("myAudioEffectPunchSqueezeId");
+		myAudioEffectPunchSqueeze.setAttribute("src", sAudioEffectActionPunchSqueeze);
 
-		fMyAudioEffectPunchSandBagVolume=1.0;
-		myAudioEffectPunchSandBag.volume=fMyAudioEffectPunchSandBagVolume;
-		myAudioEffectPunchSandBag.loop=false;
-		myAudioEffectPunchSandBag.play();		
+		fmyAudioEffectPunchSqueezeVolume=1.0;
+		myAudioEffectPunchSqueeze.volume=fmyAudioEffectPunchSqueezeVolume;
+		myAudioEffectPunchSqueeze.loop=false;
+		myAudioEffectPunchSqueeze.play();		
 	}
 
 	function grassMonsterHitByHero(mainImageTilePosX, mainImageTilePosY, iMonsterImageTilePosX, iMonsterImageTilePosY) {	
@@ -12101,6 +12219,9 @@ if (fDifferenceInXPos!=0) {
 						bIsExecutingShake=true;
 											
 						monsterHitByHero(mainImageTilePosX,mainImageTilePosY, inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY]);
+						
+						//added by Mike, 20261112
+						inputArrayWraithMonsterWithIdCount[MONSTER_CURRENT_HP]=iCurrOpponentLife;
 
 
 /*						//removed by Mike, 20261104; from 20251110
@@ -16881,7 +17002,11 @@ if (fDifferenceInXPos!=0) {
 /*			//edited by Mike, 20260809
 			drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76+5,false);		
 */			
-			drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);		
+
+			//edited by Mike, 20261112
+			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);
+
+			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
 
 			//mainImageTileHeroBody.style.visibility="visible";
 		
@@ -16940,7 +17065,11 @@ if (fDifferenceInXPos!=0) {
 			iCurrHeroManaToBeDeducted=0;
 			
 			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+parseInt(heroLifeBarStatusImageTile.style.bottom)+5,false); 	
-			drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+			
+			//edited by Mike, 20261112
+			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+
+			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 			if (!bHasBeatenStage1Boss) {
 				iInputDelayAtStageTransitionCount++;
@@ -17058,7 +17187,10 @@ if (fDifferenceInXPos!=0) {
 			
 			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+parseInt(heroLifeBarStatusImageTile.style.bottom)+5,false); 	
 			
-			drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+			//edited by Mike, 20261112
+		//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+
+			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 
 //alert(">>>DITO");
@@ -17160,7 +17292,12 @@ if (fDifferenceInXPos!=0) {
 			iCurrHeroManaToBeDeducted=0;
 			
 			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+parseInt(heroLifeBarStatusImageTile.style.bottom)+5,false); 	
-			drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+			
+			//edited by Mike, 20261112
+			
+			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+
+			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 			if (!bHasBeatenLastBoss) {
 				iInputDelayAtStageTransitionCount++;
@@ -17426,7 +17563,11 @@ if (fDifferenceInXPos!=0) {
 			drawBossLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left)+50, 0+iViewportMaxHeight*0.35,false); 
 		}
 
-		drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+		//edited by Mike, 20261112
+		//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
+		
+		drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);		
+		
 	}
 	else {
 /*		//edited by Mike, 20260809
@@ -17440,7 +17581,11 @@ if (fDifferenceInXPos!=0) {
 			drawBossLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left)+50, 0+iViewportMaxHeight*0.35,false); 
 		}
 
-		drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,true);	
+		//edited by Mike, 20261112
+		//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,true);	
+
+
+		drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,true);
 
 	}
 	
@@ -17650,6 +17795,14 @@ if (fDifferenceInXPos!=0) {
 						arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_ANIMATION_COUNT_MAX]=4;
 */
 
+						//------------------------
+						//added by Mike, 20261112
+						iCurrHeroLife=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
+						iCurrHeroLifeMax=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
+						iCurrHeroLifeToBeDeducted=0;
+						iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+						//------------------------
+
 						//added by Mike, 20260617
 						arrayWraithMonsterCountId[iCount][MONSTER_RESPAWN_WAIT_TIME]=0;
 						
@@ -17673,6 +17826,14 @@ if (fDifferenceInXPos!=0) {
 						arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=1;
 						arrayWraithMonsterCountId[iCount][MONSTER_STEPY]=1;
 						
+
+						//added by Mike, 20261112
+						//alert(arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP]);
+						
+						iCurrOpponentLife=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
+						iCurrOpponentLifeMax=WRAITH_MONSTER_HP_MAX;
+
+
 						//added by Mike, 20260627
 						arrayWraithMonsterCountId[iCount][MONSTER_DEATH_ANIMATION_TYPE]=MONSTER_DEATH_ANIMATION_TYPE_DEFAULT;
 						//-----
@@ -24347,15 +24508,19 @@ opting to put assets folder in "html_application" folder instead
 	</audio><br/>
 
 
-  <audio id="myAudioId" class="myAudio" src="assets/audio/usbongGameOff2024CaveBGMV22.mp3" type="audio/x-m4a" controls loop>
+  <audio id="myAudioId" class="myAudio" src="assets/audio/default.mp3" type="audio/x-m4a" controls loop>
 	  Your browser does not support the audio tag.
 	</audio><br/>
 
-  <audio id="myAudioPart2Id" class="myAudio" src="assets/audio/usbongGameOff2024CaveBadBGMV10.mp3" type="audio/x-m4a" controls loop>
+  <audio id="myAudioPart2Id" class="myAudio" src="assets/audio/default.mp3" type="audio/x-m4a" controls loop>
 	  Your browser does not support the audio tag.
 	</audio><br/>
 
-  <audio id="myAudioPart3Id" class="myAudio" src="assets/audio/usbongGameOff2024TitleV5.mp3" type="audio/x-m4a" controls loop>
+  <audio id="myAudioPart3Id" class="myAudio" src="assets/audio/default.mp3" type="audio/x-m4a" controls loop>
+	  Your browser does not support the audio tag.
+	</audio><br/>
+	
+  <audio id="myAudioPart4Id" class="myAudio" src="assets/audio/default.mp3" type="audio/x-m4a" controls loop>
 	  Your browser does not support the audio tag.
 	</audio><br/>
 	
@@ -24386,7 +24551,7 @@ opting to put assets folder in "html_application" folder instead
 	  Your browser does not support the audio tag.
 	</audio><br/>
 
-	<audio id="myAudioEffectPunchSandBagId" class="myAudio" src="" type="audio/x-m4a">
+	<audio id="myAudioEffectPunchSqueezeId" class="myAudio" src="" type="audio/x-m4a">
 	  Your browser does not support the audio tag.
 	</audio><br/>
 
