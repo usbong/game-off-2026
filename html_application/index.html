@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261112; from 20261111
+' @date updated: 20261113; from 20261112
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -439,6 +439,18 @@
 
 			z-index: 999999; /*10;*/
 		}
+
+		.ImageExplosionEffectResizedToSmallTwo {
+			position: absolute;
+
+			clip: rect(0px,64px,64px,0px);
+			
+			visibility: hidden;
+			
+			opacity: 0.9;
+
+			z-index: 999999; /*10;*/
+		}
 		
 		.ImageGrassCutEffectSmall, .ImagePearlSmall, .ImageKeySmall {
 			position: absolute;
@@ -515,7 +527,10 @@
 
 		.ImageBgTile {
 			position: absolute;
+/*
 			clip: rect(0px,128px,128px,0px);
+*/
+			clip: rect(0px,640px,384px,0px);
 
 			visibility: hidden;
 
@@ -1794,6 +1809,10 @@ var myAudioWater;
 //added by Mike, 20261111
 var myAudioIntroBGM;
 
+//added by Mike, 20261113
+var myCurrOpponentObjectArray;
+
+
 /*
 var iAnimationCount=-1;//0; start at -1
 var iAnimationCountMax=5;
@@ -2831,7 +2850,10 @@ var bIsHeroFacingUp=true;//false;
 		iInputDelayAtStageTransitionCount=0;
 		iInputDelayAtLeveledUpCount=0;
 		
-		setAllActorsToHidden();
+		//edited by Mike, 20261113
+		if (bIsLevelUp) {
+			setAllActorsToHidden();
+		}
 	}
 
 	function setCurrLifeAndManaToMax() {
@@ -2860,9 +2882,10 @@ var bIsHeroFacingUp=true;//false;
 	}
 
 	function setAllActorsToHidden() {
+/*
 		var dustEffectImage = document.getElementById("dustEffectImageId");
 		dustEffectImage.style.visibility="hidden";
-
+*/
 		var explosionEffectImage = document.getElementById("explosionEffectImageId");
 		explosionEffectImage.style.visibility="hidden";
 
@@ -4029,6 +4052,7 @@ var bIsHeroFacingUp=true;//false;
 
 			//edited by Mike, 20261112
 			iCurrOpponentLifeToBeDeductedAnimationMain=0;//iCurrOpponentLifeMax;
+			
 			return false;
 		}
 
@@ -4037,13 +4061,15 @@ var bIsHeroFacingUp=true;//false;
 			iCurrOpponentLife-=iCurrOpponentLifeToBeDeducted;
 			//iCurrHeroLifeToBeDeducted=0;
 		}
-		
+
+/*		//removed by Mike, 20261113		
 		//added by Mike, 20261111
 		if (iCurrOpponentLife<=iCurrOpponentLifeMax/2) {	
 			myAudioPart4.pause(); //added by Mike, 20261112
 			myAudioPart3.pause();
 			myAudioPart2.pause();
 		}
+*/
 		
 		//added by Mike, 20251124
 		iCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLife+iCurrOpponentLifeToBeDeducted;
@@ -5237,7 +5263,7 @@ var bIsHeroFacingUp=true;//false;
 		myAudioPart3 = document.getElementById("myAudioPart3Id");		
 		myAudioPart3.setAttribute("src", sAudioBGMPart3);
 
-		var fMyAudioPart3Volume=0.5;//0.4;
+		var fMyAudioPart3Volume=0.3;//0.4;
 		myAudioPart3.volume=fMyAudioPart3Volume;
 		myAudioPart3.loop=true;		
 		//myAudioPart3.play();
@@ -5248,7 +5274,7 @@ var bIsHeroFacingUp=true;//false;
 		myAudioPart4 = document.getElementById("myAudioPart4Id");		
 		myAudioPart4.setAttribute("src", sAudioBGMPart4);
 
-		var fMyAudioPart4Volume=0.5;//0.4;
+		var fMyAudioPart4Volume=0.8;//0.4;
 		myAudioPart4.volume=fMyAudioPart4Volume;
 		myAudioPart4.loop=true;		
 
@@ -5582,21 +5608,33 @@ var bIsHeroFacingUp=true;//false;
     if (explosionEffectImage.style.visibility=="visible") {
       return;
     }
+	
 
     explosionEffectImage.style.objectPosition = "-" + 0 + "px -" + 0 + "px";
 
-	explosionEffectImage.style.transform = "scale(0.5,0.5)";	
+	//removed by Mike, 20261113
+	//explosionEffectImage.style.transform = "scale(0.5,0.5)";	
 
     explosionEffectImage.style.visibility="visible";
 	
 	iExplosionEffectAnimationDelayCount=iExplosionEffectAnimationDelayCountMax;
 
 	iExplosionEffectAnimationCount=-1; //0;
-
+	
+/*
     explosionEffectImage.style.left = iInputX-128-iImageExplosionEffectAnimationWidth/2;
     explosionEffectImage.style.top = iInputY-128-iImageExplosionEffectAnimationHeight/2;
+*/
+/*
+    explosionEffectImage.style.left = iInputX-iImageExplosionEffectAnimationWidth/2-iImageFrameWidthLarge/2/2;
+    explosionEffectImage.style.top = iInputY-iImageExplosionEffectAnimationHeight/2-iImageFrameHeightLarge/2/2;
+*/
+    explosionEffectImage.style.left = iInputX-iImageFrameWidthLarge/2+iImageFrameWidthDefault/2;
+    explosionEffectImage.style.top = iInputY-iImageFrameHeightLarge/2;
+
   }
   
+  //edited by Mike, 20261113
   function setExplosionEffectPositionLarge(iInputX, iInputY) {
     var explosionEffectImage = document.getElementById("explosionEffectImageId");
 
@@ -5802,46 +5840,46 @@ var bIsHeroFacingUp=true;//false;
 			
 				//for (iCurrMiscParticleEffectCount=0; iCurrMiscParticleEffectCount<iCurrMiscParticleEffectCountMax; iCurrMiscParticleEffectCount++) {
 				var miscParticleEffectImage0 = document.getElementById("miscParticleEffectImageId"+0);
-				miscParticleEffectImage0.style.left=iInputX+iImageFrameWidthLarge/2*1-iImageFrameWidthDefault*1*0+"px";
+				miscParticleEffectImage0.style.left=iInputX+iImageFrameWidthLarge/3*1-iImageFrameWidthDefault*1*0+"px";
 				miscParticleEffectImage0.style.top=iInputY+iImageFrameHeightLarge/2*1-iImageFrameHeightDefault*0+"px";
 				miscParticleEffectImage0.style.visibility="visible";
 
 				//}
 
 				var miscParticleEffectImage1 = document.getElementById("miscParticleEffectImageId"+1);
-				miscParticleEffectImage1.style.left=iInputX+iImageFrameWidthLarge/2*1+iImageFrameWidthDefault*2*0+"px";
+				miscParticleEffectImage1.style.left=iInputX+iImageFrameWidthLarge/3*1+iImageFrameWidthDefault*2*0+"px";
 				miscParticleEffectImage1.style.top=iInputY+iImageFrameHeightLarge/2*1-iImageFrameHeightDefault*0+"px";
 				miscParticleEffectImage1.style.visibility="visible";
 
 				var miscParticleEffectImage2 = document.getElementById("miscParticleEffectImageId"+2);
-				miscParticleEffectImage2.style.left=iInputX+iImageFrameWidthLarge/2*1+iImageFrameWidthDefault*2*0+"px";
+				miscParticleEffectImage2.style.left=iInputX+iImageFrameWidthLarge/3*1+iImageFrameWidthDefault*2*0+"px";
 				miscParticleEffectImage2.style.top=iInputY+iImageFrameHeightLarge/2*1+iImageFrameHeightDefault*2*0+"px";
 				miscParticleEffectImage2.style.visibility="visible";
 
 				var miscParticleEffectImage3 = document.getElementById("miscParticleEffectImageId"+3);
-				miscParticleEffectImage3.style.left=iInputX+iImageFrameWidthLarge/2*1-iImageFrameWidthDefault*1*0+"px";
+				miscParticleEffectImage3.style.left=iInputX+iImageFrameWidthLarge/3*1-iImageFrameWidthDefault*1*0+"px";
 				miscParticleEffectImage3.style.top=iInputY+iImageFrameHeightLarge/2*1+iImageFrameHeightDefault*2*0+"px";
 				miscParticleEffectImage3.style.visibility="visible";
 				
 				//----------------------------------
 
 				var miscParticleEffectImage4 = document.getElementById("miscParticleEffectImageId"+4);
-				miscParticleEffectImage4.style.left=iInputX+iImageFrameWidthLarge/2*1+iImageFrameWidthDefault*2*0+"px";
+				miscParticleEffectImage4.style.left=iInputX+iImageFrameWidthLarge/3*1+iImageFrameWidthDefault*2*0+"px";
 				miscParticleEffectImage4.style.top=iInputY+iImageFrameHeightLarge/2*1+iImageFrameHeightDefault*2*0+"px";
 				miscParticleEffectImage4.style.visibility="visible";
 
 				var miscParticleEffectImage5 = document.getElementById("miscParticleEffectImageId"+5);
-				miscParticleEffectImage5.style.left=iInputX+iImageFrameWidthLarge/2*1-iImageFrameWidthDefault*1*0+"px";
+				miscParticleEffectImage5.style.left=iInputX+iImageFrameWidthLarge/3*1-iImageFrameWidthDefault*1*0+"px";
 				miscParticleEffectImage5.style.top=iInputY+iImageFrameHeightLarge/2*1+iImageFrameHeightDefault*2*0+"px";
 				miscParticleEffectImage5.style.visibility="visible";
 				
 				var miscParticleEffectImage6 = document.getElementById("miscParticleEffectImageId"+6);
-				miscParticleEffectImage6.style.left=iInputX+iImageFrameWidthLarge/2*1+iImageFrameWidthDefault*2*0+"px";
+				miscParticleEffectImage6.style.left=iInputX+iImageFrameWidthLarge/3*1+iImageFrameWidthDefault*2*0+"px";
 				miscParticleEffectImage6.style.top=iInputY+iImageFrameHeightLarge/2*1+iImageFrameHeightDefault*2*0+"px";
 				miscParticleEffectImage6.style.visibility="visible";
 
 				var miscParticleEffectImage7 = document.getElementById("miscParticleEffectImageId"+7);
-				miscParticleEffectImage7.style.left=iInputX+iImageFrameWidthLarge/2*1-iImageFrameWidthDefault*1*0+"px";
+				miscParticleEffectImage7.style.left=iInputX+iImageFrameWidthLarge/3*1-iImageFrameWidthDefault*1*0+"px";
 				miscParticleEffectImage7.style.top=iInputY+iImageFrameHeightLarge/2*1+iImageFrameHeightDefault*2*0+"px";
 				miscParticleEffectImage7.style.visibility="visible";
 
@@ -9063,13 +9101,15 @@ alert("iInputY: "+iInputY);
 
 	//added by Mike, 20260918
 	function processBoxerMonsterDyingAnimation(inputArrayWraithMonsterWithIdCount) {
-	
+
+/*	  //removed by Mike, 20261113	
 	  //do this only if the monster is facing directly left or right; for now;
 	  //otherwise, make the monster disappear;
 	  if (inputArrayWraithMonsterWithIdCount[MONSTER_IS_FACING_UP_OR_DOWN]) {
 		clearWraithMonsterFromStage(inputArrayWraithMonsterWithIdCount);
 		return;
 	  }
+*/
 
 	  //added by Mike, 20260924
 	  inputArrayWraithMonsterWithIdCount[MONSTER_STEPX]=1;
@@ -9146,10 +9186,13 @@ alert("iInputY: "+iInputY);
 	  }
 */	    
 
+	  //edited by Mike, 20261113
 	  if (iDistanceX>iViewportMaxWidth/8) {
+/*
 	  
 		setExplosionEffectPosition(inputArrayWraithMonsterWithIdCount[MONSTER_POSX]+iImageFrameWidthLarge/2,inputArrayWraithMonsterWithIdCount[MONSTER_POSY]+iImageFrameHeightLarge/2);
-	  
+*/
+
 		clearWraithMonsterFromStage(inputArrayWraithMonsterWithIdCount);
 		return;
 	  }
@@ -9326,6 +9369,86 @@ alert("iInputY: "+iInputY);
 			//edited by Mike, 20260723; from 20260702
 			inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.objectPosition = "-" + iMonsterFrameXOffset-iImageFrameWidthLarge*(inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]-1) - 4*iImageFrameWidthLarge + "px -" + iMonsterFrameY + "px";		
 
+	}
+
+	function executeExplosionEffectSmallTwo() {
+		var explosionEffectImage = document.getElementById("explosionEffectImageId");
+
+		if (explosionEffectImage.style.visibility=="hidden") {
+			return;
+		}
+
+		if (iExplosionEffectAnimationDelayCount==iExplosionEffectAnimationDelayCountMax) {
+	//	if (iExplosionEffectAnimationDelayCount>=iExplosionEffectAnimationDelayCountMax) {
+			
+			iExplosionEffectAnimationCount=(iExplosionEffectAnimationCount+1)%5; //last hidden
+
+			iExplosionEffectAnimationDelayCount=0;
+			/*
+			explosionEffectImage.style.visibility="visible";
+			*/
+			
+			//alert("iExplosionEffectAnimationCount: "+iExplosionEffectAnimationCount);
+		}
+		else {
+			iExplosionEffectAnimationDelayCount++;
+
+	//		alert("iExplosionEffectAnimationCount: "+iExplosionEffectAnimationCount);
+
+		}
+		
+		//debug;
+		//explosionEffectImage.style.visibility="hidden";
+
+		//alert("iExplosionEffectAnimationCount: "+iExplosionEffectAnimationCount);
+		
+		//note: current output: fireball effect used in first frame only;
+		iFrameY=0;
+		//iFrameY=128;
+
+		//put fireballExplosion as 1st frame
+		if (iExplosionEffectAnimationCount==0) {
+			iFrameY=64;
+		}
+
+		if (iExplosionEffectAnimationCount==0) { //%2
+			explosionEffectImage.style.objectPosition = "-" + 0 + "px -" + iFrameY + "px";
+		}
+		else if (iExplosionEffectAnimationCount==1) {
+			explosionEffectImage.style.objectPosition = "-" + 64 + "px -" + iFrameY + "px";
+			//alert(">>>>");
+		}
+		else if (iExplosionEffectAnimationCount==2) {
+			explosionEffectImage.style.objectPosition = "-" + 64*2 + "px -" + iFrameY + "px";
+			//alert(">>>>");
+		}
+		else if (iExplosionEffectAnimationCount==3) {
+			explosionEffectImage.style.objectPosition = "-" + 64*3 + "px -" + iFrameY + "px";
+			//alert(">>>>");
+		}
+		else {
+			explosionEffectImage.style.visibility="hidden";
+
+			var textStoryDiv = document.getElementById("textStoryDivId");
+			textStoryDiv.style.visibility="hidden";
+
+
+			//special case; boss stage;
+			if (iCurrMapLocation==55) { //boss 1
+				if (bHasBeatenStage1Boss) {
+					//fCurrDivStoryOpacity=0;
+					executeStageTransition(61);
+				}
+			}
+			else if (iCurrMapLocation==75) { //last boss
+				if (bHasBeatenLastBoss) {
+					//fCurrDivStoryOpacity=0;
+					executeStageTransition(81);
+				}
+			}
+			
+			//alert("HALLO");
+		}
 	}
 	
 	function executeExplosionEffect() {
@@ -10325,6 +10448,7 @@ alert("iInputY: "+iInputY);
 */
 		//alert(arrayCoinCountId[iCurrCoinCount][MONSTER_POSX]);
 
+
 		if ((arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSX]==fDefaultObjectPosX) && (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]==fDefaultObjectPosY)) {
 			return;
 		}
@@ -10338,14 +10462,19 @@ alert("iInputY: "+iInputY);
 			arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]+=arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPY]*arrayCoinCountId[iCurrCoinCountInput][MONSTER_GRAVITY_MULTIPLIER];
 						
 			if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_IS_FACING_UP]) {
-				if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]<arrayCoinCountId[iCurrCoinCountInput][MONSTER_DEATH_ANIMATION_START_Y]-iImageFrameWidthLarge*0.75) {
+				//if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]<arrayCoinCountId[iCurrCoinCountInput][MONSTER_DEATH_ANIMATION_START_Y]-iImageFrameWidthLarge*0.75) {
+				
+				if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]<myCurrOpponentObjectArray[MONSTER_POSY]-iImageFrameWidthLarge*0.75) {
+				
 					arrayCoinCountId[iCurrCoinCountInput][MONSTER_GRAVITY_MULTIPLIER]*=-1;
 
 					arrayCoinCountId[iCurrCoinCountInput][MONSTER_IS_FACING_UP]=false;
 				}
 			}
 			else {
-				if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]>arrayCoinCountId[iCurrCoinCountInput][MONSTER_DEATH_ANIMATION_START_Y]) {
+				//if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]>arrayCoinCountId[iCurrCoinCountInput][MONSTER_DEATH_ANIMATION_START_Y]) {
+				
+				if (arrayCoinCountId[iCurrCoinCountInput][MONSTER_POSY]>myCurrOpponentObjectArray[MONSTER_POSY]) {			
 					arrayCoinCountId[iCurrCoinCountInput][MONSTER_GRAVITY_MULTIPLIER]=0;
 					arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPX]=0;
 					arrayCoinCountId[iCurrCoinCountInput][MONSTER_STEPY]=0;
@@ -11171,6 +11300,14 @@ if (arrayWalkOnSnowEffectCount==1) {
 		//added by Mike, 20261112
 		reduceOpponentLifeBar(iHeroAttackDamage);
 		
+		//added by Mike, 20261113
+		if (iCurrOpponentLife<=0) {
+			for (iCount=0; iCount<iCurrCoinCountMax; iCount++) {
+				processCoinOut((iMonsterImageTilePosX-iImageFrameWidthLarge/2)+iCount*iImageFrameWidthDefault/8,iMonsterImageTilePosY);
+			}
+		}
+
+		
 /*		//edited by Mike, 20260721
 		var myAudioEffectSwordOut = document.getElementById("myAudioEffectSwordOutId");
 
@@ -11431,7 +11568,9 @@ if (arrayWalkOnSnowEffectCount==1) {
 */		
 		//added by Mike, 20261105
 		//set boundaries;
-		if (fCurrViewportX<-iViewportMaxWidth/4) {
+		//if (fCurrViewportX<-iViewportMaxWidth/4) {
+		if (fCurrViewportX<0-iViewportMaxWidth/8) {
+
 			//if going to the left
 			if (newMainImageTileProjectilePosX<0) {
 				newMainImageTileProjectilePosX=0;
@@ -11440,7 +11579,10 @@ if (arrayWalkOnSnowEffectCount==1) {
 				//return;
 			}
 		}
-		else if (fCurrViewportX>iViewportMaxWidth/2) {
+		//else if (fCurrViewportX>iViewportMaxWidth/2) {
+		//else if (fCurrViewportX>iViewportMaxWidth*0.55) {
+		else if (fCurrViewportX>iViewportMaxWidth/4+iViewportMaxWidth/6) {
+
 			//if going to the right
 			if (newMainImageTileProjectilePosX>0) {
 				newMainImageTileProjectilePosX=0;
@@ -11450,7 +11592,9 @@ if (arrayWalkOnSnowEffectCount==1) {
 			}
 		}
 
-		if (fCurrViewportY<-iViewportMaxHeight/2) {
+		//if (fCurrViewportY<-iViewportMaxHeight/2) {
+		if (fCurrViewportY<-iViewportMaxHeight/2+iViewportMaxHeight/8) {
+
 			//if going up
 			if (newMainImageTileProjectilePosY<0) {
 				newMainImageTileProjectilePosY=0;
@@ -11623,14 +11767,14 @@ if (fDifferenceInXPos!=0) {
 				else if (arrayActors[iCount]["type"]==ITEM_ARRAY_ACTOR_ROLE_TYPE) {
 					//edited by Mike, 20261111
 					//still pulls the coin downward somewhat
-					if (arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_GRAVITY_MULTIPLIER]==0) {
+					//if (arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_GRAVITY_MULTIPLIER]==0) {
 						arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSX]=fActorPosXUpdated;
 						arrayActors[iCount].style.left=fActorPosXUpdated+"px";
 						
 						arrayCoinCountId[arrayActors[iCount]["iCount"]][MONSTER_POSY]=fActorPosYUpdated;
 						
 						arrayActors[iCount].style.top=fActorPosYUpdated+"px";
-					}
+					//}
 				}
 				else if (arrayActors[iCount]["type"]==FIREBALL_ARRAY_ACTOR_ROLE_TYPE) {
 					mainImageTileFireballProjectilePosX=fActorPosXUpdated;
@@ -11653,6 +11797,7 @@ if (fDifferenceInXPos!=0) {
 					arrayActors[iCount].style.left=fActorPosXUpdated+"px";
 					arrayActors[iCount].style.top=fActorPosYUpdated+"px";
 				}
+				
 /*				
 			}
 */			
@@ -11798,11 +11943,17 @@ if (fDifferenceInXPos!=0) {
 		//added by Mike, 20261013
 		var mainImageTileHeroBody = document.getElementById("mainImageTileImageHeroBodyId");	
 		
-		
 		//added by Mike, 20261105
 		if (iCurrOpponentLife<=0) {
 			mainImageTileHeroBody.style.zIndex=iCurrZIndex; 
+			
+			//added by Mike, 20261113
+			for (iCurrCoinCountTemp=0; iCurrCoinCountTemp<iCurrCoinCountMax; iCurrCoinCountTemp++) {
+				coinImage = document.getElementById("coinImageId"+iCurrCoinCountTemp);	
+				coinImage.style.zIndex=iCurrZIndex-1;
+			}			
 		}
+
 		
 		//alert(iCurrPlatformWallTopBgTileImageCountMax+0);
 
@@ -11828,6 +11979,11 @@ if (fDifferenceInXPos!=0) {
 		}
 
 */		
+		//added by Mike, 20261113
+		//put the bgTileImage #2 for the bottom part of the ring above the hero;
+		var bgTileImage = document.getElementById("bgTileImageId"+1);
+		bgTileImage.style.zIndex=mainImageTileHeroBody.style.zIndex+1;
+
 
 		for (iPlatformWallCount=iCurrPlatformWallBgTileImageCountMax; iPlatformWallCount<iCurrPlatformWallBgTileImageCountMax+iCurrPlatformWallTopBgTileImageCountMax; iPlatformWallCount++) {
 
@@ -12010,6 +12166,11 @@ if (fDifferenceInXPos!=0) {
 		
 		//added by Mike, 20260827
 		if (iCurrHeroMana<=0) {	//if no mana
+			return;	
+		}
+
+		//added by Mike, 20261113
+		if (iCurrOpponentLife<=0) {	
 			return;	
 		}
 
@@ -16801,7 +16962,9 @@ if (fDifferenceInXPos!=0) {
 					//edited by Mike, 20261111
 					//sText = "The generosity of the Empire hardly extends to the far reaches of the galaxy. <br/><br/>Distant from imperial affairs, the people of the Outer Waves have learned to survive without relying on the help of the Empire.";
 					
-					sText = "INVITATION: <br/><br/>COMPETE FOR THE LEGENDARY *POWER SHIFT GLOVE*!";
+					//sText = "INVITATION: <br/><br/>COMPETE FOR THE LEGENDARY *POWER SHIFT GLOVE*!";
+
+					sText = "YOU'RE INVITED TO COMPETE FOR THE LEGENDARY POWERSHIFT GLOVE!<br/><br/>IT'S YOURS IF YOU WIN!<br/><br/>-RED SPIDER";
 					
 					//bgImageMoon.style.visibility="visible";
 					break;
@@ -16829,6 +16992,7 @@ if (fDifferenceInXPos!=0) {
 			//sText="<span style='text-align: center;'>"+sText+"</span>";
 
 
+/*			//removed by Mike, 20261113
 			if (iCurrMissionIntroPage>1) {
 			
 				//textStatusDiv.innerHTML = sText;
@@ -16861,7 +17025,7 @@ if (fDifferenceInXPos!=0) {
 			}
 			//scrollable
 			else {
-			
+*/			
 			
 				textStoryDiv.innerHTML = sText;
 			
@@ -16873,8 +17037,9 @@ if (fDifferenceInXPos!=0) {
 				textStoryDiv.style.visibility="visible";
 				
 				textStoryDiv.style.opacity=fCurrDivStoryOpacity;
+/*
 			}
-
+*/
 			
 			//mainImageTileProjectile.style.visibility="hidden";
 			textStatusBackgroundDiv.style.top=textStatusDiv.style.top;
@@ -16905,9 +17070,12 @@ if (fDifferenceInXPos!=0) {
 			//added by Mike, 20260625
 			drawHeroComboStatus(myCanvasTwoContext,0+iViewportMaxWidth/2, 0+iImageFrameHeightLarge*0.1); 
 			
+/*			//r3emoved by Mike, 20261113; no need to display when in STORY PAGE;			
 			//added by Mike, 20260809; from 20260727
 			//drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthLarge, 0+iViewportMaxHeight*0.87); 
 			drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.5-iImageFrameHeightDefault*0.1);  
+*/
+
 
 /*			//edited by Mike, 20260809
 			drawHeroXYPosStatus(myCanvasTwoContext, 0+iViewportMaxWidth*0.8, 0+iViewportMaxHeight*0.77);			
@@ -17465,7 +17633,8 @@ if (fDifferenceInXPos!=0) {
 */	
         bossMonsterImageTile.style.visibility = "hidden"; //"visible";
 
-		executeExplosionEffect();
+		executeExplosionEffectSmallTwo();
+		
 		executeFireballExplosionEffect();
 
 		executeGrassCutEffect();
@@ -17708,6 +17877,12 @@ if (fDifferenceInXPos!=0) {
 					dustEffectImage.style.visibility="hidden";				
 					arrayWalkOnSnowEffect[MONSTER_OBJECT]=document.getElementById("walkOnSnowEffectImageId"+0);
 					arrayWalkOnSnowEffect[MONSTER_OBJECT].style.visibility="hidden";
+					
+					//added by Mike, 20261113
+					//iExplosionEffectAnimationCount=0;
+					explosionEffectImage.style.left=999999+"px";
+					explosionEffectImage.style.top=999999+"px";
+					
 				
 /*				
 					isSkelMonsterTileActive=true;
@@ -17770,6 +17945,9 @@ if (fDifferenceInXPos!=0) {
 						arrayWraithMonsterCountId[iCount][MONSTER_IS_IN_RIVER]=false;
 						
 						arrayActors[iArrayActorsCount]=arrayWraithMonsterCountId[iCount][MONSTER_OBJECT];
+						
+						//added by Mike, 20261113
+						myCurrOpponentObjectArray=arrayWraithMonsterCountId[iCount];
 						
 						//added by Mike, 20260801
 						arrayActors[iArrayActorsCount]["iCount"]=iCount;
@@ -20544,6 +20722,13 @@ alert("iXPos: "+iXPos);
 		if (processLeftClickStartScreens()) {
 			return;
 		}		
+		
+		//added by Mike, 20261113
+		if (iCurrOpponentLife<=0) {
+			resetProjectile();
+			return;
+		}
+		
 
 		bIsHeroWalking=false;
 		
@@ -21701,7 +21886,7 @@ function initTouchInput() {
 			  }
 			  else {
 				  if (!bHasViewedMissionIntro) {
-
+/*					//edited by Mike, 20261113
 					if (iCurrMissionIntroPage<iCurrMissionIntroPageMax-1) {
 						sCurrText="";
 						iCurrTextCharacterCountEffectDelayCount=0;
@@ -21714,36 +21899,6 @@ function initTouchInput() {
 							fCurrDivStoryOpacity=0;
 						}
 						else if ((iCurrMissionIntroPage==2) || (iCurrMissionIntroPage==4)){
-	/*
-							myAudioIntroBGM.pause();	
-
-							//--------------------
-							//var myAudioIntroBGM = document.getElementById("myAudioIntroBGMId");
-
-							if (!myAudioHurryBGM.paused) {
-							}
-							else {
-								myAudioHurryBGM.setAttribute("src", sAudioDrumbeatBGM);
-
-								//fMyAudioEffectVolume=0.2;
-								fMyAudioHurryBGMVolume=0.6;
-								myAudioHurryBGM.volume=fMyAudioHurryBGMVolume;
-								myAudioHurryBGM.loop=true;
-								myAudioHurryBGM.play();		
-							}
-
-							//--------------------
-							var myAudioEffectCannonFire = document.getElementById("myAudioEffectCannonFireId");
-
-							myAudioEffectCannonFire.setAttribute("src", sAudioEffectActionCannonFire);
-
-							//fMyAudioEffectVolume=0.2;
-							fMyAudioEffectCannonFireVolume=1.0;
-							myAudioEffectCannonFire.volume=fMyAudioEffectCannonFireVolume;
-							myAudioEffectCannonFire.loop=false;
-							myAudioEffectCannonFire.play();		
-							//--------------------
-	*/
 						}									
 						return true;
 					}
@@ -21751,6 +21906,10 @@ function initTouchInput() {
 						bHasViewedMissionIntro=true;
 						return true;
 					}
+*/					
+						bHasViewedMissionIntro=true;
+						return true;
+
 				  }
 				  else if (iCurrMapLocation==61) {
 						iCurrMapLocation=62;
@@ -22797,6 +22956,22 @@ function initTouchInput() {
 	iCurrBgTileImageCount++;
 	//----------------------------------
 
+	//BOTTOM CORNER
+	iCurrBgTileImageColumn=0;
+	iCurrBgTileImageRow=2;
+	
+	//----------------------------------
+	currBgTileImageObject=setBgTileImagePosition(0-iStageOffsetX+iCurrBgTileImageColumn*iImageFrameWidthBgTile,0-iStageOffsetY+iCurrBgTileImageRow*iImageFrameHeightBgTile,iCurrBgTileImageCount,3,0);
+	//----------------------------------
+	arrayActors[iArrayActorsCount]=currBgTileImageObject;	arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault;//iZIndexDefault;//+iArrayActorsCount;
+	arrayActors[iArrayActorsCount]["type"]=BG_TILE_ARRAY_ACTOR_ROLE_TYPE;
+	iArrayActorsCount++;							
+	//----------------------------------
+	iCurrBgTileImageCount++;
+	//----------------------------------
+	
+
+/*
 	//LEFT SIDE
 	iCurrBgTileImageColumn=0;
 	iCurrBgTileImageRow=0+1;
@@ -23006,7 +23181,7 @@ function initTouchInput() {
 	//----------------------------------
 	iCurrBgTileImageCount++;
 	//----------------------------------
-	
+*/	
   }
   
   //edited by Mike, 20261102; from 20261012
@@ -23978,8 +24153,10 @@ opting to put assets folder in "html_application" folder instead
 
 	
 	<img id="grassCutEffectImageId" class="ImageGrassCutEffectSmall" src="assets/images/bgTile.png">
-
+<!--
 	<img id="explosionEffectImageId" class="ImageExplosionEffectResizedToSmall" src="assets/images/effectsSmall.png">
+-->
+	<img id="explosionEffectImageId" class="ImageExplosionEffectResizedToSmallTwo" src="assets/images/effectsSmallTwo.png">
 
 	<img id="fireballExplosionEffectImageId" class="ImageExplosionEffectResizedToSmall" src="assets/images/effectsSmall.png">
   
