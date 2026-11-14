@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261113; from 20261112
+' @date updated: 20261114; from 20261113
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1691,6 +1691,31 @@ const iCurrHeroManaRechargeDelayCountMax=20;
 var iCurrHeroManaRechargeDelayCount=iCurrHeroManaRechargeDelayCountMax;
 
 
+//added by Mike, 20261114
+//--------------------------------------
+var iCurrOpponentManaMaxDefault=10;//15;//20;
+var iCurrOpponentManaMax=iCurrOpponentManaMaxDefault;
+var iCurrOpponentMana=iCurrOpponentManaMax;
+
+var iCurrOpponentManaToBeDeducted=0;
+var iCurrOpponentManaToBeDeductedAnimation=0;
+var iCurrOpponentManaToBeDeductedAnimationMain=0;
+
+//enable recharge right away; when battle starts
+const iCurrOpponentManaAnimationDelayCountMax=5;
+var iCurrOpponentManaAnimationDelayCount=iCurrOpponentManaAnimationDelayCountMax;
+const iCurrOpponentProjectileManaAnimationDelayCountMax=6;//5;//125;//5;
+var iCurrOpponentProjectileManaAnimationDelayCount=iCurrOpponentProjectileManaAnimationDelayCountMax;
+
+var iCurrOpponentManaToBeDeductedAnimationDelayCount=0;
+var iCurrOpponentManaToBeDeductedAnimationDelayCountMax=5;//5;//125;//5;
+
+const iCurrOpponentManaRechargeDelayCountMax=20;
+var iCurrOpponentManaRechargeDelayCount=iCurrOpponentManaRechargeDelayCountMax;
+//--------------------------------------
+
+
+
 //added by Mike, 20251108
 var bIsHeroWalking=false;
 //var bHasHeroChangedFacingLeftOrRight=false; //removed by Mike, 20261015
@@ -1729,6 +1754,7 @@ var iCurrHeroPlatformWallShakeCount=0;
 
 //added by Mike, 20260727
 var iCurrHeroCoinCount=0;
+var iCurrOpponentCoinCount=0; //added by Mike, 20261114
 
 const DEFAULT_DEATH_COUNT_VAL=1;
 const BOSS_DEATH_COUNT_VAL=10;
@@ -1993,6 +2019,7 @@ const iCoinAnimationDelayCountMax=10;//1;
 var iCurrCoinCount=0;
 //edited by Mike, 20261108; from 20261107
 const iCurrCoinCountMax=26;//16;//16+1; //+1 for display icon
+const iCurrCoinCountMaxTwo=27;//16;//16+1; //+1 for display icon
 
 /*	//buggy
 const imageCoinStyle = {
@@ -4181,6 +4208,47 @@ var bIsHeroFacingUp=true;//false;
 		return true;
 	}
 
+
+
+	//added by Mike, 20261114
+	function reduceOpponentMana(iAmount) {
+		//iCurrHeroMana-=3;
+		iCurrOpponentManaToBeDeducted+=iAmount;
+		
+		if (iCurrOpponentManaToBeDeducted>iCurrOpponentManaMax) {
+			iCurrOpponentManaToBeDeducted=iCurrOpponentManaMax;
+		}
+		
+		if (iCurrOpponentMana-iCurrOpponentManaToBeDeducted<=0) {
+			iCurrOpponentManaToBeDeducted=0;
+			iCurrOpponentMana=0;
+			iCurrOpponentManaRechargeDelayCount=0;
+			
+			return false;
+		}
+		
+		//added by Mike, 20251112
+		if (iCurrOpponentManaToBeDeducted>0) {
+			iCurrOpponentMana-=iCurrOpponentManaToBeDeducted;
+			//iCurrHeroManaToBeDeducted=0;
+		}
+
+/*		
+		iCurrHeroProjectileManaAnimationDelayCount=0;
+
+		//if (iCurrHeroManaToBeDeductedAnimation==0) {
+			iCurrHeroManaToBeDeductedAnimation+=iCurrHeroManaToBeDeducted;
+		//}
+		
+		iCurrHeroManaToBeDeductedAnimationMain=iCurrHeroManaMax-iCurrHeroManaToBeDeductedAnimation;
+*/
+		
+		return true;
+	}
+
+
+
+
 	function drawHeroManaBar(myCanvasContext, iXPos, iYPos, bIsFrameOnly) {
 		//removed by Mike, 20261002
 		//var mainImageTileFireballProjectile = document.getElementById("mainImageTileFireballProjectileImageId");
@@ -4330,6 +4398,158 @@ var bIsHeroFacingUp=true;//false;
 		//OK; goes up
 		//myCanvasContext.fillRect(0+iXPos+textManaBarDiv.innerHTML.length*4, 0+iYPos, iHeroManaBarWidth, -iHeroManaBarHeight/iCurrHeroManaMax*(iCurrHeroMana));
 	}		
+
+	//added by Mike, 20261114
+	function drawOpponentManaBar(myCanvasContext, iXPos, iYPos, bIsFrameOnly) {
+		//removed by Mike, 20261002
+		//var mainImageTileFireballProjectile = document.getElementById("mainImageTileFireballProjectileImageId");
+
+		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
+		
+		//added by Mike, 20261112; adjust y pos;
+		iYPos-=2;
+
+		var iOpponentManaBarWidth=4;
+		var iOpponentManaBarHeight=5;//8;//4;		
+
+		var iOpponentManaBarSpacing=0;//1;
+		var iOpponentManaBarPaddingX=2;
+		var iOpponentManaBarPaddingY=2;
+
+/*
+		myCanvasContext.clearRect(0, 0, myCanvasContext.width, myCanvasContext.height);
+
+		//edited by Mike, 20251121
+		myCanvasContext.fillStyle = "#000000";	
+		myCanvasContext.fillRect(0+iXPos, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentManaMax*2, iOpponentManaBarHeight);
+*/
+
+		//added by Mike, 20251129
+		myCanvasContext.strokeStyle = 'black'; 
+		myCanvasContext.lineWidth = 1; 
+		myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentManaMax, iOpponentManaBarHeight); 
+
+		myCanvasContext.fillStyle = "#2d2622"; //"#736157"; //#ffffff; //"#ff0000";	
+		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentManaMax, iOpponentManaBarHeight);
+		
+		if (bIsFrameOnly) {
+			return;
+		}
+
+			if (iCurrOpponentProjectileManaAnimationDelayCount==iCurrOpponentProjectileManaAnimationDelayCountMax) {
+				if (iCurrOpponentMana<iCurrOpponentManaMax) {
+					//iCurrOpponentMana++;
+				
+					if (iCurrOpponentManaRechargeDelayCount<iCurrOpponentManaRechargeDelayCountMax) {
+						iCurrOpponentManaRechargeDelayCount++;
+					}
+					else {
+						iCurrOpponentMana++;
+					}
+				}			
+				
+				iCurrOpponentProjectileManaAnimationDelayCount=0;
+			}
+			else {
+				iCurrOpponentProjectileManaAnimationDelayCount++;
+			}
+		//}
+
+			if (iCurrOpponentManaToBeDeductedAnimationDelayCount==iCurrOpponentManaToBeDeductedAnimationDelayCountMax) {
+				if (iCurrOpponentManaToBeDeductedAnimation>0) {
+					//alert(iCurrOpponentManaToBeDeductedAnimation);
+					iCurrOpponentManaToBeDeductedAnimation--;
+				}
+				
+				iCurrOpponentManaToBeDeductedAnimationDelayCount=0;
+			}
+			else {
+				iCurrOpponentManaToBeDeductedAnimationDelayCount++;
+			}
+
+		//added by Mike, 20251111
+		//TODO: -update: this
+		if (iCurrOpponentManaToBeDeducted>0) {
+			//iCurrOpponentMana-=iCurrOpponentManaToBeDeducted;
+			iCurrOpponentManaToBeDeducted=0;
+		}
+
+/*
+		//added by Mike, 20251111
+		if (iCurrOpponentMana<=0) {
+		
+			myCanvasContext.strokeStyle = 'red'; //white
+			myCanvasContext.lineWidth = 0.2; 
+			myCanvasContext.strokeRect(0+iXPos, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentManaMax, iOpponentManaBarHeight); 
+		}
+		else {
+			myCanvasContext.strokeStyle = 'black'; 
+			myCanvasContext.lineWidth = 0.2; 
+			myCanvasContext.strokeRect(0+iXPos, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentManaMax, iOpponentManaBarHeight); 
+		}
+*/
+		
+/*
+		myCanvasContext.fillStyle = 'yellow';
+
+		//myCanvasContext.fillRect(0+iXPos, 0+iYPos, iOpponentManaBarWidth*(iCurrOpponentMana+ iCurrOpponentManaToBeDeductedAnimation), iOpponentManaBarHeight);
+		myCanvasContext.fillRect(0+iXPos, 0+iYPos, iOpponentManaBarWidth*(iCurrOpponentManaToBeDeductedAnimationMain+iCurrOpponentManaToBeDeductedAnimation), iOpponentManaBarHeight);
+*/
+			
+/*
+		myCanvasContext.fillStyle = "#ffffff"; //white		
+		myCanvasContext.fillRect(0+iXPos+textManaBarDiv.innerHTML.length*6-iOpponentManaBarPaddingX, 0+iYPos-iOpponentManaBarPaddingY, iOpponentManaBarWidth*iCurrOpponentManaMax+iOpponentManaBarPaddingX, iOpponentManaBarHeight+iOpponentManaBarPaddingY);
+*/		
+
+		//myCanvasContext.fillStyle = "#000000"; //black		
+		//myCanvasContext.fillStyle = "#ff6b00"; //orange
+		//myCanvasContext.fillStyle = "#00dd00";
+
+
+		//added by Mike, 20251111
+		if (iCurrOpponentMana<=0) {
+			//myCanvasContext.strokeStyle = 'red'; //white
+
+			if (iCurrOpponentManaAnimationDelayCount<10) {//5) {
+				myCanvasContext.strokeStyle = "#000000"//"#cc0000";
+			}
+			else {
+				myCanvasContext.strokeStyle = "#ffffff"; //"#ff0000"; //white
+			}
+
+			myCanvasContext.lineWidth = 0.2;//5;//2; 
+			myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentManaMax, iOpponentManaBarHeight); 
+		}
+		else {
+			myCanvasContext.strokeStyle = 'black'; 
+			myCanvasContext.lineWidth = 0.2; 
+			myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentManaMax, iOpponentManaBarHeight); 
+		}
+
+
+		//Game Off 2021; TUGON
+		if (iCurrOpponentManaAnimationDelayCount<10) {//5) {
+			//myCanvasContext.fillStyle = "#00dd00";
+			//myCanvasContext.fillStyle = "#00aa00";
+			
+			myCanvasContext.fillStyle = "#048A1F";
+		}
+		else {
+			if (iCurrOpponentManaAnimationDelayCount>20) {//10) {
+				iCurrOpponentManaAnimationDelayCount=0;
+			}
+			//myCanvasContext.fillStyle = "#00cc00";
+			//myCanvasContext.fillStyle = "#009900";
+			myCanvasContext.fillStyle = "#04781B";
+		}	
+		iCurrOpponentManaAnimationDelayCount++;
+
+		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentMana, iOpponentManaBarHeight);
+		
+		//OK; goes up
+		//myCanvasContext.fillRect(0+iXPos+textManaBarDiv.innerHTML.length*4, 0+iYPos, iOpponentManaBarWidth, -iOpponentManaBarHeight/iCurrOpponentManaMax*(iCurrOpponentMana));
+	}		
+
 
 	function drawSniperShotStatus(myCanvasContext, iXPos, iYPos) {	
 
@@ -4573,6 +4793,23 @@ var bIsHeroFacingUp=true;//false;
 
 		textHeroCoinStatusDiv.innerHTML = "x"+iCurrHeroCoinCount;
 	}
+
+	//added by Mike, 20261114
+	function drawOpponentCoinStatus(myCanvasContext, iXPos, iYPos) {		
+		var textOpponentCoinStatusDiv = document.getElementById("textOpponentCoinStatusDivId");
+
+		textOpponentCoinStatusDiv.style.visibility="visible";
+
+/*
+		textHeroCoinStatusDiv.style.left=0+iXPos+iImageFrameWidthDefault+"px"
+		textHeroCoinStatusDiv.style.top=0+iYPos+iImageFrameHeightDefault+"px";
+*/
+		textOpponentCoinStatusDiv.style.left=0+iXPos+"px"
+		textOpponentCoinStatusDiv.style.top=0+iYPos+"px";
+
+		textOpponentCoinStatusDiv.innerHTML = "x"+iCurrOpponentCoinCount;
+	}
+
 
 	function drawHeroXYPosStatus(myCanvasContext, iXPos, iYPos) {		
 		var textHeroXPosStatusDiv = document.getElementById("textHeroXPosStatusDivId");
@@ -10523,6 +10760,41 @@ alert("iInputY: "+iInputY);
 	}
 
 
+	//added by Mike, 20261114
+	function drawOpponentCoinDisplayIcon(iCurrCoinCountInput) {
+		var coinImage = document.getElementById("coinImageId"+iCurrCoinCountInput);
+
+		if (coinImage.style.visibility=="hidden") {
+			return;
+		}
+
+		if (iCurrMapLocation>62) { //after the portal
+			coinImage.style.visibility="hidden";
+			return;
+		}
+
+		coinImage.style.visibility="visible";
+
+		if (iCurrCoinCountInput==iCurrCoinCountMax) { //16) {
+			if (iCoinAnimationDelayCount==iCoinAnimationDelayCountMax) {
+				iCoinAnimationCount=(iCoinAnimationCount+1)%iCoinAnimationCountMax;//5; //last hidden
+
+				iCoinAnimationDelayCount=0;
+			}
+			else {
+				iCoinAnimationDelayCount++;
+			}
+		}
+		
+		if (iCoinAnimationCount<iCoinAnimationCountMax) {
+			coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + 0 + "px";
+		}
+		else {
+			iCoinAnimationCount=0;
+		}		
+	}
+
+
 
 	//added by Mike, 20260727
 	//function drawCoin(iCurrCoinCountInput) {
@@ -11110,6 +11382,16 @@ if (arrayWalkOnSnowEffectCount==1) {
 	function heroHitByMonster(mainImageTilePosX, mainImageTilePosY, iMonsterImageTilePosX, iMonsterImageTilePosY, iMonsterAttackDamage) {				
 		/*var mainImageTileHeroBody = document.getElementById("mainImageTileImageHeroBodyId");
 		*/
+
+		//added by Mike, 20261114
+		//TODO: set iManaCostHeroMeleeAttack; to adjust based on attack damage
+		//iMonsterAttackDamage
+
+		var bHasReducedOpponentManaOutput=reduceOpponentMana(iManaCostHeroMeleeAttack);
+
+		if (!bHasReducedOpponentManaOutput) {
+			return;
+		}
 
 		if (iHeroInvincibileCount<iHeroInvincibileCountMax) {
 			return;
@@ -16337,6 +16619,95 @@ if (fDifferenceInXPos!=0) {
 		}
 	}
 
+
+
+	//added by Mike, 20261114
+	function verifyOpponentCollideWithCoin(iCount) {
+	
+		//var mainImageTileHeroBody = document.getElementById("mainImageTileImageHeroBodyId");	
+
+		var coinImage = document.getElementById("coinImageId"+iCount);
+
+/*
+		//reference: Google AI Overview; MDN Web Docs
+		const bIsVisible = coinImage.checkVisibility({
+		  visibilityProperty: true // Checks for visibility: hidden or collapse
+		});
+*/
+		bIsVisible=true;
+		if (coinImage.style.visibility=="hidden") {
+			bIsVisible=false;
+		}
+		
+		//edited by Mike, 20260730
+		//if (!coinImage.checkVisibility()) { //note doesn't seem to be working;
+		if (!bIsVisible) {
+		  //alert("NOT VISIBLE!: "+iCount);
+		
+		  return;
+		}
+		else {
+
+			//added by Mike, 20261114
+			//TODO: -update: this
+			//if (myCurrOpponentObjectArray[MONSTER_IS_FACING_UP]) {
+			if (arrayCoinCountId[iCurrCoinCountTemp][MONSTER_IS_FACING_UP]) {
+				return;
+			}
+			
+
+			//added by Mike, 20260728
+			//note we added a blank square space above the tile to get the correct z-index during auto-update
+			const coinImageOffsetY=iImageFrameHeightDefault;
+			
+			if (isPointsOfRectIntersectingPointsOfRectMonster(parseFloat(myCurrOpponentObjectArray[MONSTER_POSX]),parseFloat(myCurrOpponentObjectArray[MONSTER_POSY]), parseFloat(coinImage.style.left),parseFloat(coinImage.style.top)+coinImageOffsetY, iImageFrameWidthLarge*0.75, iImageFrameHeightLarge*0.75, iImageFrameWidthDefault*0.75, iImageFrameHeightDefault*0.75)) {
+
+				//alert("HERE!!!");
+/*
+				if (!coinImage.checkVisibility()) {
+				
+					alert(coinImage.checkVisibility());
+				
+					iCurrHeroCoinCount++;
+				}
+*/										
+				arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSX]=fDefaultObjectPosX;
+				arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSY]=fDefaultObjectPosY;
+
+				coinImage.style.left=arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSX]+"px";
+				coinImage.style.top=arrayCoinCountId[iCurrCoinCountTemp][MONSTER_POSY]+"px";
+
+				//added by Mike, 20261110
+				//------------------------
+				var myAudioEffectCoin = document.getElementById("myAudioEffectCoinId");
+				myAudioEffectCoin.setAttribute("src", sAudioEffectCoin);
+
+				fMyAudioEffectCoinVolume=1.0;
+				myAudioEffectCoin.volume=fMyAudioEffectCoinVolume;
+				myAudioEffectCoin.loop=false;
+				myAudioEffectCoin.play();				
+				//------------------------
+
+/*		
+				coinImage.style.left="-999999px";
+				coinImage.style.top="-999999px";
+				
+				coinImage.style.visibility="hidden";
+*/
+
+				iCurrOpponentCoinCount++;
+
+				//alert(iCount);
+
+				//bIsExecutingShake=true;
+				//setExplosionEffectPosition(inputArrayWraithMonsterWithIdCount[MONSTER_POSX]+iImageFrameWidthLarge/2,inputArrayWraithMonsterWithIdCount[MONSTER_POSY]+iImageFrameHeightLarge/2);	
+			}
+		}
+	}
+
+
+
+
 	function verifyHeroSniperShotCollideWithWraithMonsters(inputArrayWraithMonsterWithIdCount) {
 		if (!inputArrayWraithMonsterWithIdCount[MONSTER_IS_ACTIVE]) {
 			return;
@@ -16901,6 +17272,7 @@ if (fDifferenceInXPos!=0) {
 
 		//executeTransitionEffect();
 
+
 	  //debug
 	  //bIsMissionDone=true;
 	  bIsMissionStarted=true;
@@ -17158,7 +17530,7 @@ if (fDifferenceInXPos!=0) {
 			
 			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-			drawOpponentLifeBar(myCanvasTwoContext,parseInt(opponentLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 
 /*
@@ -17176,7 +17548,18 @@ if (fDifferenceInXPos!=0) {
 
 			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
 
+			//added by Mike, 20261114
+			//drawOpponentManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
+
+			//added by Mike, 20261114
+			drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+
 			//mainImageTileHeroBody.style.visibility="visible";
+		
+			//added by Mike, 20261114; from 20261108; display icon only;
+			drawCoinDisplayIcon(iCurrCoinCountMax); 
+			drawOpponentCoinDisplayIcon(iCurrCoinCountMaxTwo);
+
 		
 			if (iInputDelayAtLeveledUpCount>=iInputDelayAtLeveledUpCountMax/2) {
 				textLevelUpLifeDiv.style.visibility="visible";
@@ -17223,7 +17606,7 @@ if (fDifferenceInXPos!=0) {
 */			
 			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-			drawOpponentLifeBar(myCanvasTwoContext,parseInt(opponentLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 			
 /*
 			iCurrHeroLife=iCurrHeroLifeMax;
@@ -17238,6 +17621,10 @@ if (fDifferenceInXPos!=0) {
 			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
 
 			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+
+			//added by Mike, 20261114
+			drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+
 
 			if (!bHasBeatenStage1Boss) {
 				iInputDelayAtStageTransitionCount++;
@@ -17348,7 +17735,7 @@ if (fDifferenceInXPos!=0) {
 */
 			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-			drawOpponentLifeBar(myCanvasTwoContext,parseInt(opponentLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 			iCurrHeroMana=iCurrHeroManaMax;
 			iCurrHeroManaToBeDeducted=0;
@@ -17360,6 +17747,8 @@ if (fDifferenceInXPos!=0) {
 
 			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
+			//added by Mike, 20261114
+			drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 //alert(">>>DITO");
 			
@@ -17450,7 +17839,7 @@ if (fDifferenceInXPos!=0) {
 */
 			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-			drawOpponentLifeBar(myCanvasTwoContext,parseInt(opponentLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 
 ////			iCurrHeroLife=iCurrHeroLifeMax;
@@ -17466,6 +17855,9 @@ if (fDifferenceInXPos!=0) {
 			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);	
 
 			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+
+			//added by Mike, 20261114
+			drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 			if (!bHasBeatenLastBoss) {
 				iInputDelayAtStageTransitionCount++;
@@ -17700,7 +18092,6 @@ if (fDifferenceInXPos!=0) {
 	//added by Mike, 20260924
 	executeKeyboardInputs();
 	
-	
 	//edited by Mike, 20251119
 	if (!bIsGameOver) {
 		if (iHeroInvincibileCount<iHeroInvincibileCountMax) {
@@ -17726,7 +18117,7 @@ if (fDifferenceInXPos!=0) {
 */
 		drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-		drawOpponentLifeBar(myCanvasTwoContext,parseInt(opponentLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+		drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 		if (bIsBossBattle) {
 			drawBossLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left)+50, 0+iViewportMaxHeight*0.35,false); 
@@ -17737,6 +18128,8 @@ if (fDifferenceInXPos!=0) {
 		
 		drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);		
 		
+		//added by Mike, 20261114
+		drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 	}
 	else {
 /*		//edited by Mike, 20260809
@@ -17756,6 +18149,8 @@ if (fDifferenceInXPos!=0) {
 
 		drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,true);
 
+		//added by Mike, 20261114
+		drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 	}
 	
 	drawHeroDeathStatus(myCanvasTwoContext,0+parseInt(textTimeDiv.style.left), 0+parseInt(textTimeDiv.style.top));
@@ -17765,7 +18160,11 @@ if (fDifferenceInXPos!=0) {
 
 	//edited by Mike, 20260809; from 20260727
 	//drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthLarge, 0+iViewportMaxHeight*0.77); 
-	drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.5-iImageFrameHeightDefault*0.1);  
+	drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
+
+	//added by Mike, 20261114
+	drawOpponentCoinStatus(myCanvasTwoContext,0+iViewportMaxWidth/2+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
+	
 
 	drawHeroXYPosStatus(myCanvasTwoContext, 0+iViewportMaxWidth-iImageFrameHeightLarge*2, 0+iViewportMaxHeight-iImageFrameHeightLarge*1.25);			
 		
@@ -17810,6 +18209,7 @@ if (fDifferenceInXPos!=0) {
 		//edited by Mike, 20251125; from 20251124
 		//put this here;
 		bIsBossBattle=false;
+
 		
 		if (!bHasViewedMissionIntro) {
 			return;
@@ -17838,6 +18238,7 @@ if (fDifferenceInXPos!=0) {
 			return;
 		}		
 */
+
 
 		//debug
 		//bHasHeroGottenSniperShot=true;
@@ -18213,9 +18614,16 @@ if (fDifferenceInXPos!=0) {
 					//alert(iCurrCoinCountTemp);
 					//alert(iCurrCoinCountMax);
 					
-					var displayCoinIconImageObject=setCoinPosition(0+iImageFrameWidthDefault*0.5, 0+iViewportMaxHeight-iImageFrameHeightLarge-iImageFrameHeightDefault*0.5,iCurrCoinCountMax); 
+					var displayCoinIconImageObject=setCoinPosition(0+iImageFrameWidthDefault*0.5, 0+iViewportMaxHeight-iImageFrameHeightLarge-iImageFrameHeightDefault*0.2,iCurrCoinCountMax); 
 
 					arrayCoinCountId[iCurrCoinCountMax][MONSTER_OBJECT]=displayCoinIconImageObject;
+
+					//added by Mike, 20261114
+					var opponentDisplayCoinIconImageObject=setCoinPosition(0+iViewportMaxWidth/2+iImageFrameWidthDefault*0.5, 0+iViewportMaxHeight-iImageFrameHeightLarge-iImageFrameHeightDefault*0.2,iCurrCoinCountMax+1); 
+
+
+					//arrayCoinCountId[iCurrCoinCountMax][MONSTER_OBJECT]=displayCoinIconImageObject;
+					
 
 					//added by Mike, 20260822; from 20260805
 					var impactParticleEffectImage = document.getElementById("impactParticleEffectImageId");
@@ -18603,10 +19011,14 @@ if (fDifferenceInXPos!=0) {
 					drawCoin(arrayCoinCountId[iCurrCoinCountTemp]);
 					
 					verifyHeroCollideWithCoin(iCurrCoinCountTemp);
+					
+					//added by Mike, 20261114
+					verifyOpponentCollideWithCoin(iCurrCoinCountTemp);
 				}
-		
+
 				drawCoinDisplayIcon(iCurrCoinCountMax); //added by Mike, 20261108; display icon only;
-				//drawCoin(arrayCoinCountId[iCurrCoinCountMax]);
+				
+				drawOpponentCoinDisplayIcon(iCurrCoinCountMaxTwo);
 
 /*				
 				alert("iCurrBgTileImageCount: "+iCurrBgTileImageCount);
@@ -20454,6 +20866,7 @@ alert("iXPos: "+iXPos);
 */			
 			//added by Mike, 20260727
 			iCurrHeroCoinCount=0;
+			iCurrOpponentCoinCount=0; //added by Mike, 20261114
 			
 			//added by Mike, 20260801
 			fCurrViewportX=0;
@@ -20785,7 +21198,8 @@ alert("iXPos: "+iXPos);
 			//if (e.code==='KeyJ') {
 			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 			//TODO: -update: if only for One Player or Two Players
-			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			if ((e.code==='KeyJ') || (e.code==='NumpadEnter') || (e.code==='Enter')) {
 				if (processLeftClickStartScreens()) {
 					return;
 				}		
@@ -20801,9 +21215,11 @@ alert("iXPos: "+iXPos);
 			
 			//debug
 			if (e.code==='KeyP') {
-				if (!bIsGameOver) {
-					bIsLevelUp=true;
-					resetOptions();
+				if ((bIsMissionStarted) && (bHasViewedMissionIntro)) {
+					if (!bIsGameOver) {
+						bIsLevelUp=true;
+						resetOptions();
+					}
 				}
 			}
 			
@@ -21081,7 +21497,9 @@ alert("iXPos: "+iXPos);
 			//if (e.code==='KeyJ') {
 			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 			//TODO: -update: if only for One Player or Two Players
-			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			//edited by Mike, 20261114
+			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			if ((e.code==='KeyJ') || (e.code==='NumpadEnter') || (e.code==='Enter')) {
 				processKeyDownKeyJ(e);
 			}
 
@@ -21241,9 +21659,11 @@ alert("iXPos: "+iXPos);
 				arrayKeyPressedStored[iKEY_S]=false; //added by Mike, 20261029
 			}
 
-			//edited by Mike, 20261109; from 20261105
+			//edited by Mike, 20261114; from 20261109
 			//if (e.code==='KeyJ') {
-			if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
+			if ((e.code==='KeyJ') || (e.code==='NumpadEnter') || (e.code==='Enter')) {
+
 					processKeyUpKeyJ();
 /*
 					//let the attack animation finish first;
@@ -24198,6 +24618,10 @@ opting to put assets folder in "html_application" folder instead
 	<!-- display icon only -->
 	<img id="coinImageId26" class="ImageCoinDisplayIcon" src="assets/images/coin.png?lastmod=20260727T1402">
 
+	<!-- opponent display icon only -->
+	<img id="coinImageId27" class="ImageCoinDisplayIcon" src="assets/images/coin.png?lastmod=20260727T1402">
+
+
 	<img id="bgTileImageId0" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1346">
 	<img id="bgTileImageId1" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
 	<img id="bgTileImageId2" class="ImageBgTile" src="assets/images/bgTile.png?lastmod=20260813T1303">
@@ -24662,6 +25086,8 @@ opting to put assets folder in "html_application" folder instead
 	<div id="textHeroComboStatusDivId" class="DivTextCombo"></div>
 
 	<div id="textHeroCoinStatusDivId" class="DivTextCoin">0</div>
+
+	<div id="textOpponentCoinStatusDivId" class="DivTextCoin">0</div>
 
 	<div id="textHeroXPosStatusDivId" class="DivTextCoin">0</div>
 	<div id="textViewportXPosStatusDivId" class="DivTextCoin">0</div>
