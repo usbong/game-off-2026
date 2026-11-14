@@ -34,13 +34,15 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 20261110: Sound now comes out whenever P1 collects a coin. I've also disabled the default behavior of the arrow keys and the numpad keys, because I noticed that on itch.io, these keys also scroll the page or move out of full screen mode. I then updated the image sprites for our new character, "Einstein;" however, getting only the animation sprites for movement without the attacks or when getting hit already took me an afternoon totaling to `2hrs`.
 
 
-#### 4) 20261111-20261113; https://masarapmabuhay.itch.io/game-off-2026-prototype4
+#### 4) 20261111-20261114; https://masarapmabuhay.itch.io/game-off-2026-prototype4
 
 20261111: The first BGM recording now plays once P1 hits the Opponent. The next two BGM recordings play upon hitting the Opponent two more times. When P1's life bar is reduced to `<=` half his total life points upon getting hit, then only the first BGM recording is played. The rest are again played following the rules stated previously. I've also added the title screen, how-to screen and the story screen, things that are commonly used in any game. Finally, I've updated Einstein's image sprite sheet, though even after another `1.5hrs`, I haven't yet finished all the necessary animation frames.
 
 20261112: I've added a fourth BGM, made the life bars larger with animation for both P1 and Opponent. No sprite image updates today, unfortunately. Staff member at the clinic intentionally used an eye-irritating substance that lingered in the air. Beware of fake online products knowingly used by people with financial problems.  
 
 20261113: Today's major update is the new boxing ring graphics. I've also updated the coin object's logic, so that it doesn't gravitate toward the hero's position. Also, more coins come out upon defeating the opponent. I've also found and fixed bugs in the code, especially those related to the next opponent `transition`, wherein because I set all the actors' `visibility` to `hidden`, when a part of the code immediately tries to access an actor that's still set to `hidden`, the hero can't move or attack at all. This error doesn't anymore appear at least based on my tests so far.
+
+20261114: I've updated more animation sprite images for Einstein, though there are still a few that remain. I'm thinking of not using these remaining ones anymore, because it would again take at most another afternoon to finish the task. Updating the code appears to me to be a lot faster. Also, both P1 and the Opponent have the stamina bar and the coins count; however, the Opponent immediately gets the coin whenever he's punched, so this part should be updated. I've set aside most of the programming work for tomorrow and spent more of my time today on updating the sprite images, because it's easier for me to do the latter in my current setup at the clinic.
 
 ## Related link
 
