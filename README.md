@@ -33,7 +33,6 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 20261110: Sound now comes out whenever P1 collects a coin. I've also disabled the default behavior of the arrow keys and the numpad keys, because I noticed that on itch.io, these keys also scroll the page or move out of full screen mode. I then updated the image sprites for our new character, "Einstein;" however, getting only the animation sprites for movement without the attacks or when getting hit already took me an afternoon totaling to `2hrs`.
 
-
 #### 4) 20261111-20261115; https://masarapmabuhay.itch.io/game-off-2026-prototype4
 
 20261111: The first BGM recording now plays once P1 hits the Opponent. The next two BGM recordings play upon hitting the Opponent two more times. When P1's life bar is reduced to `<=` half his total life points upon getting hit, then only the first BGM recording is played. The rest are again played following the rules stated previously. I've also added the title screen, how-to screen and the story screen, things that are commonly used in any game. Finally, I've updated Einstein's image sprite sheet, though even after another `1.5hrs`, I haven't yet finished all the necessary animation frames.
@@ -45,6 +44,12 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 20261114: I've updated more animation sprite images for Einstein, though there are still a few that remain. I'm thinking of not using these remaining ones anymore, because it would again take at most another afternoon to finish the task. Updating the code appears to me to be a lot faster. Also, both P1 and the Opponent have the stamina bar and the coins count; however, the Opponent immediately gets the coin whenever he's punched, so this part should be updated. I've set aside most of the programming work for tomorrow and spent more of my time today on updating the sprite images, because it's easier for me to do the latter in my current setup at the clinic.
 
 20261115: I did try out updating the sprite images last night, but eventually decided to simply do away with the animation frames when the character is moving or attacking directly upward or downward, because it's taking me over `2hrs` just to get the character's face right. At a certain angle, Einstein, a female hybrid of a Japanese Spitz and the so-called Askal (Wild Street Dog), looked like a smiling character from Dragon Ball Z. At one point, I thought that he looked like Majin Buu (The fat alien lifeform who becomes the friend of Mr. Satan ("Mr. Pogi" in the Filipino dubbing). Having said this, updating the code was really much faster, taking me only less than an hour to finish. Also, today I put the font style that I had prepared beforehand to good use, though I still had to update the spacing at the code level. There are still some gameplay-related bugs left that I haven't been able to fix. This part is the tedious one to do programming-wise. I plan to get a working game done by tomorrow.
+
+#### 5) 20261116; https://masarapmabuhay.itch.io/game-off-2026-milestone1
+
+20261116: Here's the output after two weeks of development: A simple game with the goal of getting the most money.
+
+https://github.com/usbong/game-off-2026/releases/tag/output
 
 ## Related link
 
