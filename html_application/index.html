@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261115; from 20261114
+' @date updated: 20261116; from 20261115
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1412,7 +1412,7 @@ var fontImageArray = [];
 const iFontImageCountMax=100;//60;//6;
 
 
-const iHeroLifeBarStatusImageTileOffsetX=4;//2; //0;//edited by Mike, 20260813; from 20260809
+const iHeroLifeBarStatusImageTileOffsetX=10;//2; //0;//edited by Mike, 20260813; from 20260809
 
 var iRowCount=0;
 const iRowCountMax=6;//10;
@@ -3615,6 +3615,7 @@ alert("iColumn: "+iColumn);
 		var iHeroLifeBarSpacing=0;//1;
 */
 		
+		
 		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
 		
 		//var iCurrHeroLife=10;
@@ -3784,7 +3785,7 @@ alert("iColumn: "+iColumn);
 		var iHeroLifeBarSpacing=0;//1;
 */		
 		
-		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
+		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX/3;
 		
 		//var iCurrHeroLife=10;
 /*		
@@ -4465,7 +4466,7 @@ alert("iColumn: "+iColumn);
 		//removed by Mike, 20261002
 		//var mainImageTileFireballProjectile = document.getElementById("mainImageTileFireballProjectileImageId");
 
-		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
+		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX/3;
 		
 		//added by Mike, 20261112; adjust y pos;
 		iYPos-=2;
@@ -5636,12 +5637,16 @@ alert("iColumn: "+iColumn);
 		heroLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.01)+"px"; 
 		heroLifeBarStatusImageTile.style.top=(0+iViewportMaxHeight*0.01)+"px";
 */
-		heroLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.02)+"px"; 
+		heroLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.014)+"px"; 
 		heroLifeBarStatusImageTile.style.top=(0+iViewportMaxHeight*0.02)+"px";
 
-		//opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.08)+"px"; 
-		opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.25)+"px"; 
+		opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.95)+"px"; 
+		//opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.25)+"px"; 
+		//opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth/2)+"px"; 
 		opponentLifeBarStatusImageTile.style.top=(0+iViewportMaxHeight*0.02)+"px";
+
+		opponentLifeBarStatusImageTile.style.objectPosition = "-" + iImageFrameWidthDefault + "px -" + 0 + "px";
+
 
 				
 /*
@@ -10736,7 +10741,7 @@ alert("iInputY: "+iInputY);
 	}
 
 	//added by Mike, 20251115
-	function executeSnowEffect(iCurrSnowEffectCount) {
+	function executeSnowEffectPREV(iCurrSnowEffectCount) {
 		var snowEffectImage = document.getElementById("snowEffectImageId"+iCurrSnowEffectCount);
 
 		//edited by Mike, 20251125; from 20251121
@@ -10802,6 +10807,88 @@ alert("iInputY: "+iInputY);
 			iSnowEffectPosY=0-iImageFrameHeightDefault-iWrapOffsetY;
 		}
 		iSnowEffectPosY+=window.parseInt(Math.random()*5)%5;
+		//iSnowEffectPosY++;
+		
+		snowEffectImage.style.left=iSnowEffectPosX+"px";
+		snowEffectImage.style.top=iSnowEffectPosY+"px";
+	}
+	
+	
+		//added by Mike, 20251115
+	function executeSnowEffect(iCurrSnowEffectCount) {
+		var snowEffectImage = document.getElementById("snowEffectImageId"+iCurrSnowEffectCount);
+
+		//edited by Mike, 20251125; from 20251121
+		//if ((bIsGameOver) || (bIsLevelUp)) {
+		//if ((bIsGameOver) || (bIsLevelUp) || (bIsShowingStage1End) || (bIsShowingStage2End)) {
+		if ((bIsGameOver) || (bIsLevelUp) || (bIsShowingStage1End) || (bIsShowingStage2End) || (bIsShowingStage3End) || (bIsShowingStage1Start) || (bIsShowingStage2Start) || (bIsShowingStage3Start)) {
+
+			snowEffectImage.style.visibility="hidden";
+			return;
+		}
+
+
+//alert("iCurrSnowEffectCount: "+iCurrSnowEffectCount)
+
+		if (snowEffectImage.style.visibility=="hidden") {
+			return;
+		}
+
+
+		if (iCurrMapLocation>62) { //after the portal
+			snowEffectImage.style.visibility="hidden";
+			return;
+		}
+
+
+		if (iCurrSnowEffectCount==0) {
+			if (iSnowEffectAnimationDelayCount==iSnowEffectAnimationDelayCountMax) {
+				iSnowEffectAnimationCount=(iSnowEffectAnimationCount+1)%iSnowEffectAnimationCountMax;//5; //last hidden
+
+				iSnowEffectAnimationDelayCount=0;
+			}
+			else {
+				iSnowEffectAnimationDelayCount++;
+
+		//		alert("iExplosionEffectAnimationCount: "+iExplosionEffectAnimationCount);
+			}
+		}
+		
+		if (iSnowEffectAnimationCount<iSnowEffectAnimationCountMax) {
+			snowEffectImage.style.objectPosition = "-" + iImageSnowEffectAnimationWidth*iSnowEffectAnimationCount + "px -" + 0 + "px";
+		}
+		else {
+			//snowEffectImage.style.visibility="visible";
+			iSnowEffectAnimationCount=0;
+		}		
+		
+		//move the snow toward the bottom-left
+		iSnowEffectPosX=parseInt(snowEffectImage.style.left);
+		iSnowEffectPosY=parseInt(snowEffectImage.style.top);
+		
+		let iWrapOffsetX=iViewportMaxWidth/2;
+		let iWrapOffsetY=iViewportMaxHeight/4;
+		
+		if (iSnowEffectPosX<0) {
+			iSnowEffectPosX=iViewportMaxWidth;
+		}
+		//add randomizing movement
+		//iSnowEffectPosX--;
+		//increase 5 to speed-up
+		iSnowEffectPosX-=window.parseInt(Math.random()*5)%5;
+
+/*		
+		if (iSnowEffectPosY>iViewportMaxHeight-iWrapOffsetY) {
+			iSnowEffectPosY=0-iImageFrameHeightDefault-iWrapOffsetY;
+		}
+		iSnowEffectPosY+=window.parseInt(Math.random()*5)%5;
+*/
+		if (iSnowEffectPosY<0) {
+			iSnowEffectPosY=0+iViewportMaxHeight-iWrapOffsetY;
+		}
+
+		iSnowEffectPosY-=window.parseInt(Math.random()*5)%5;
+
 		//iSnowEffectPosY++;
 		
 		snowEffectImage.style.left=iSnowEffectPosX+"px";
@@ -17698,12 +17785,19 @@ if (fDifferenceInXPos!=0) {
 				//drawString(0,0,"'");
 				//drawString(0,0,"YOU'RE INVITED TO COMPETE!");
 
+/*				//TODO: -use: this in next part of dev; noted by Mike, 20261116
 				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1,"YOU'RE INVITED TO");
 				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*3,"COMPETE FOR THE");
 				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*5,"POWERSHIFT GLOVE!");
 				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7,"IT'S YOURS IF YOU");
 				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*9,"WIN! -RED SPIDER");
+*/
 
+				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1,"LET'S PLAY!!");
+				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*3,"WHOEVER GETS THE MOST");
+				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*5,"MONEY WINS THE GAME!");
+				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7,"CLICK TO START!");
+				
 				//drawString(0,0,"!");
 			
 				textStoryDiv.style.left=0+iViewportMaxWidth*0.15;
@@ -17830,10 +17924,10 @@ if (fDifferenceInXPos!=0) {
 			myCanvasTwoContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
 
 /*			//edited by Mike, 20260809
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
 */
 			
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
 			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
@@ -17905,11 +17999,12 @@ if (fDifferenceInXPos!=0) {
 			//sText="";
 
 			heroLifeBarStatusImageTile.style.visibility = "visible";
+			opponentLifeBarStatusImageTile.style.visibility = "visible";
 
 /*			//edited by Mike, 20260809
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
 */			
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
 			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 			
@@ -18034,11 +18129,12 @@ if (fDifferenceInXPos!=0) {
 
 
 			heroLifeBarStatusImageTile.style.visibility = "visible";
+			opponentLifeBarStatusImageTile.style.visibility = "visible";
 
 /*			//edited by Mike, 20260809
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
 */
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
 			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
@@ -18132,17 +18228,19 @@ if (fDifferenceInXPos!=0) {
 			//profile
 			//heroLifeBarStatusImageTile.style.visibility = "hidden";
 			mainImageTileHeroBody.style.visibility = "hidden";
-
+			
 			setAllActorsToHidden();
 
 			//sText="";
 
 			heroLifeBarStatusImageTile.style.visibility = "visible";
+			opponentLifeBarStatusImageTile.style.visibility = "visible";
+
 
 /*			//edited by Mike, 20260809
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
 */
-			drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
 			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
@@ -18425,11 +18523,13 @@ if (fDifferenceInXPos!=0) {
 		}
 		
 		heroLifeBarStatusImageTile.style.visibility="visible";
+		opponentLifeBarStatusImageTile.style.visibility="visible";
+
 
 /*		//edited by Mike, 20260809
-		drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+		drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
 */
-		drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+		drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
 		drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
@@ -18447,9 +18547,9 @@ if (fDifferenceInXPos!=0) {
 	}
 	else {
 /*		//edited by Mike, 20260809
-		drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,true); 
+		drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,true); 
 */
-		drawHeroLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,true); 
+		drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,true); 
 
 		drawOpponentLifeBar(myCanvasTwoContext,parseInt(opponentLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,true); 
 
@@ -18483,6 +18583,9 @@ if (fDifferenceInXPos!=0) {
 	drawOpponentCoinStatus(myCanvasTwoContext,0+iViewportMaxWidth/2+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
 
 	drawHeroXYPosStatus(myCanvasTwoContext, 0+iViewportMaxWidth-iImageFrameHeightLarge*2, 0+iViewportMaxHeight-iImageFrameHeightLarge*1.25);			
+
+
+	drawString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2,(0+iViewportMaxHeight*0.01),"KO");
 		
 //--------------------	
 		var dustEffectImage = document.getElementById("dustEffectImageId");
@@ -24792,7 +24895,7 @@ opting to put assets folder in "html_application" folder instead
 
 	<img id="mainImageTileImageTankBodyId" class="ImageTankFrame1" src="assets/images/inputImageLarge.png?lastmod=20241110">
 	
-		<img id="mainImageTileImageHeroBodyId" class="ImageHeroBody" src="assets/images/inputImageLarge2026.png?lastmod=20260721T1429">		
+		<img id="mainImageTileImageHeroBodyId" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerBlue.png?lastmod=20261116T1944">		
 
 		<img id="mainImageTileImageHeroBodyId0" class="ImageHeroBody" src="assets/images/inputImageLarge2026.png?lastmod=20260721T1429">		
 
@@ -24852,7 +24955,7 @@ opting to put assets folder in "html_application" folder instead
 		<img id="runningWraithMonsterImageId2" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 		<img id="runningWraithMonsterImageId3" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 -->
-		<img id="wraithMonsterImageId0" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId0" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRed.png?lastmod=20261116T2001>
 		<img id="wraithMonsterImageId1" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
 
 		<img id="wraithMonsterImageId2" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
