@@ -51,7 +51,7 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 https://github.com/usbong/game-off-2026/releases/tag/output
 
-#### 6) 20261117; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
+#### 6) 20261117-20261118; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
 
 20261117: First prototype of the two player versus mode. Unfair damage, wrong movement related to viewport, etc.
 
