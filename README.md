@@ -55,6 +55,7 @@ https://github.com/usbong/game-off-2026/releases/tag/output
 
 20261117: First prototype of the two player versus mode. Unfair damage, wrong movement related to viewport, etc.
 
+20261118: Second prototype. Hit animation for 1P only uses one frame. Continuing or starting a new game when 1P has lost requires another "J" key press or left-click.
 
 ## Related link
 
