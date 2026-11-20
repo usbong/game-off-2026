@@ -51,13 +51,17 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 https://github.com/usbong/game-off-2026/releases/tag/output
 
-#### 6) 20261117-20261119; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
+#### 6) 20261117-20261120; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
 
 20261117: First prototype of the two player versus mode. Unfair damage, wrong movement related to viewport, etc.
 
 20261118: Second prototype. Hit animation for 1P only uses one frame. Continuing or starting a new game when 1P has lost requires another "J" key press or left-click.
 
 20261119: Prototype#3. Fixed transition bug that required another key press to start after P1 beats P2. Took longer than I would have wanted. Animation, z-index-related bugs next to be fixed.
+
+20261120: Prototype#4. Put together working version of Single Player and Versus Mode. Fixed wrong movement related to viewport bug, among other known issues. 
+
+<img src="https://github.com/usbong/game-off-2026/blob/main/notes/gameOff2026DesignDocument20261102.jpg" width="60%" height="60%">
 
 ## Related link
 
