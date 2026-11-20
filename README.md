@@ -59,7 +59,7 @@ https://github.com/usbong/game-off-2026/releases/tag/output
 
 20261119: Prototype#3. Fixed transition bug that required another key press to start after P1 beats P2. Took longer than I would have wanted. Animation, z-index-related bugs next to be fixed.
 
-20261120: Prototype#4. Put together working version of Single Player and Versus Mode. Fixed wrong movement related to viewport bug, among other known issues. 
+20261120: Prototype#4. Put together working version of Single Player and Versus Mode. Fixed wrong movement related to viewport bug, among other known issues. SHIFT + ENTER while in the start page to play the versus mode.
 
 <img src="https://github.com/usbong/game-off-2026/blob/main/notes/gameOff2026DesignDocument20261102.jpg" width="60%" height="60%">
 
