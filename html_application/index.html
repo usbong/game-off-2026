@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261120; from 20261119
+' @date updated: 20261121; from 20261120
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1631,12 +1631,27 @@ var iHeroInvincibleCount=iHeroInvincibleCountMax;
 //added by Mike, 20261105
 const iLifeBarWidthTotalPoints=10;
 
+//added by Mike, 20261121
+const iManaBarWidthTotalPoints=10;
+
 //increase this per level-up
 var iCurrHeroLifeMaxDefault=10;//10;//15;//20;
 var iCurrHeroLifeMax=iCurrHeroLifeMaxDefault;//15;//20;
 var iCurrHeroLife=iCurrHeroLifeMax;
 var iCurrHeroLifeAnimationDelayCount=0;
 var iCurrHeroLifeAnimationDelayCountMax=5;
+
+//added by Mike, 20261121
+var iCurrHeroLifeAnimationCount=0;
+var iCurrHeroLifeAnimationCountMax=5;
+const sCurrHeroLifeFillColorDefault="#ee7500"; //orange
+var sCurrHeroLifeFillColor=sCurrHeroLifeFillColorDefault;
+
+var iCurrOpponentLifeAnimationCount=0;
+var iCurrOpponentLifeAnimationCountMax=5;
+const sCurrOpponentLifeFillColorDefault="#ee7500"; //orange
+var sCurrOpponentLifeFillColor=sCurrOpponentLifeFillColorDefault;
+
 
 var iCurrHeroLifeToBeDeducted=0;
 var iCurrHeroLifeToBeDeductedAnimation=0;
@@ -2262,6 +2277,10 @@ var iHeroIdleAnimationCount=0;//-1; //0; //due to immediately +1 in execution;
 const iHeroIdleAnimationCountMax=5;
 var iHeroIdleAnimationDelayCount=0;
 const iHeroIdleAnimationDelayCountMax=8;
+
+//added by Mike, 20261121
+var iHeroHitAnimationCount=0;
+const iHeroHitAnimationCountMax=iHeroAttackAnimationCountMax;
 
 //removed by Mike, 20260626; from 20251106
 //var iHeroAttackComboCount=0;
@@ -3751,7 +3770,7 @@ alert("iColumn: "+iColumn);
 		}
 
 		//myCanvasContext.fillStyle = 'yellow';
-		myCanvasContext.fillStyle = "#ee0000"
+		myCanvasContext.fillStyle = "#ee0000" //red
 
 		//edited by Mike, 20261112
 		var iLifeBarRedFillOffsetY=0;//iHeroLifeBarHeight;//4;
@@ -3765,45 +3784,64 @@ alert("iColumn: "+iColumn);
 		//---------------------------------
 
 
-		if (iCurrHeroLifeToBeDeducted>0) {
-			//iCurrHeroLife-=iCurrHeroLifeToBeDeducted;
-			iCurrHeroLifeToBeDeducted=0;
-		}		
-
+		//Game Off 2021; TUGON
+/*		//using sCurrHeroLifeFillColorDefault results to wrong output
+		//----------------------
+		if (iCurrHeroLifeAnimationCount<10) {//5) {
+			sCurrHeroLifeFillColor=sCurrHeroLifeFillColorDefault; //orange
+		}
+		else {
+			if (iCurrHeroLifeAnimationCount>20) {//10) {
+				iCurrHeroLifeAnimationCount=0;
+			}
+			
+			if (iCurrHeroLifeAnimationCount==0) {
+				sCurrHeroLifeFillColor="#eeda00"; //yellow
+			}
+		}			
+		iCurrHeroLifeAnimationCount++;			
+		//----------------------
+*/
 
 		if (iCurrHeroLife>=10) { //5) {
 			//myCanvasContext.fillStyle = "#00c7ff"; //sky blue
 			//myCanvasContext.fillStyle = "#ffff24"; //yellow
-			myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			//edited by Mike, 20261121
+			///myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			
+			myCanvasContext.fillStyle = sCurrHeroLifeFillColor;//"#ee7500"; //orange
+			//alert(myCanvasContext.fillStyle);
+			
+/*			
+			if (iCurrHeroLifeAnimationCount<10) {//5) {
+				myCanvasContext.fillStyle = "#ee7500"; //orange
+			}
+			else {
+				if (iCurrHeroLifeAnimationCount>20) {//10) {
+					iCurrHeroLifeAnimationCount=0;
+				}
+				
+				if (iCurrHeroLifeAnimationCount==0) {
+					myCanvasContext.fillStyle = "#eeda00"; //yellow
+				}
+			}			
+			iCurrHeroLifeAnimationCount++;			
+*/
+			
 		}
 		else if (iCurrHeroLife>=3) {//2) {
 			//myCanvasContext.fillStyle = "#ff6b00"; //orange
-			myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			//edited by Mike, 20261121
+			//myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			myCanvasContext.fillStyle = sCurrHeroLifeFillColor;//"#ee7500"; //orange
 		}
 		else {
-		
-/*		
-			//due to min damage is 2;
-			if (iCurrHeroLife==2) {
-				iCurrHeroLife=1;
-			}
-*/
-		
-/*		
-			//myCanvasContext.fillStyle = "#ff0000"; //red
-			iCurrHeroLifeAnimationDelayCount=(iCurrHeroLifeAnimationDelayCount+1)%iCurrHeroLifeAnimationDelayCountMax;
-
-			if (iCurrHeroLifeAnimationDelayCount==0) {
-				myCanvasContext.fillStyle = "#000000"; //black
-			}			
-			else {
-				myCanvasContext.fillStyle = "#ff0000"; //red		
-			}
-*/
 			//Game Off 2021; TUGON
 			if (iCurrHeroLifeAnimationDelayCount<10) {//5) {
 				//myCanvasContext.fillStyle = "#ff0000"; //red	
 				myCanvasContext.fillStyle = "#cc0000"; //red	
+				//edited by Mike, 20261121
+				//myCanvasContext.fillStyle = sCurrHeroLifeFillColor;//"#ee7500"; //orange
 			}
 			else {
 				if (iCurrHeroLifeAnimationDelayCount>20) {//10) {
@@ -3944,35 +3982,43 @@ alert("iColumn: "+iColumn);
 		}		
 
 
+/*
+		//added by Mike, 20261121
+		//Game Off 2021; TUGON
+		//using sCurrHeroLifeFillColorDefault results to wrong output
+		//----------------------
+		if (iCurrOpponentLifeAnimationCount<10) {//5) {
+			sCurrOpponentLifeFillColor=sCurrOpponentLifeFillColorDefault; //orange
+		}
+		else {
+			if (iCurrOpponentLifeAnimationCount>20) {//10) {
+				iCurrOpponentLifeAnimationCount=0;
+			}
+			
+			if (iCurrOpponentLifeAnimationCount==0) {
+				sCurrOpponentLifeFillColor="#eeda00"; //yellow
+			}
+		}			
+		iCurrOpponentLifeAnimationCount++;			
+		//----------------------
+*/
+
+
 		if (iCurrOpponentLife>=10) { //5) {
 			//myCanvasContext.fillStyle = "#00c7ff"; //sky blue
-			myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			//edited by Mike, 20261121
+			//myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			//myCanvasContext.fillStyle = sCurrOpponentLifeFillColor;
+			myCanvasContext.fillStyle = "#ee7500"; //orange
 		}
 		else if (iCurrOpponentLife>=3) {//2) {
 			//myCanvasContext.fillStyle = "#ff6b00"; //orange
-			myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			//edited by Mike, 20261121
+			//myCanvasContext.fillStyle = "#aa0000"; //dark red		
+			//myCanvasContext.fillStyle = sCurrOpponentLifeFillColor;
+			myCanvasContext.fillStyle = "#ee7500"; //orange
 		}
 		else {
-		
-/*		
-			//due to min damage is 2;
-			if (iCurrHeroLife==2) {
-				iCurrHeroLife=1;
-			}
-*/
-		
-/*		
-			//myCanvasContext.fillStyle = "#ff0000"; //red
-			iCurrHeroLifeAnimationDelayCount=(iCurrHeroLifeAnimationDelayCount+1)%iCurrHeroLifeAnimationDelayCountMax;
-
-			if (iCurrHeroLifeAnimationDelayCount==0) {
-				myCanvasContext.fillStyle = "#000000"; //black
-			}			
-			else {
-				myCanvasContext.fillStyle = "#ff0000"; //red		
-			}
-*/
-
 			//Game Off 2021; TUGON
 			if (iCurrOpponentLifeAnimationDelayCount<10) {//5) {
 				//myCanvasContext.fillStyle = "#ff0000"; //red	
@@ -4383,18 +4429,29 @@ alert("iColumn: "+iColumn);
 	function drawHeroManaBar(myCanvasContext, iXPos, iYPos, bIsFrameOnly) {
 		//removed by Mike, 20261002
 		//var mainImageTileFireballProjectile = document.getElementById("mainImageTileFireballProjectileImageId");
-
-		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
 		
-		//added by Mike, 20261112; adjust y pos;
-		iYPos-=2;
-
 		var iHeroManaBarWidth=4;
 		var iHeroManaBarHeight=5;//8;//4;		
 
 		var iHeroManaBarSpacing=0;//1;
 		var iHeroManaBarPaddingX=2;
 		var iHeroManaBarPaddingY=2;
+
+		//added by Mike, 20261121
+		//var iCurrManaBarWidthTotalPoints=iCurrHeroManaMax;
+
+		//edited by Mike, 20261121
+		//iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
+		
+		//iXPosUpdated=iXPos+(iHeroManaBarWidth*iCurrHeroManaMax)+(iHeroManaBarWidth*(iCurrHeroManaMaxDefault*2.5))-iHeroLifeBarStatusImageTileOffsetX;
+
+		//iXPosUpdated=iXPos+(iHeroManaBarWidth*(iCurrHeroManaMaxDefault*2.5))-iHeroLifeBarStatusImageTileOffsetX;
+		
+		iXPosUpdated=iXPos+(iHeroManaBarWidth*(iCurrHeroManaMaxDefault*2.5))-(iHeroManaBarWidth*(iCurrHeroManaMax-iCurrHeroManaMaxDefault))-iHeroLifeBarStatusImageTileOffsetX;
+		
+				
+		//added by Mike, 20261112; adjust y pos;
+		iYPos-=2;
 
 /*
 		myCanvasContext.clearRect(0, 0, myCanvasContext.width, myCanvasContext.height);
@@ -4415,6 +4472,7 @@ alert("iColumn: "+iColumn);
 		if (bIsFrameOnly) {
 			return;
 		}
+
 
 			if (iCurrHeroProjectileManaAnimationDelayCount==iCurrHeroProjectileManaAnimationDelayCountMax) {
 				if (iCurrHeroMana<iCurrHeroManaMax) {
@@ -4524,7 +4582,14 @@ alert("iColumn: "+iColumn);
 		}	
 		iCurrHeroManaAnimationDelayCount++;
 
-		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroManaBarWidth*iCurrHeroMana, iHeroManaBarHeight);
+		//edited by Mike, 20261121
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroManaBarWidth*iCurrHeroMana, iHeroManaBarHeight);
+		
+		//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroManaBarWidth*iManaBarWidthTotalPoints)-iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iManaBarWidthTotalPoints, 0+iYPos, iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iManaBarWidthTotalPoints, iHeroManaBarHeight);
+				
+		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroManaBarWidth*iCurrHeroManaMax)-iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iCurrHeroManaMax, 0+iYPos, iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iCurrHeroManaMax, iHeroManaBarHeight);
+		
+		//*(iCurrHeroManaMax-iCurrHeroManaMaxDefault)
 		
 		//OK; goes up
 		//myCanvasContext.fillRect(0+iXPos+textManaBarDiv.innerHTML.length*4, 0+iYPos, iHeroManaBarWidth, -iHeroManaBarHeight/iCurrHeroManaMax*(iCurrHeroMana));
@@ -7418,8 +7483,15 @@ alert("iInputY: "+iInputY);
 					}
 				}
 			}
-			
-			if (bIsHeroAttacked) { //HIT_STATE
+
+			//added by Mike, 20261121
+			if (iCurrHeroLife<=0) {
+				iHeroFrameY=iImageFrameHeightLarge*9;
+				iHeroFrameXOffset=iImageFrameWidthLarge*3;
+
+				mainImageTileHeroBody.style.objectPosition = "-" + iHeroFrameXOffset + "px -" + iHeroFrameY + "px";
+			}
+			else if (bIsHeroAttacked) { //HIT_STATE
 
 				if	 (iHeroFrameY/(iImageFrameHeightLarge*13)==1) {//face left
 					iHeroFrameY=iImageFrameHeightLarge*0;
@@ -7463,8 +7535,11 @@ alert("iInputY: "+iInputY);
 				
 				mainImageTileHeroBody.style.objectPosition = "-" + iHeroFrameXOffset + "px -" + iHeroFrameY + "px";
 				
-				//TODO: -add: a delay count
-				bIsHeroAttacked=false;
+				//edited by Mike, 20261121				
+				//if (iHeroHitAnimationCount>iHeroHitAnimationCountMax) {
+					bIsHeroAttacked=false;
+					//iHeroHitAnimationCount=0;
+				//}
 			}
 			else {			
 				
@@ -7537,7 +7612,7 @@ alert("iInputY: "+iInputY);
 				//if removed; could be unresponsive at times though;
 				//note if added; check the combo counter instead; to avoid instant death; hold; double damage;
 				//bHasReleasedKeyJ=true;
-
+				
 				iHeroAttackAnimationDelayCountMaxOffset=0;
 			}
 			else {
@@ -7693,6 +7768,7 @@ alert("iInputY: "+iInputY);
 			}
 			else if (bIsHeroAttacked) { //HIT_STATE
 
+
 					if	 (iHeroFrameY/(iImageFrameHeightLarge*13)==1) {//face left
 						iHeroFrameY=iImageFrameHeightLarge*0;
 					}
@@ -7729,9 +7805,24 @@ alert("iInputY: "+iInputY);
 */
 
 				mainImageTileHeroBody.style.objectPosition = "-" + iHeroFrameXOffset + "px -" + iHeroFrameY + "px";
-				
-				//TODO: -add: a delay count;
-				bIsHeroAttacked=false;
+
+				//edited by Mike, 20261121				
+				if (iHeroHitAnimationCount>iHeroHitAnimationCountMax) {
+					bIsHeroAttacked=false;
+					iHeroHitAnimationCount=0;
+				}
+				iHeroHitAnimationCount++;
+/*				
+				if (HeroHitAnimationCount<HeroHitAnimationCountMax) {
+					HeroHitAnimationCount++;
+					
+					//alert(HeroHitAnimationCount);
+				}
+				else {
+					bIsHeroAttacked=false;
+					HeroHitAnimationCount=0;
+				}
+*/
 			}
 			else {			
 				
@@ -11952,6 +12043,9 @@ if (arrayWalkOnSnowEffectCount==1) {
 			return;
 		}
 */
+
+		//noted by Mike, 20261121;
+		//single player only; reconsider;
 		if (iHeroInvincibleCount<iHeroInvincibleCountMax) {
 			return;
 		}
@@ -11982,7 +12076,14 @@ if (arrayWalkOnSnowEffectCount==1) {
 			}
 				
 			setExplosionEffectPosition(mainImageTilePosX+iImageFrameWidthLarge/2,mainImageTilePosY+iImageFrameHeightLarge/2);
-		}		
+			
+			//added by Mike, 20261121
+			bHasReleasedDirectionalKey=true;
+			arrayKeyPressed[iKEY_D]=false;
+			arrayKeyPressed[iKEY_A]=false;
+			arrayKeyPressed[iKEY_W]=false;
+			arrayKeyPressed[iKEY_S]=false;
+		}
 
 		//edited by Mike, 20261117
 		if (!bIsVersusMode) {
@@ -13251,9 +13352,11 @@ if (fDifferenceInXPos!=0) {
 			return;
 		}
 		
-		//added by Mike, 20260827
-		if (iCurrHeroMana<=0) {	//if no mana
-			return;	
+		//edited by Mike, 20261121; from 20260827
+		if (!bIsVersusMode) {		
+			if (iCurrHeroMana<=0) {	//if no mana
+				return;	
+			}
 		}
 
 		//added by Mike, 20261113
@@ -18786,6 +18889,7 @@ if (fDifferenceInXPos!=0) {
 	
 		if (!bIsVersusMode) {	
 			if (iHeroInvincibleCount<iHeroInvincibleCountMax) {
+				//TODO: -reverify: this
 				if (iHeroInvincibleCount%2==0) {
 					mainImageTileHeroBody.style.visibility="hidden";
 				}
@@ -19162,7 +19266,10 @@ if (fDifferenceInXPos!=0) {
 					arrayWraithMonsterCountId[0][MONSTER_POSY]=iInnerVerticalOffset+iViewportMaxHeight/4+iImageFrameHeightLarge/2;
 */
 
-					arrayWraithMonsterCountId[0][MONSTER_POSX]=iInnerHorizontalOffset+iImageFrameWidthLarge*3.5;
+					//arrayWraithMonsterCountId[0][MONSTER_POSX]=iInnerHorizontalOffset+iImageFrameWidthLarge*3.5;
+					
+					arrayWraithMonsterCountId[0][MONSTER_POSX]=iInnerHorizontalOffset+iImageFrameWidthLarge*5;
+
 					
 					arrayWraithMonsterCountId[0][MONSTER_POSY]=iInnerVerticalOffset+iViewportMaxHeight*0.005+iImageFrameHeightLarge/2;
 
@@ -20128,12 +20235,12 @@ if (fDifferenceInXPos!=0) {
 				if (!arrayKeyPressed[iKEY_J]) {
 					executeHeroWalkingAnimation();
 				}
-					
-
+				
 				//}
 /*
 			}
 */		
+
 //-----------------
 
 		//destination to the left of hero projectile
@@ -21210,6 +21317,7 @@ alert("iXPos: "+iXPos);
 		var myAudioEffectSolved = document.getElementById("myAudioEffectSolvedId");
 
 		myAudioEffectSolved.setAttribute("src", sAudioEffectSolved);
+
 
 		//fMyAudioEffectVolume=0.2;
 		myAudioEffectSolvedVolume=1.0;
