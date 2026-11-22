@@ -1647,7 +1647,7 @@ const iLifeBarWidthTotalPoints=10;
 const iManaBarWidthTotalPoints=10;
 
 //increase this per level-up
-var iCurrHeroLifeMaxDefault=10;//10;//15;//20;
+var iCurrHeroLifeMaxDefault=50;//10;//10;//15;//20;
 var iCurrHeroLifeMax=iCurrHeroLifeMaxDefault;//15;//20;
 var iCurrHeroLife=iCurrHeroLifeMax;
 var iCurrHeroLifeAnimationDelayCount=0;
@@ -1665,17 +1665,17 @@ const sCurrOpponentLifeFillColorDefault="#ee7500"; //orange
 var sCurrOpponentLifeFillColor=sCurrOpponentLifeFillColorDefault;
 
 
-var iCurrHeroLifeToBeDeducted=0;
-var iCurrHeroLifeToBeDeductedAnimation=0;
-var iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+var fCurrHeroLifeToBeDeducted=0;
+var fCurrHeroLifeToBeDeductedAnimation=0;
+var fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
 
 var iCurrHeroLifeAnimationDelayCount=0;
 var iCurrHeroLifeAnimationDelayCountMax=5;
 var iCurrHeroProjectileLifeAnimationDelayCount=0;
 var iCurrHeroProjectileLifeAnimationDelayCountMax=6;
 
-var iCurrHeroLifeToBeDeductedAnimationDelayCount=0;
-var iCurrHeroLifeToBeDeductedAnimationDelayCountMax=5;
+var fCurrHeroLifeToBeDeductedAnimationDelayCount=0;
+var fCurrHeroLifeToBeDeductedAnimationDelayCountMax=5;
 
 //added by Mike, 20251124
 var iCurrHeroLevel=0;
@@ -1689,17 +1689,17 @@ var iCurrOpponentLife=iCurrHeroLifeMax;
 var iCurrOpponentLifeAnimationDelayCount=0;
 var iCurrOpponentLifeAnimationDelayCountMax=5;
 
-var iCurrOpponentLifeToBeDeducted=0;
-var iCurrOpponentLifeToBeDeductedAnimation=0;
-var iCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLifeMax;
+var fCurrOpponentLifeToBeDeducted=0;
+var fCurrOpponentLifeToBeDeductedAnimation=0;
+var fCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLifeMax;
 
 var iCurrOpponentLifeAnimationDelayCount=0;
 var iCurrOpponentLifeAnimationDelayCountMax=5;
 var iCurrOpponentProjectileLifeAnimationDelayCount=0;
 var iCurrOpponentProjectileLifeAnimationDelayCountMax=6;
 
-var iCurrOpponentLifeToBeDeductedAnimationDelayCount=0;
-var iCurrOpponentLifeToBeDeductedAnimationDelayCountMax=5;
+var fCurrOpponentLifeToBeDeductedAnimationDelayCount=0;
+var fCurrOpponentLifeToBeDeductedAnimationDelayCountMax=5;
 
 
 
@@ -1800,6 +1800,9 @@ var iCurrMonsterDeathCount=0;
 
 //added by Mike, 20260625
 var iCurrHeroComboCount=0;
+
+//added by Mike, 20261122
+var iCurrOpponentComboCount=0;
 
 //added by Mike, 20260911
 var iCurrHeroWallBounceCount=0;
@@ -2330,6 +2333,11 @@ const iHeroHitAnimationCountMax=iHeroAttackAnimationCountMax;
 var iHeroAttackComboResetDelayCount=0;
 //edited by Mike, 20260916; at 5; too fast mouse clicks lead to combo count not increasing;
 const iHeroAttackComboResetDelayCountMax=20;//5;
+
+//added by Mike, 20261122
+var iOpponentAttackComboResetDelayCount=0;
+//edited by Mike, 20260916; at 5; too fast mouse clicks lead to combo count not increasing;
+const iOpponentAttackComboResetDelayCountMax=20;//5;
 
 
 /*
@@ -2934,7 +2942,7 @@ var bIsHeroFacingUp=true;//false;
 	var iSetNum=0; //instead of random
 
 	//edited by Mike, 20261112; from 20260616; debug
-	const WRAITH_MONSTER_HP_MAX=10;//50;//10;//100;//4;//2;//10;//1;//2;//3;
+	const WRAITH_MONSTER_HP_MAX=50;//15;//10;//50;//10;//100;//4;//2;//10;//1;//2;//3;
 	const WRAITH_MONSTER_MANA_MAX=10; //added by Mike, 20261115
 
 	const RUNNING_WRAITH_MONSTER_HP_MAX=1;
@@ -3043,7 +3051,7 @@ var bIsHeroFacingUp=true;//false;
 
 	function setCurrLifeAndManaToMax() {
 		iCurrHeroLife=iCurrHeroLifeMax;
-		iCurrHeroLifeToBeDeducted=0;
+		fCurrHeroLifeToBeDeducted=0;
 
 		iCurrHeroMana=iCurrHeroManaMax;
 		iCurrHeroManaToBeDeducted=0;
@@ -3778,18 +3786,20 @@ alert("iColumn: "+iColumn);
 
 		//added by Mike, 20251112
 		//---------------------------------		
-		if (iCurrHeroLifeToBeDeductedAnimationDelayCount==iCurrHeroLifeToBeDeductedAnimationDelayCountMax) {
-			if (iCurrHeroLifeToBeDeductedAnimation>0) {
+		if (fCurrHeroLifeToBeDeductedAnimationDelayCount==fCurrHeroLifeToBeDeductedAnimationDelayCountMax) {
+			if (fCurrHeroLifeToBeDeductedAnimation>0) {
 				
-				//alert(iCurrHeroLifeToBeDeductedAnimation);
+				//alert(fCurrHeroLifeToBeDeductedAnimation);
 				
-				iCurrHeroLifeToBeDeductedAnimation--;
+				//fCurrHeroLifeToBeDeductedAnimation--;
+				fCurrHeroLifeToBeDeductedAnimation-=0.5;//0.2; //0.1
+
 			}
 			
-			iCurrHeroLifeToBeDeductedAnimationDelayCount=0;
+			fCurrHeroLifeToBeDeductedAnimationDelayCount=0;
 		}
 		else {
-			iCurrHeroLifeToBeDeductedAnimationDelayCount++;
+			fCurrHeroLifeToBeDeductedAnimationDelayCount++;
 		}
 
 /*		
@@ -3809,12 +3819,12 @@ alert("iColumn: "+iColumn);
 */		
 
 		//added by Mike, 20251121
-		if (iCurrHeroLifeToBeDeductedAnimation<0) {
-			iCurrHeroLifeToBeDeductedAnimation=0;
+		if (fCurrHeroLifeToBeDeductedAnimation<0) {
+			fCurrHeroLifeToBeDeductedAnimation=0;
 		}
 
-	    if (iCurrHeroLifeToBeDeductedAnimationMain<0) {
-			iCurrHeroLifeToBeDeductedAnimationMain=0;
+	    if (fCurrHeroLifeToBeDeductedAnimationMain<0) {
+			fCurrHeroLifeToBeDeductedAnimationMain=0;
 		}
 
 		//myCanvasContext.fillStyle = 'yellow';
@@ -3823,18 +3833,31 @@ alert("iColumn: "+iColumn);
 		//edited by Mike, 20261112
 		var iLifeBarRedFillOffsetY=0;//iHeroLifeBarHeight;//4;
 
-		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrHeroLifeToBeDeductedAnimationMain+iCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
 
-		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iCurrHeroLifeMax)-(iHeroLifeBarWidth*(iCurrHeroLifeToBeDeductedAnimationMain+iCurrHeroLifeToBeDeductedAnimation)), 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrHeroLifeToBeDeductedAnimationMain+iCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+		
+		//edited by Mike, 20261122
+		//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iCurrHeroLifeMax)-(iHeroLifeBarWidth*(fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation)), 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+/*
+		if ((fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation)!=10) {
+		alert(fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation);
+		}
+*/
+
+//		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-(iHeroLifeBarWidth*((fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation)/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints), 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+
+	
+		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-(iHeroLifeBarWidth*((fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation)/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints), 0+iYPos-iLifeBarRedFillOffsetY, (iHeroLifeBarWidth*(fCurrHeroLifeToBeDeductedAnimationMain+fCurrHeroLifeToBeDeductedAnimation)/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+
 
 		//myCanvasContext.fillRect(0+iXPos, 0+iYPos, iHeroLifeBarWidth*(iCurrHeroLifeMax), iHeroLifeBarHeight);
 
 		//---------------------------------
 
 		//added by Mike, 20261122
-		if (iCurrHeroLifeToBeDeducted>0) {
-			//iCurrHeroLife-=iCurrHeroLifeToBeDeducted;
-			iCurrHeroLifeToBeDeducted=0;
+		if (fCurrHeroLifeToBeDeducted>0) {
+			//iCurrHeroLife-=fCurrHeroLifeToBeDeducted;
+			fCurrHeroLifeToBeDeducted=0;
 		}	
 		
 
@@ -3887,7 +3910,7 @@ alert("iColumn: "+iColumn);
 			//myCanvasContext.fillStyle = "#ff6b00"; //orange
 			//edited by Mike, 20261121
 			//myCanvasContext.fillStyle = "#aa0000"; //dark red		
-			myCanvasContext.fillStyle = sCurrHeroLifeFillColor;//"#ee7500"; //orange
+			myCanvasContext.fillStyle = "#ee7500"; //orange
 		}
 		else {
 			//Game Off 2021; TUGON
@@ -3903,7 +3926,7 @@ alert("iColumn: "+iColumn);
 				}
 				
 				//edited by Mike, 20251112
-				if (iCurrHeroLifeToBeDeductedAnimation==0) {
+				if (fCurrHeroLifeToBeDeductedAnimation==0) {
 					myCanvasContext.fillStyle = "#2d2622"; //"#000000"; //black
 				}
 			}			
@@ -3921,8 +3944,21 @@ alert("iColumn: "+iColumn);
 
 		//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-iHeroLifeBarWidth*iCurrHeroLife, 0+iYPos, iHeroLifeBarWidth*iCurrHeroLife, iHeroLifeBarHeight);
 
-		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, 0+iYPos, iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
-		
+		//edited by Mike, 20261122
+
+	//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, 0+iYPos, iHeroLifeBarWidth*(iCurrHeroLife/iCurrHeroLifeMax)*iLifeBarWidthTotalPoints, iHeroLifeBarHeight);
+
+/*
+		if (iCurrHeroLifeMax==15) {
+
+alert(iCurrHeroLife/iCurrHeroLifeMax);
+
+alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLifeMax)*(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)));
+}
+*/
+
+		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLifeMax)*(iHeroLifeBarWidth*iLifeBarWidthTotalPoints)), 0+iYPos-iLifeBarRedFillOffsetY, (iCurrHeroLife/iCurrHeroLifeMax)*(iHeroLifeBarWidth*iLifeBarWidthTotalPoints), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+
 		//added by Mike, 20261112
 		myCanvasContext.strokeStyle = 'black'; 
 		myCanvasContext.lineWidth = 0.2; 
@@ -3976,18 +4012,20 @@ alert("iColumn: "+iColumn);
 
 		//added by Mike, 20251112
 		//---------------------------------		
-		if (iCurrOpponentLifeToBeDeductedAnimationDelayCount==iCurrOpponentLifeToBeDeductedAnimationDelayCountMax) {
-			if (iCurrOpponentLifeToBeDeductedAnimation>0) {
+		if (fCurrOpponentLifeToBeDeductedAnimationDelayCount==fCurrOpponentLifeToBeDeductedAnimationDelayCountMax) {
+			if (fCurrOpponentLifeToBeDeductedAnimation>0) {
 				
-				//alert(iCurrOpponentLifeToBeDeductedAnimation);
+				//alert(fCurrOpponentLifeToBeDeductedAnimation);
 				
-				iCurrOpponentLifeToBeDeductedAnimation--;
+				//edited by Mike, 20261122
+				//fCurrOpponentLifeToBeDeductedAnimation--;
+				fCurrOpponentLifeToBeDeductedAnimation-=0.5;//0.2;
 			}
 			
-			iCurrOpponentLifeToBeDeductedAnimationDelayCount=0;
+			fCurrOpponentLifeToBeDeductedAnimationDelayCount=0;
 		}
 		else {
-			iCurrOpponentLifeToBeDeductedAnimationDelayCount++;
+			fCurrOpponentLifeToBeDeductedAnimationDelayCount++;
 			
 		}
 		
@@ -4010,12 +4048,12 @@ alert("iColumn: "+iColumn);
 */		
 
 		//added by Mike, 20251121
-		if (iCurrOpponentLifeToBeDeductedAnimation<0) {
-			iCurrOpponentLifeToBeDeductedAnimation=0;
+		if (fCurrOpponentLifeToBeDeductedAnimation<0) {
+			fCurrOpponentLifeToBeDeductedAnimation=0;
 		}
 		
-	    if (iCurrOpponentLifeToBeDeductedAnimationMain<0) {
-			iCurrOpponentLifeToBeDeductedAnimationMain=0;
+	    if (fCurrOpponentLifeToBeDeductedAnimationMain<0) {
+			fCurrOpponentLifeToBeDeductedAnimationMain=0;
 		}
 
 		//myCanvasContext.fillStyle = 'yellow';
@@ -4024,15 +4062,29 @@ alert("iColumn: "+iColumn);
 		var iLifeBarRedFillOffsetY=0;//4;
 
 		//edited by Mike, 20261112
-		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrOpponentLifeToBeDeductedAnimationMain+iCurrOpponentLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(fCurrOpponentLifeToBeDeductedAnimationMain+fCurrOpponentLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
 
-		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(iCurrOpponentLifeToBeDeductedAnimationMain+iCurrOpponentLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+		//edited by Mike, 20261122
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, iHeroLifeBarWidth*(fCurrOpponentLifeToBeDeductedAnimationMain+fCurrOpponentLifeToBeDeductedAnimation), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+		
+		var fTemp=(fCurrOpponentLifeToBeDeductedAnimationMain+fCurrOpponentLifeToBeDeductedAnimation);
+/*
+		if (fTemp>iCurrOpponentLife+fCurrOpponentLifeToBeDeductedAnimationMain) {
+			fTemp=iCurrOpponentLife+fCurrOpponentLifeToBeDeductedAnimationMain;
+		}
+*/
+		
+		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, (iHeroLifeBarWidth*((fCurrOpponentLifeToBeDeductedAnimationMain+fCurrOpponentLifeToBeDeductedAnimation)/iCurrOpponentLifeMax)*iLifeBarWidthTotalPoints), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+		
+		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos-iLifeBarRedFillOffsetY, (iHeroLifeBarWidth*((fTemp)/iCurrOpponentLifeMax)*iLifeBarWidthTotalPoints), iHeroLifeBarHeight-iLifeBarRedFillOffsetY);
+
+		
 		//---------------------------------
 
 
-		if (iCurrOpponentLifeToBeDeducted>0) {
-			//iCurrHeroLife-=iCurrHeroLifeToBeDeducted;
-			iCurrOpponentLifeToBeDeducted=0;
+		if (fCurrOpponentLifeToBeDeducted>0) {
+			//iCurrHeroLife-=fCurrHeroLifeToBeDeducted;
+			fCurrOpponentLifeToBeDeducted=0;
 		}		
 
 
@@ -4084,7 +4136,7 @@ alert("iColumn: "+iColumn);
 				}
 				
 				//edited by Mike, 20251112
-				if (iCurrOpponentLifeToBeDeductedAnimation==0) {
+				if (fCurrOpponentLifeToBeDeductedAnimation==0) {
 					myCanvasContext.fillStyle = "#2d2622"; //"#000000"; //black
 				}
 			}			
@@ -4129,7 +4181,7 @@ alert("iColumn: "+iColumn);
 		if (iCurrBossLifeToBeDeductedAnimationDelayCount==iCurrBossLifeToBeDeductedAnimationDelayCountMax) {
 			if (iCurrBossLifeToBeDeductedAnimation>0) {
 				
-				//alert(iCurrHeroLifeToBeDeductedAnimation);
+				//alert(fCurrHeroLifeToBeDeductedAnimation);
 				
 				iCurrBossLifeToBeDeductedAnimation--;
 			}
@@ -4173,7 +4225,7 @@ alert("iColumn: "+iColumn);
 		//---------------------------------
 
 		if (iCurrBossLifeToBeDeducted>0) {
-			//iCurrHeroLife-=iCurrHeroLifeToBeDeducted;
+			//iCurrHeroLife-=fCurrHeroLifeToBeDeducted;
 			iCurrBossLifeToBeDeducted=0;
 		}		
 
@@ -4224,27 +4276,27 @@ alert("iColumn: "+iColumn);
 		//alert(iAmount);
 			
 		//iCurrHeroMana-=3;
-		iCurrHeroLifeToBeDeducted+=iAmount*3;
+		fCurrHeroLifeToBeDeducted+=iAmount*3;
 		
-		if (iCurrHeroLifeToBeDeducted>iCurrHeroLifeMax) {
-			iCurrHeroLifeToBeDeducted=iCurrHeroLifeMax;
+		if (fCurrHeroLifeToBeDeducted>iCurrHeroLifeMax) {
+			fCurrHeroLifeToBeDeducted=iCurrHeroLifeMax;
 		}
 		
-		if (iCurrHeroLife-iCurrHeroLifeToBeDeducted<=0) {
+		if (iCurrHeroLife-fCurrHeroLifeToBeDeducted<=0) {
 			iCurrHeroLife=0;
-			iCurrHeroLifeToBeDeducted=0;
+			fCurrHeroLifeToBeDeducted=0;
 			//iCurrHeroManaToBeDeductedAnimation=0;
 
 			//edited by Mike, 20261112
-			//iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
-			iCurrHeroLifeToBeDeductedAnimationMain=0;
+			//fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+			fCurrHeroLifeToBeDeductedAnimationMain=0;
 			return false;
 		}
 
 
-		if (iCurrHeroLifeToBeDeducted>0) {
-			iCurrHeroLife-=iCurrHeroLifeToBeDeducted;
-			//iCurrHeroLifeToBeDeducted=0;
+		if (fCurrHeroLifeToBeDeducted>0) {
+			iCurrHeroLife-=fCurrHeroLifeToBeDeducted;
+			//fCurrHeroLifeToBeDeducted=0;
 		}
 		
 		//added by Mike, 20261111
@@ -4265,22 +4317,30 @@ alert("iColumn: "+iColumn);
 			myAudioPart2.pause();
 		}
 		
-		//added by Mike, 20251124
-		iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLife+iCurrHeroLifeToBeDeducted;
+		//edited by Mike, 20261122; from 20251124
+		if (fCurrHeroLifeToBeDeducted>iAmount*3) {
+			fCurrHeroLifeToBeDeducted=0;
+		}
+
+
+		fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLife+fCurrHeroLifeToBeDeducted;
 	
 		iCurrHeroProjectileLifeAnimationDelayCount=0;
-		iCurrHeroLifeToBeDeductedAnimation+=iCurrHeroLifeToBeDeducted;
+		fCurrHeroLifeToBeDeductedAnimation+=fCurrHeroLifeToBeDeducted;
 		
-		//iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax-iCurrHeroLifeToBeDeductedAnimation;
+		//fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax-fCurrHeroLifeToBeDeductedAnimation;
 		
-		iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeToBeDeductedAnimationMain-iCurrHeroLifeToBeDeductedAnimation;
+		////fCurrHeroLifeToBeDeductedAnimationMain=fCurrHeroLifeToBeDeductedAnimationMain-fCurrHeroLifeToBeDeductedAnimation;
 		
+		fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLife;
+
+
 
 		//alert(iCurrHeroLife);
 
 /*		
-		alert("iCurrHeroLifeToBeDeductedAnimation: "+iCurrHeroLifeToBeDeductedAnimation);
-		alert("iCurrHeroLifeToBeDeductedAnimationMain: "+iCurrHeroLifeToBeDeductedAnimationMain);
+		alert("fCurrHeroLifeToBeDeductedAnimation: "+fCurrHeroLifeToBeDeductedAnimation);
+		alert("fCurrHeroLifeToBeDeductedAnimationMain: "+fCurrHeroLifeToBeDeductedAnimationMain);
 */		
 		
 		return true;
@@ -4302,27 +4362,28 @@ alert("iColumn: "+iColumn);
 		//alert("DITO!!");
 			
 		//iCurrHeroMana-=3;
-		iCurrOpponentLifeToBeDeducted+=iAmount*3;
 		
-		if (iCurrOpponentLifeToBeDeducted>iCurrOpponentLifeMax) {
-			iCurrOpponentLifeToBeDeducted=iCurrOpponentLifeMax;
+		fCurrOpponentLifeToBeDeducted+=iAmount*3;
+		
+		if (fCurrOpponentLifeToBeDeducted>iCurrOpponentLifeMax) {
+			fCurrOpponentLifeToBeDeducted=iCurrOpponentLifeMax;
 		}
 		
-		if (iCurrOpponentLife-iCurrOpponentLifeToBeDeducted<=0) {
+		if (iCurrOpponentLife-fCurrOpponentLifeToBeDeducted<=0) {
 			iCurrOpponentLife=0;
-			iCurrOpponentLifeToBeDeducted=0;
+			fCurrOpponentLifeToBeDeducted=0;
 			//iCurrHeroManaToBeDeductedAnimation=0;
 
 			//edited by Mike, 20261112
-			iCurrOpponentLifeToBeDeductedAnimationMain=0;//iCurrOpponentLifeMax;
+			fCurrOpponentLifeToBeDeductedAnimationMain=0;//iCurrOpponentLifeMax;
 			
 			return false;
 		}
 
 
-		if (iCurrOpponentLifeToBeDeducted>0) {
-			iCurrOpponentLife-=iCurrOpponentLifeToBeDeducted;
-			//iCurrHeroLifeToBeDeducted=0;
+		if (fCurrOpponentLifeToBeDeducted>0) {
+			iCurrOpponentLife-=fCurrOpponentLifeToBeDeducted;
+			//fCurrHeroLifeToBeDeducted=0;
 		}
 
 /*		//removed by Mike, 20261113		
@@ -4334,19 +4395,27 @@ alert("iColumn: "+iColumn);
 		}
 */
 		
-		//added by Mike, 20251124
-		iCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLife+iCurrOpponentLifeToBeDeducted;
-	
-		iCurrOpponentProjectileLifeAnimationDelayCount=0;
-		iCurrOpponentLifeToBeDeductedAnimation+=iCurrOpponentLifeToBeDeducted;
+			//edited by Mike, 20261122; from 20251124
+			if (fCurrOpponentLifeToBeDeducted>iAmount*3) {
+				fCurrOpponentLifeToBeDeducted=0;
+			}
 		
-		//iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax-iCurrHeroLifeToBeDeductedAnimation;
+			fCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLife+fCurrOpponentLifeToBeDeducted;
 		
-		iCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLifeToBeDeductedAnimationMain-iCurrOpponentLifeToBeDeductedAnimation;
+			iCurrOpponentProjectileLifeAnimationDelayCount=0;
+			fCurrOpponentLifeToBeDeductedAnimation+=fCurrOpponentLifeToBeDeducted;
+			
+			//fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax-fCurrHeroLifeToBeDeductedAnimation;
+			
+			////fCurrOpponentLifeToBeDeductedAnimationMain=fCurrOpponentLifeToBeDeductedAnimationMain-fCurrOpponentLifeToBeDeductedAnimation;
+			
+			fCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLife;
+			
+			
 		
 /*		
-		alert("iCurrHeroLifeToBeDeductedAnimation: "+iCurrHeroLifeToBeDeductedAnimation);
-		alert("iCurrHeroLifeToBeDeductedAnimationMain: "+iCurrHeroLifeToBeDeductedAnimationMain);
+		alert("fCurrHeroLifeToBeDeductedAnimation: "+fCurrHeroLifeToBeDeductedAnimation);
+		alert("fCurrHeroLifeToBeDeductedAnimationMain: "+fCurrHeroLifeToBeDeductedAnimationMain);
 */		
 		
 		return true;
@@ -4386,7 +4455,7 @@ alert("iColumn: "+iColumn);
 
 		if (iCurrBossLifeToBeDeducted>0) {
 			iCurrBossLife-=iCurrBossLifeToBeDeducted;
-			//iCurrHeroLifeToBeDeducted=0;
+			//fCurrHeroLifeToBeDeducted=0;
 		}
 		
 		//added by Mike, 20251124
@@ -4395,13 +4464,13 @@ alert("iColumn: "+iColumn);
 		iCurrBossProjectileLifeAnimationDelayCount=0;
 		iCurrBossLifeToBeDeductedAnimation+=iCurrBossLifeToBeDeducted;
 		
-		//iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax-iCurrHeroLifeToBeDeductedAnimation;
+		//fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax-fCurrHeroLifeToBeDeductedAnimation;
 		
 		iCurrBossLifeToBeDeductedAnimationMain=iCurrBossLifeToBeDeductedAnimationMain-iCurrBossLifeToBeDeductedAnimation;
 		
 /*		
-		alert("iCurrHeroLifeToBeDeductedAnimation: "+iCurrHeroLifeToBeDeductedAnimation);
-		alert("iCurrHeroLifeToBeDeductedAnimationMain: "+iCurrHeroLifeToBeDeductedAnimationMain);
+		alert("fCurrHeroLifeToBeDeductedAnimation: "+fCurrHeroLifeToBeDeductedAnimation);
+		alert("fCurrHeroLifeToBeDeductedAnimationMain: "+fCurrHeroLifeToBeDeductedAnimationMain);
 */		
 		
 		return true;
@@ -5050,6 +5119,8 @@ alert("iColumn: "+iColumn);
 		
 		//textHeroComboStatusDiv.innerHTML = "Kx"+iHasHeldKeyJ;		
 		//textHeroComboStatusDiv.innerHTML = "Dx"+iHeroAttackAnimationDelayCountMaxOffset;		
+		
+		//textHeroComboStatusDiv.innerHTML = "OCx"+iCurrOpponentComboCount;		
 	}
 	
 	function drawHeroCoinStatus(myCanvasContext, iXPos, iYPos) {		
@@ -5911,11 +5982,12 @@ alert("iColumn: "+iColumn);
 		for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
 			arrayWraithMonsterCountId[iCount][MONSTER_OBJECT]=document.getElementById("wraithMonsterImageId"+iCount);
 			
-			arrayWraithMonsterCountId[iCount][MONSTER_OBJECT].style.visibility="hidden";			
+			//removed by Mike, 20261116
+			//arrayWraithMonsterCountId[iCount][MONSTER_OBJECT].style.visibility="hidden";			
 			arrayWraithMonsterCountId[iCount][MONSTER_IS_ACTIVE]=false;
 
-			arrayWraithMonsterCountId[iCount][MONSTER_POSX]=0;
-			arrayWraithMonsterCountId[iCount][MONSTER_POSY]=0;
+			arrayWraithMonsterCountId[iCount][MONSTER_POSX]=fDefaultObjectPosX;//0;
+			arrayWraithMonsterCountId[iCount][MONSTER_POSY]=fDefaultObjectPosY;//0;
 			arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=2;
 			arrayWraithMonsterCountId[iCount][MONSTER_STEPY]=2;			
 
@@ -6134,6 +6206,9 @@ alert("iColumn: "+iColumn);
 
 		//added by Mike, 2026025
 		iCurrHeroComboCount=0;
+
+		//added by Mike, 20261122
+		iCurrOpponentComboCount=0;
 		
 		//added by Mike, 20260911
 		iCurrHeroWallBounceCount=0;
@@ -9155,7 +9230,9 @@ alert("iInputY: "+iInputY);
 					return;
 				}						
 			}
-		}	 		
+		}	 
+
+		
 		
 		//removed by Mike, 20261117
 		//bIsOpponentWalking=true;
@@ -9182,6 +9259,15 @@ alert("iInputY: "+iInputY);
 			inputArrayWraithMonsterWithIdCount[MONSTER_RESPAWN_WAIT_TIME]=0;
 		}
 */	
+
+		//added by Mike, 20261122
+		if (iOpponentAttackComboResetDelayCount>=iOpponentAttackComboResetDelayCountMax) {
+			iCurrOpponentComboCount=0;
+		}
+		else {
+			iOpponentAttackComboResetDelayCount++
+		}
+
 
 		//added by Mike, 20260714
 		//---------------------------------------------
@@ -10121,6 +10207,12 @@ alert("iInputY: "+iInputY);
 				//inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]++;
 				inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT]++;
 
+				//added by Mike, 20261122
+				//faster; initial combos;
+				if (iCurrOpponentComboCount<3) {
+					inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT]++;
+				}
+
 			}
 
 			//added again by Mike, 20261107
@@ -10135,12 +10227,28 @@ alert("iInputY: "+iInputY);
 				iMonsterFrameY=iImageFrameHeightLarge*1;//0; //face right
 				//iFrameY=iImageFrameHeightLarge*12 //face right
 				
+				
+				//added by Mike, 20261122
+				//two straight punches before this
+				if (iCurrOpponentComboCount==3) {
+					iMonsterFrameY=iImageFrameHeightLarge*3;
+				}
+				else if (iCurrOpponentComboCount>3) { //straight punch again before this
+					iMonsterFrameY=iImageFrameHeightLarge*5;
+				}
+				
+				
 	//removed by Mike, 20260702; attack only when horizontally aligned with the hero			
 				//if skel is facing up; below hero
 				if (inputArrayWraithMonsterWithIdCount[MONSTER_POSY]>mainImageTilePosY+iImageFrameHeightLarge/4) {
 				
 				
 					iMonsterFrameY=iImageFrameHeightLarge*5; //face up
+					
+					//added by Mike, 20261122
+					if (iCurrOpponentComboCount>=3) {
+						iMonsterFrameY=iImageFrameHeightLarge*9;
+					}
 				}
 				else if (inputArrayWraithMonsterWithIdCount[MONSTER_POSY]+iImageFrameHeightLarge/4<mainImageTilePosY) {
 				
@@ -10156,13 +10264,28 @@ alert("iInputY: "+iInputY);
 				//edited by Mike, 20261107
 				iMonsterFrameY=iImageFrameHeightLarge*0;//1; //face left
 				//iFrameY=iImageFrameHeightLarge*13; //face left
+				
+				
+				//added by Mike, 20261122
+				//two straight punches before this
+				if (iCurrOpponentComboCount==3) {
+					iMonsterFrameY=iImageFrameHeightLarge*2;
+				}
+				else if (iCurrOpponentComboCount>3) {
+					iMonsterFrameY=iImageFrameHeightLarge*4;
+				}
+				
+				
 
 	//removed by Mike, 20260702; attack only when horizontally aligned with the hero			
 				//if skel is facing up; below hero
 				if (inputArrayWraithMonsterWithIdCount[MONSTER_POSY]>mainImageTilePosY+iImageFrameHeightLarge/4) {
-				
-				
 					iMonsterFrameY=iImageFrameHeightLarge*4; //face up
+					
+					//added by Mike, 20261122
+					if (iCurrOpponentComboCount>=3) {
+						iMonsterFrameY=iImageFrameHeightLarge*8;
+					}
 				}
 				else if (inputArrayWraithMonsterWithIdCount[MONSTER_POSY]+iImageFrameHeightLarge/4<mainImageTilePosY) {
 				
@@ -13561,12 +13684,13 @@ if (fDifferenceInXPos!=0) {
 	}
 
 	function verifyHeroCollideWithWraithMonstersDebug(inputArrayWraithMonsterWithIdCount, iCount) {
-
+/*		//removed by Mike, 20261122
 		//added by Mike, 20260914
 		if ((bHasClickedWall) && (bHasHeroHitWall)) {
 			resetProjectile();
 			return;
 		}
+*/
 
 /*		//removed by Mike, 20261122		
 		//edited by Mike, 20261121; from 20260827
@@ -13604,6 +13728,7 @@ if (fDifferenceInXPos!=0) {
 			if (inputArrayWraithMonsterWithIdCount[MONSTER_OBJECT].style.visibility=="hidden") {
 				bIsVisible=false;
 			}
+
 			
 
 			if ((!bIsVisible) || (!inputArrayWraithMonsterWithIdCount[MONSTER_IS_ACTIVE])) {
@@ -13945,6 +14070,10 @@ if (fDifferenceInXPos!=0) {
 									heroHitByMonster(mainImageTilePosX,mainImageTilePosY, inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iMonsterAttackDamageWraith);
 																	
 									setParticleEffectHitAnimationPosition(mainImageTilePosX,mainImageTilePosY, iHeroMonsterType);
+
+									//added by Mike, 20261122
+									iOpponentAttackComboResetDelayCount=0;
+									iCurrOpponentComboCount++;
 								}
 								//---------------------------------------
 
@@ -14016,6 +14145,11 @@ if (fDifferenceInXPos!=0) {
 									heroHitByMonster(mainImageTilePosX,mainImageTilePosY, inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY], iMonsterAttackDamageWraith);
 																	
 									setParticleEffectHitAnimationPosition(mainImageTilePosX,mainImageTilePosY, iHeroMonsterType);
+									
+									//added by Mike, 20261122
+									iOpponentAttackComboResetDelayCount=0;
+									iCurrOpponentComboCount++;
+
 
 									//-----
 /*									
@@ -18846,7 +18980,12 @@ if (fDifferenceInXPos!=0) {
 		
 			mainImageTile.style.visibility="hidden";
 			mainImageTileTankBody.style.visibility="hidden";
-			mainImageTileHeroBody.style.visibility="hidden";
+			
+			//edited by Mike, 20261122
+			//mainImageTileHeroBody.style.visibility="hidden";
+			mainImageTileHeroBody.style.left=fDefaultObjectPosX+"px";
+			mainImageTileHeroBody.style.top=fDefaultObjectPosY+"px";
+
 
 			mainImageTileHeroBody0.style.visibility="hidden";
 			mainImageTileHeroBody1.style.visibility="hidden";
@@ -19126,11 +19265,18 @@ if (fDifferenceInXPos!=0) {
 		if (!bIsVersusMode) {	
 			if (iHeroInvincibleCount<iHeroInvincibleCountMax) {
 				//TODO: -reverify: this
+				//edited by Mike, 20261122
 				if (iHeroInvincibleCount%2==0) {
-					mainImageTileHeroBody.style.visibility="hidden";
+					//mainImageTileHeroBody.style.visibility="hidden";
+					//mainImageTileHeroBody.style.left=fDefaultObjectPosX+"px";
+					//mainImageTileHeroBody.style.top=fDefaultObjectPosY+"px";
+					mainImageTileHeroBody.style.opacity=0;//0.5;
 				}
 				else {
-					mainImageTileHeroBody.style.visibility="visible";
+					//mainImageTileHeroBody.style.visibility="visible";
+					//mainImageTileHeroBody.style.left=mainImageTilePosX+"px";
+					//mainImageTileHeroBody.style.top=mainImageTilePosY+"px";
+					mainImageTileHeroBody.style.opacity=1.0;
 				}
 
 				iHeroInvincibleCount++;
@@ -19139,10 +19285,16 @@ if (fDifferenceInXPos!=0) {
 			}
 			else {
 				mainImageTileHeroBody.style.visibility="visible";
+
+				//added by Mike, 20261122
+				mainImageTileHeroBody.style.opacity=1.0;//0.5;
 			}
 		}
 		else {
 			mainImageTileHeroBody.style.visibility="visible";
+
+			//added by Mike, 20261122
+			mainImageTileHeroBody.style.opacity=1.0;//0.5;
 		}
 
 		//edited by Mike, 20260809
@@ -19432,11 +19584,13 @@ if (fDifferenceInXPos!=0) {
 */
 
 						//------------------------
-						//added by Mike, 20261112
-						iCurrHeroLife=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
-						iCurrHeroLifeMax=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
-						iCurrHeroLifeToBeDeducted=0;
-						iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+						//removed by Mike, 20261122; from 20261112
+						//iCurrHeroLife=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
+						//iCurrHeroLifeMax=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
+						iCurrHeroLife=iCurrHeroLifeMax;
+
+						fCurrHeroLifeToBeDeducted=0;
+						fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
 						iCurrOpponentMana=iCurrOpponentManaMax;
 						iCurrHeroManaToBeDeducted=0;
 						iCurrHeroManaToBeDeductedAnimationMain=iCurrHeroManaMax;
@@ -19444,7 +19598,8 @@ if (fDifferenceInXPos!=0) {
 
 						iCurrOpponentLife=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
 						iCurrOpponentLifeMax=WRAITH_MONSTER_HP_MAX;
-						iCurrOpponentLifeToBeDeducted=0;
+						
+						fCurrOpponentLifeToBeDeducted=0;
 						iCurrOpponentToBeDeductedAnimationMain=iCurrOpponentLifeMax;
 						iCurrOpponentMana=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_MANA]
 						iCurrOpponentManaToBeDeducted=0;
@@ -21658,9 +21813,9 @@ alert("iXPos: "+iXPos);
 		iCurrHeroMana=iCurrHeroManaMax;
 
 		//added by Mike, 20251123
-		iCurrHeroLifeToBeDeducted=0;
-		iCurrHeroLifeToBeDeductedAnimation=0;
-		iCurrHeroLifeToBeDeductedAnimationMain=0;
+		fCurrHeroLifeToBeDeducted=0;
+		fCurrHeroLifeToBeDeductedAnimation=0;
+		fCurrHeroLifeToBeDeductedAnimationMain=0;
 
 		iCurrHeroManaToBeDeducted=0;
 		iCurrHeroManaToBeDeductedAnimation=0;
@@ -21731,7 +21886,9 @@ alert("iXPos: "+iXPos);
 		arrayKeyPressedStored[iKEY_J]=false;					
 */
 		
-		hasInitMapLocation=false;
+		//removed by Mike, 20261122
+		//debug; related to hero dying animation frame upon pressing CONTINUE; in versus mode;
+		//hasInitMapLocation=false;
 
 		//added by Mike, 20261107
 		resetOptions();
@@ -21962,9 +22119,9 @@ alert("iXPos: "+iXPos);
 			iCurrHeroLife=iCurrHeroLifeMax;
 
 /*			//removed by Mike, 20261009
-			iCurrHeroLifeToBeDeducted=0;
-			iCurrHeroLifeToBeDeductedAnimation=0;
-			iCurrHeroLifeToBeDeductedAnimationMain=0;
+			fCurrHeroLifeToBeDeducted=0;
+			fCurrHeroLifeToBeDeductedAnimation=0;
+			fCurrHeroLifeToBeDeductedAnimationMain=0;
 */
 			iCurrHeroManaMax=iCurrHeroManaMaxDefault;
 			iCurrHeroMana=iCurrHeroManaMax;
@@ -21980,9 +22137,9 @@ alert("iXPos: "+iXPos);
 		}
 
 		//added by Mike, 20261009
-		iCurrHeroLifeToBeDeducted=0;
-		iCurrHeroLifeToBeDeductedAnimation=0;
-		iCurrHeroLifeToBeDeductedAnimationMain=0;
+		fCurrHeroLifeToBeDeducted=0;
+		fCurrHeroLifeToBeDeductedAnimation=0;
+		fCurrHeroLifeToBeDeductedAnimationMain=0;
 
 		iCurrHeroManaToBeDeducted=0;
 		iCurrHeroManaToBeDeductedAnimation=0;
@@ -22012,8 +22169,8 @@ alert("iXPos: "+iXPos);
 			case HP_STAT_ID:
 				iCurrHeroLifeMax+=5;
 				iCurrHeroLife=iCurrHeroLifeMax;
-				iCurrHeroLifeToBeDeducted=0;
-				iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+				fCurrHeroLifeToBeDeducted=0;
+				fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
 
 				//added by Mike, 20261122
 
@@ -22023,6 +22180,8 @@ alert("iXPos: "+iXPos);
 				if ((iCurrHeroCardSlotCount==1) && (arrayHeroCardSlot[0][CARD_SLOT_TYPE]==CARD_SLOT_TYPE_DEFENSE)) {
 					arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_LEVEL]++;
 				}
+
+				//alert(iCurrHeroLifeMax);
 
 				iCurrHeroCardSlotCount++;
 				break;
