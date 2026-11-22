@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261121; from 20261120
+' @date updated: 20261122; from 20261121
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -230,6 +230,18 @@
 			clip: rect(0px,32px,32px,0px);
 			visibility: hidden;
 			
+			z-index: 79; /*4;*/ /*2;*/
+		}
+
+		.cardImage64x64Tile {
+			position: absolute;
+
+			clip: rect(0px,64px,64px,0px);
+			visibility: hidden;
+			
+			transform-origin: top left;  
+			scale: 0.8;			
+
 			z-index: 79; /*4;*/ /*2;*/
 		}
 
@@ -1802,6 +1814,8 @@ var iCurrHeroPlatformWallShakeCount=0;
 var iCurrHeroCoinCount=0;
 var iCurrOpponentCoinCount=0; //added by Mike, 20261114
 
+const iCoinCountMax=999; //added by Mike, 20261122
+
 const DEFAULT_DEATH_COUNT_VAL=1;
 const BOSS_DEATH_COUNT_VAL=10;
 
@@ -2067,6 +2081,29 @@ var iCurrCoinCount=0;
 const iCurrCoinCountMax=26;//16;//16+1; //+1 for display icon
 const iCurrCoinCountMaxTwo=27;//16;//16+1; //+1 for display icon
 
+//added by Mike, 20261122
+var iCardAnimationCount=-1; //0; //due to immediately +1 in execution;
+const iCardAnimationCountMax=2; //4
+var iCardAnimationDelayCount=0;
+const iCardAnimationDelayCountMax=10;//10;//1;
+
+var arrayHeroCardSlot=[[],[]]; 
+const iCurrHeroCardSlotCountMax=2;
+var iCurrHeroCardSlotCount=0;
+
+var arrayOpponentCardSlot=[[],[]]; 
+const iCurrOpponentCardSlotCountMax=2;
+var iCurrOpponentCardSlotCount=0;
+
+const CARD_SLOT_TYPE=0;
+const CARD_SLOT_LEVEL=1;
+
+const CARD_SLOT_TYPE_EMPTY=0;
+const CARD_SLOT_TYPE_DEFENSE=1;
+const CARD_SLOT_TYPE_STAMINA=2;
+const CARD_SLOT_TYPE_SPEED=3;
+
+
 /*	//buggy
 const imageCoinStyle = {
 	position: 'absolute',
@@ -2211,6 +2248,10 @@ const iImageParticleEffectAnimationHeight=32;
 //added by Mike, 20260727
 const iImageCoinAnimationWidth=32;
 const iImageCoinAnimationHeight=32;
+
+//added by Mike, 20261122
+const iImageCardAnimationWidth=64;//32;
+const iImageCardAnimationHeight=64;//32;
 
 //added by Mike, 20260730
 const iImageBgTileImageAnimationWidth=128;
@@ -2382,6 +2423,10 @@ var bossMonsterImageTilePosY=10;
 
 var iImageFrameWidth=32;// 64; //0;
 var iImageFrameHeight=32;// 64;
+
+//added by Mike, 20261122
+var iImageFrameWidthMedium=64;
+var iImageFrameHeightMedium=64;
 
 //edited by Mike, 20260903
 var iImageFrameWidthLarge=96;//64;//128;
@@ -3076,7 +3121,10 @@ var bIsHeroFacingUp=true;//false;
 		
 		
 		for (iCount=0; iCount<iArrayActorsCount; iCount++) {
-			arrayActors[iCount].style.visibility="hidden";
+			//edited by Mike, 20261122
+			//arrayActors[iCount].style.visibility="hidden";
+			arrayActors[iCount].style.left=fDefaultObjectPosX;
+			arrayActors[iCount].style.top=fDefaultObjectPosY;
 		}
 /*					
 		for (iCurrSnowRow=0; iCurrSnowRow<4; iCurrSnowRow++) {
@@ -3783,6 +3831,12 @@ alert("iColumn: "+iColumn);
 
 		//---------------------------------
 
+		//added by Mike, 20261122
+		if (iCurrHeroLifeToBeDeducted>0) {
+			//iCurrHeroLife-=iCurrHeroLifeToBeDeducted;
+			iCurrHeroLifeToBeDeducted=0;
+		}	
+		
 
 		//Game Off 2021; TUGON
 /*		//using sCurrHeroLifeFillColorDefault results to wrong output
@@ -3809,7 +3863,7 @@ alert("iColumn: "+iColumn);
 			//edited by Mike, 20261121
 			///myCanvasContext.fillStyle = "#aa0000"; //dark red		
 			
-			myCanvasContext.fillStyle = sCurrHeroLifeFillColor;//"#ee7500"; //orange
+			myCanvasContext.fillStyle = "#ee7500"; //orange //sCurrHeroLifeFillColor;
 			//alert(myCanvasContext.fillStyle);
 			
 /*			
@@ -3822,7 +3876,7 @@ alert("iColumn: "+iColumn);
 				}
 				
 				if (iCurrHeroLifeAnimationCount==0) {
-					myCanvasContext.fillStyle = "#eeda00"; //yellow
+					myCanvasContext.fillStyle = "#ffca0e"; //yellow
 				}
 			}			
 			iCurrHeroLifeAnimationCount++;			
@@ -4166,6 +4220,8 @@ alert("iColumn: "+iColumn);
 */			
 
 		//alert(iCurrHeroLife);
+		
+		//alert(iAmount);
 			
 		//iCurrHeroMana-=3;
 		iCurrHeroLifeToBeDeducted+=iAmount*3;
@@ -4219,6 +4275,9 @@ alert("iColumn: "+iColumn);
 		
 		iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeToBeDeductedAnimationMain-iCurrHeroLifeToBeDeductedAnimation;
 		
+
+		//alert(iCurrHeroLife);
+
 /*		
 		alert("iCurrHeroLifeToBeDeductedAnimation: "+iCurrHeroLifeToBeDeductedAnimation);
 		alert("iCurrHeroLifeToBeDeductedAnimationMain: "+iCurrHeroLifeToBeDeductedAnimationMain);
@@ -4586,8 +4645,12 @@ alert("iColumn: "+iColumn);
 		//myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iHeroManaBarWidth*iCurrHeroMana, iHeroManaBarHeight);
 		
 		//myCanvasContext.fillRect(0+iXPosUpdated+(iHeroManaBarWidth*iManaBarWidthTotalPoints)-iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iManaBarWidthTotalPoints, 0+iYPos, iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iManaBarWidthTotalPoints, iHeroManaBarHeight);
-				
-		myCanvasContext.fillRect(0+iXPosUpdated+(iHeroManaBarWidth*iCurrHeroManaMax)-iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iCurrHeroManaMax, 0+iYPos, iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iCurrHeroManaMax, iHeroManaBarHeight);
+
+		//edited by Mike, 20261122
+		if (iCurrHeroLife>0) {		
+			myCanvasContext.fillRect(0+iXPosUpdated+(iHeroManaBarWidth*iCurrHeroManaMax)-iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iCurrHeroManaMax, 0+iYPos, iHeroManaBarWidth*(iCurrHeroMana/iCurrHeroManaMax)*iCurrHeroManaMax, iHeroManaBarHeight);
+			
+		}
 		
 		//*(iCurrHeroManaMax-iCurrHeroManaMaxDefault)
 		
@@ -4740,7 +4803,10 @@ alert("iColumn: "+iColumn);
 		}	
 		iCurrOpponentManaAnimationDelayCount++;
 
-		myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentMana, iOpponentManaBarHeight);
+		//edited by Mike, 20261122
+		if (iCurrOpponentLife>0) {		
+			myCanvasContext.fillRect(0+iXPosUpdated, 0+iYPos, iOpponentManaBarWidth*iCurrOpponentMana, iOpponentManaBarHeight);
+		}
 		
 		//OK; goes up
 		//myCanvasContext.fillRect(0+iXPos+textManaBarDiv.innerHTML.length*4, 0+iYPos, iOpponentManaBarWidth, -iOpponentManaBarHeight/iCurrOpponentManaMax*(iCurrOpponentMana));
@@ -4997,8 +5063,11 @@ alert("iColumn: "+iColumn);
 
 		textHeroCoinStatusDiv.innerHTML = "x"+iCurrHeroCoinCount;
 */		
-		if (iCurrHeroCoinCount>9999) {
-			iCurrHeroCoinCount=9999;
+
+		//iCurrHeroCoinCount=999; //debug
+
+		if (iCurrHeroCoinCount>iCoinCountMax) {
+			iCurrHeroCoinCount=iCoinCountMax;
 		}
 
 //		clearString();
@@ -5017,8 +5086,8 @@ alert("iColumn: "+iColumn);
 
 		textOpponentCoinStatusDiv.innerHTML = "x"+iCurrOpponentCoinCount;
 */
-		if (iCurrOpponentCoinCount>9999) {
-			iCurrOpponentCoinCount=9999;
+		if (iCurrOpponentCoinCount>iCoinCountMax) {
+			iCurrOpponentCoinCount=iCoinCountMax;
 		}
 
 //		clearString();
@@ -5475,6 +5544,17 @@ alert("iColumn: "+iColumn);
 		var myFavicon = document.getElementById("faviconImageId");
 		var deathCountImageTile = document.getElementById("deathCountImageId");
 
+		//added by Mike, 20261122
+		//--------------------------------
+		var heroCardSlotOne = document.getElementById("heroCardSlotOneImageId");
+		var heroCardSlotTwo = document.getElementById("heroCardSlotTwoImageId");
+		var heroCardSlotThree = document.getElementById("heroCardSlotThreeImageId");
+
+		var opponentCardSlotOne = document.getElementById("opponentCardSlotOneImageId");
+		var opponentCardSlotTwo = document.getElementById("opponentCardSlotTwoImageId");
+		var opponentCardSlotThree = document.getElementById("opponentCardSlotThreeImageId");
+		//--------------------------------
+
 		var wolfImageTile = document.getElementById("wolfImageTileId");
 		var emperorImageTile = document.getElementById("emperorImageTileId");
 
@@ -5574,6 +5654,32 @@ alert("iColumn: "+iColumn);
 		
 		myFavicon.style.visibility="hidden";
 		deathCountImageTile.style.visibility="hidden";
+
+		//added by Mike, 20261122
+		heroCardSlotOne.style.visibility="visible";
+		heroCardSlotOne.style.left=fDefaultObjectPosX+"px";
+		heroCardSlotOne.style.top=fDefaultObjectPosY+"px";
+
+		heroCardSlotTwo.style.visibility="visible";
+		heroCardSlotTwo.style.left=fDefaultObjectPosX+"px";
+		heroCardSlotTwo.style.top=fDefaultObjectPosY+"px";
+
+		heroCardSlotThree.style.visibility="visible";
+		heroCardSlotThree.style.left=fDefaultObjectPosX+"px";
+		heroCardSlotThree.style.top=fDefaultObjectPosY+"px";
+
+		opponentCardSlotOne.style.visibility="visible";
+		opponentCardSlotOne.style.left=fDefaultObjectPosX+"px";
+		opponentCardSlotOne.style.top=fDefaultObjectPosY+"px";
+		
+		opponentCardSlotTwo.style.visibility="visible";
+		opponentCardSlotTwo.style.left=fDefaultObjectPosX+"px";
+		opponentCardSlotTwo.style.top=fDefaultObjectPosY+"px";
+
+		opponentCardSlotThree.style.visibility="visible";
+		opponentCardSlotThree.style.left=fDefaultObjectPosX+"px";
+		opponentCardSlotThree.style.top=fDefaultObjectPosY+"px";
+		//---------------------------
 
 		wolfImageTile.style.visibility="hidden";
 		emperorImageTile.style.visibility="hidden";
@@ -5830,12 +5936,24 @@ alert("iColumn: "+iColumn);
 			arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_DELAY_MAX]=200;//4;//200;
 
 			arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_ANIMATION_COUNT]=0;//-1; //0
-			arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_ANIMATION_COUNT_MAX]=4;
+			arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_ANIMATION_COUNT_MAX]=3;//4; //edited by Mike, 20261122
 			
 			
 			arrayWraithMonsterCountId[iCount][MONSTER_IS_IN_RIVER]=false;
 		}
 
+		
+		//added by Mike, 20261122
+		for (iCount=0; iCount<iCurrHeroCardSlotCountMax; iCount++) {
+			arrayHeroCardSlot[iCount][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_EMPTY;
+			arrayHeroCardSlot[iCount][CARD_SLOT_LEVEL]=0;
+		}
+
+		for (iCount=0; iCount<iCurrOpponentCardSlotCountMax; iCount++) {
+			arrayOpponentCardSlot[iCount][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_EMPTY;
+			arrayOpponentCardSlot[iCount][CARD_SLOT_LEVEL]=0;
+		}
+		
 		
 		for (iCurrParticleEffectCount=0; iCurrParticleEffectCount<iCurrParticleEffectCountMax; iCurrParticleEffectCount++) {
 			var particleEffectImage = document.getElementById("particleEffectImageId"+iCurrParticleEffectCount);
@@ -9924,16 +10042,19 @@ alert("iInputY: "+iInputY);
 			//if (inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT]>=0) {
 
 			if (inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT]>=currAnimationDelayCountMax+iOpponentAttackAnimationDelayCountMaxOffset) {
-						
-				inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]=(inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]+1);//%4; //last hidden
+				
+				//removed by Mike, 20261122
+				//inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]=(inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]+1);//%4; //last hidden
 
 				//edited by Mike, 20261117; from 20261115
 				if (inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]>inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT_MAX]) {
 
 				//if (inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]>=inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT_MAX]) {
 				
-					//removed by Mike, 20261117
-					bHasReducedOpponentManaOutput=reduceOpponentMana(iManaCostOpponentMeleeAttack);
+					//edited by Mike, 20261117
+					if (!bIsVersusMode) {
+						bHasReducedOpponentManaOutput=reduceOpponentMana(iManaCostOpponentMeleeAttack);
+					}
 
 					if (!bHasReducedOpponentManaOutput) {
 						inputArrayWraithMonsterWithIdCount[MONSTER_CURRENT_STATE]=IDLE_STATE;
@@ -9986,6 +10107,10 @@ alert("iInputY: "+iInputY);
 						//currSkelMonsterTileState=ATTACKING_STATE;//WALKING_STATE;
 					//}							
 					//---------------------------------------
+				}
+				//added by Mike, 20261122
+				else {
+					inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_ANIMATION_COUNT]++;
 				}
 
 				inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT]=0;
@@ -11258,6 +11383,96 @@ alert("iInputY: "+iInputY);
 		
 		snowEffectImage.style.left=iSnowEffectPosX+"px";
 		snowEffectImage.style.top=iSnowEffectPosY+"px";
+	}
+
+	//added by Mike, 20261122
+	function drawCards() {
+		var heroCardSlotOne = document.getElementById("heroCardSlotOneImageId");
+		var heroCardSlotTwo = document.getElementById("heroCardSlotTwoImageId");
+		//var heroCardSlotThree = document.getElementById("heroCardSlotThreeImageId");
+
+		var opponentCardSlotOne = document.getElementById("opponentCardSlotOneImageId");
+		var opponentCardSlotTwo = document.getElementById("opponentCardSlotTwoImageId");
+		//var opponentCardSlotThree = document.getElementById("opponentCardSlotThreeImageId");
+
+/*
+		if (coinImage.style.visibility=="hidden") {
+			return;
+		}
+
+		if (iCurrMapLocation>62) { //after the portal
+			coinImage.style.visibility="hidden";
+			return;
+		}
+
+		coinImage.style.visibility="visible";
+*/
+
+
+		if (iCardAnimationDelayCount==iCardAnimationDelayCountMax) {
+			iCardAnimationCount=(iCardAnimationCount+1)%iCardAnimationCountMax;//5; //last hidden
+
+			iCardAnimationDelayCount=0;
+		}
+		else {
+			iCardAnimationDelayCount++;
+		}
+		
+		
+		//alert(iCardAnimationCount);
+		
+		if (iCardAnimationCount<iCardAnimationCountMax) {
+/*
+			heroCardSlotOne.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*iCurrHeroCardSlotOneLevel*2) + "px -" + iImageCardAnimationHeight*0 + "px";
+
+			heroCardSlotTwo.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*iCurrHeroCardSlotTwoLevel*2) + "px -" + iImageCardAnimationHeight*2 + "px";
+
+			heroCardSlotThree.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*iCurrHeroCardSlotThreeLevel*2) + "px -" + + iImageCardAnimationHeight*1 + "px";
+
+			opponentCardSlotOne.style.objectPosition = "-" + iImageCardAnimationWidth*iCardAnimationCount + "px -" + iImageCardAnimationHeight*0 + "px";
+
+			opponentCardSlotTwo.style.objectPosition = "-" + iImageCardAnimationWidth*iCardAnimationCount + "px -" + iImageCardAnimationHeight*2 + "px";
+
+			opponentCardSlotThree.style.objectPosition = "-" + iImageCardAnimationWidth*iCardAnimationCount + "px -" + + iImageCardAnimationHeight*1 + "px";
+*/
+
+			//[CARD_SLOT_TYPE]
+			//arrayHeroCardSlot[CARD_SLOT_LEVEL]=0;
+
+			var iHeroCardSlotOneTypeOffset=arrayHeroCardSlot[0][CARD_SLOT_TYPE]-1;
+			var iHeroCardSlotTwoTypeOffset=arrayHeroCardSlot[1][CARD_SLOT_TYPE]-1;
+
+			var iOpponentCardSlotOneTypeOffset=arrayOpponentCardSlot[0][CARD_SLOT_TYPE]-1;
+			var iOpponentCardSlotTwoTypeOffset=arrayOpponentCardSlot[1][CARD_SLOT_TYPE]-1;
+			
+			if (iHeroCardSlotOneTypeOffset<0) {
+				iHeroCardSlotOneTypeOffset=0;
+			}
+
+			if (iHeroCardSlotTwoTypeOffset<0) {
+				iHeroCardSlotTwoTypeOffset=0;
+			}
+
+			if (iOpponentCardSlotOneTypeOffset<0) {
+				iOpponentCardSlotOneTypeOffset=0;
+			}
+
+			if (iOpponentCardSlotTwoTypeOffset<0) {
+				iOpponentCardSlotTwoTypeOffset=0;
+			}
+
+			heroCardSlotOne.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*arrayHeroCardSlot[0][CARD_SLOT_LEVEL]*2) + "px -" + iImageCardAnimationHeight*(iHeroCardSlotOneTypeOffset) + "px";
+
+			heroCardSlotTwo.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*arrayHeroCardSlot[1][CARD_SLOT_LEVEL]*2) + "px -" + iImageCardAnimationHeight*(iHeroCardSlotTwoTypeOffset) + "px";
+			
+			opponentCardSlotOne.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*arrayOpponentCardSlot[0][CARD_SLOT_LEVEL]*2) + "px -" + iImageCardAnimationHeight*(iOpponentCardSlotOneTypeOffset) + "px";
+
+			opponentCardSlotTwo.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*arrayOpponentCardSlot[1][CARD_SLOT_LEVEL]*2) + "px -" + iImageCardAnimationHeight*(iOpponentCardSlotTwoTypeOffset) + "px";
+			
+		}
+		else {
+			iCardAnimationCount=0;
+		}				
 	}
 
 	//added by Mike, 20261108
@@ -13264,9 +13479,10 @@ if (fDifferenceInXPos!=0) {
 		}
 		
 		//added by Mike, 20261120; from 20261113
-		//put the bgTileImage #2 for the bottom part of the ring above the hero;
+		//put the bgTileImage #2 for the bottom part of the ring just below the current z-index; above the hero;
+		//var myCanvasTwo = document.getElementById("myCanvasTwoId");
 		var bgTileImage = document.getElementById("bgTileImageId"+1);
-		bgTileImage.style.zIndex=parseInt(mainImageTileHeroBody.style.zIndex)+1;
+		bgTileImage.style.zIndex=iCurrZIndex+1;//myCanvasTwo.style.zIndex-1;//999999;//parseInt(mainImageTileHeroBody.style.zIndex)+1;
 		
 		
 		
@@ -13351,13 +13567,15 @@ if (fDifferenceInXPos!=0) {
 			resetProjectile();
 			return;
 		}
-		
+
+/*		//removed by Mike, 20261122		
 		//edited by Mike, 20261121; from 20260827
 		if (!bIsVersusMode) {		
 			if (iCurrHeroMana<=0) {	//if no mana
 				return;	
 			}
 		}
+*/
 
 		//added by Mike, 20261113
 		if (iCurrOpponentLife<=0) {	
@@ -13428,6 +13646,7 @@ if (fDifferenceInXPos!=0) {
 						bHasAttacked=bHasFired;
 					}
 */
+
 
 					//TODO: -update: this
 					//added by Mike, 20261105
@@ -18065,6 +18284,17 @@ if (fDifferenceInXPos!=0) {
 		var myFavicon = document.getElementById("faviconImageId");
 		var deathCountImageTile = document.getElementById("deathCountImageId");
 
+		//added by Mike, 20261122
+		//--------------------------------
+		var heroCardSlotOne = document.getElementById("heroCardSlotOneImageId");
+		var heroCardSlotTwo = document.getElementById("heroCardSlotTwoImageId");
+		var heroCardSlotThree = document.getElementById("heroCardSlotThreeImageId");
+
+		var opponentCardSlotOne = document.getElementById("opponentCardSlotOneImageId");
+		var opponentCardSlotTwo = document.getElementById("opponentCardSlotTwoImageId");
+		var opponentCardSlotThree = document.getElementById("opponentCardSlotThreeImageId");
+		//--------------------------------
+
 		var wolfImageTile = document.getElementById("wolfImageTileId");
 		var emperorImageTile = document.getElementById("emperorImageTileId");
 		
@@ -18783,11 +19013,17 @@ if (fDifferenceInXPos!=0) {
 */
 
 			if (!bIsVersusMode) {
-				myFavicon.style.left=parseInt(mainImageTile.style.left)+iImageFrameWidthLarge/2-iImageFrameWidthDefault/2+"px";
-				myFavicon.style.top=parseInt(mainImageTile.style.top)+iImageFrameHeightLarge/2-iImageFrameHeightDefault/2+"px";
-
+				//edited by Mike, 20261122
 				myFavicon.style.visibility="visible";
+
+				myFavicon.style.left=parseFloat(mainImageTile.style.left)+iImageFrameWidthLarge/2-iImageFrameWidthDefault/2+"px";
+				myFavicon.style.top=parseFloat(mainImageTile.style.top)+iImageFrameHeightLarge/2-iImageFrameHeightDefault/2+"px";
 			}
+/*			else {
+				myFavicon.style.left=fDefaultObjectPosX+"px";
+				myFavicon.style.top=fDefaultObjectPosY+"px";
+			}
+*/
 
 
 /*			//removed by Mike, 20261118
@@ -19099,6 +19335,7 @@ if (fDifferenceInXPos!=0) {
 					explosionEffectImage.style.left=999999+"px";
 					explosionEffectImage.style.top=999999+"px";
 					
+				
 				
 /*				
 					isSkelMonsterTileActive=true;
@@ -19467,6 +19704,55 @@ if (fDifferenceInXPos!=0) {
 					var opponentDisplayCoinIconImageObject=setCoinPosition(0+iViewportMaxWidth/2+iImageFrameWidthDefault*0.5, 0+iViewportMaxHeight-iImageFrameHeightLarge-iImageFrameHeightDefault*0.2,iCurrCoinCountMax+1); 
 
 
+
+					//added by Mike, 20261122
+					//--------------------------------
+/*
+					heroCardSlotOne.style.left=(0+iImageFrameWidthDefault*0.5+iImageFrameWidthDefault*5)+"px";
+					heroCardSlotOne.style.top=(0+iViewportMaxHeight-iImageFrameHeightDefault-iImageFrameHeightDefault*0.2)+"px";
+										
+					heroCardSlotTwo.style.left=(0+iImageFrameWidthDefault*0.5+iImageFrameWidthDefault*5+iImageFrameWidthDefault*1)+"px";
+					heroCardSlotTwo.style.top=(0+iViewportMaxHeight-iImageFrameHeightDefault-iImageFrameHeightDefault*0.2)+"px";
+
+					heroCardSlotThree.style.left=(0+iImageFrameWidthDefault*0.5+iImageFrameWidthDefault*5+iImageFrameWidthDefault*2)+"px";
+					heroCardSlotThree.style.top=(0+iViewportMaxHeight-iImageFrameHeightDefault-iImageFrameHeightDefault*0.2)+"px";
+*/					
+/*
+					heroCardSlotOne.style.left=(0+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*5)+"px";
+					heroCardSlotOne.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+										
+					heroCardSlotTwo.style.left=(0+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*5+iImageFrameWidthMedium*0.6*1)+"px";
+					heroCardSlotTwo.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+
+					heroCardSlotThree.style.left=(0+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*5+iImageFrameWidthMedium*0.6*2)+"px";
+					heroCardSlotThree.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+*/					
+					heroCardSlotOne.style.left=(0+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*4+iImageFrameWidthMedium*0.6*1)+"px";
+					heroCardSlotOne.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+										
+					heroCardSlotTwo.style.left=(0+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*4+iImageFrameWidthMedium*0.6*2)+"px";
+					heroCardSlotTwo.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+
+					//heroCardSlotThree.style.left=(0+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*5+iImageFrameWidthMedium*0.6*2)+"px";
+					//heroCardSlotThree.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+
+					//--------------------------------
+
+					opponentCardSlotOne.style.left=(0+iViewportMaxWidth/2+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*4+iImageFrameWidthMedium*0.6*1)+"px";
+					
+					opponentCardSlotOne.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+
+					opponentCardSlotTwo.style.left=(0+iViewportMaxWidth/2+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*4+iImageFrameWidthMedium*0.6*2)+"px";
+
+					opponentCardSlotTwo.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+
+					//opponentCardSlotThree.style.left=(0+iViewportMaxWidth/2+iImageFrameWidthDefault*0.5+iImageFrameWidthDefault*5+iImageFrameWidthDefault*2)+"px";
+					
+					//opponentCardSlotThree.style.top=(0+iViewportMaxHeight-iImageFrameHeightDefault-iImageFrameHeightDefault*0.2)+"px";
+					//--------------------------------
+
+
+
 					//arrayCoinCountId[iCurrCoinCountMax][MONSTER_OBJECT]=displayCoinIconImageObject;
 					
 
@@ -19763,6 +20049,9 @@ if (fDifferenceInXPos!=0) {
 				drawCoinDisplayIcon(iCurrCoinCountMax); //added by Mike, 20261108; display icon only;
 				
 				drawOpponentCoinDisplayIcon(iCurrCoinCountMaxTwo);
+
+				drawCards();
+
 
 /*				
 				alert("iCurrBgTileImageCount: "+iCurrBgTileImageCount);
@@ -21357,10 +21646,9 @@ alert("iXPos: "+iXPos);
 	}
 
 	function executeHeroContinue(bIsContinue) {
-		hasInitMapLocation=false; //added by Mike, 20261111
+		//hasInitMapLocation=false; //removed by Mike, 20261122; from 20261111
 		
 		//alert("DITO!!"+bIsContinue);
-
 
 
 		//alert("iCurrHeroLife: "+iCurrHeroLife+"iCurrOpponentLife: "+iCurrOpponentLife);
@@ -21525,13 +21813,21 @@ alert("iXPos: "+iXPos);
 		textNewGameDiv.style.visibility="hidden";		
 		textContinueGameDiv.style.visibility="hidden";
 		explosionEffectImage.style.visibility="hidden";
-		
-		
+				
 		
 		if (!bIsContinue) {		
 			//NEW GAME
 			iCurrBossMonsterLife=iCurrBossMonsterLifeMax;
-			
+		
+			//added by Mike, 20261122
+			iCurrHeroCardSlotOneLevel=0;
+			iCurrHeroCardSlotTwoLevel=0;
+			iCurrHeroCardSlotThreeLevel=0;
+
+			iCurropponentCardSlotOneLevel=0;
+			iCurropponentCardSlotTwoLevel=0;
+			iCurropponentCardSlotThreeLevel=0;
+		
 			//edited by Mike, 20261103; from 20260829
 			//mainImageTilePosX=iViewportMaxWidth/2-iImageFrameWidthLarge/2;
 			mainImageTilePosX=iViewportMaxWidth*0.5-iImageFrameWidthLarge/2;
@@ -21718,12 +22014,35 @@ alert("iXPos: "+iXPos);
 				iCurrHeroLife=iCurrHeroLifeMax;
 				iCurrHeroLifeToBeDeducted=0;
 				iCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
+
+				//added by Mike, 20261122
+
+				arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_DEFENSE;
+				arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_LEVEL]++;
+				
+				if ((iCurrHeroCardSlotCount==1) && (arrayHeroCardSlot[0][CARD_SLOT_TYPE]==CARD_SLOT_TYPE_DEFENSE)) {
+					arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_LEVEL]++;
+				}
+
+				iCurrHeroCardSlotCount++;
 				break;
 			case STAMINA_STAT_ID:
 				iCurrHeroManaMax+=5;
 				iCurrHeroMana=iCurrHeroManaMax;
 				iCurrHeroManaToBeDeducted=0;
 				iCurrHeroManaToBeDeductedAnimationMain=iCurrHeroManaMax;
+
+				//added by Mike, 20261122
+				arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_STAMINA;
+				arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_LEVEL]++;
+
+				if ((iCurrHeroCardSlotCount==1) && (arrayHeroCardSlot[0][CARD_SLOT_TYPE]==CARD_SLOT_TYPE_STAMINA)) {
+					arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_LEVEL]++;
+				}
+
+				//alert("DITO!!"+arrayHeroCardSlot[0][CARD_SLOT_TYPE]);
+
+				iCurrHeroCardSlotCount++;
 				break;
 			case SPEED_STAT_ID:
 				//note max is only until 5;
@@ -21738,6 +22057,16 @@ alert("iXPos: "+iXPos);
 
 				mainImageTileProjectileStepY=mainImageTileProjectileStepYMin;
 				mainImageTileProjectileStepX=mainImageTileProjectileStepYMin;
+
+				//added by Mike, 20261122
+				arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_SPEED;
+				arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_LEVEL]++;
+
+				if ((iCurrHeroCardSlotCount==1) && (arrayHeroCardSlot[0][CARD_SLOT_TYPE]==CARD_SLOT_TYPE_SPEED)) {
+					arrayHeroCardSlot[iCurrHeroCardSlotCount][CARD_SLOT_LEVEL]++;
+				}
+
+				iCurrHeroCardSlotCount++;
 				break;
 		}
 		
@@ -21927,7 +22256,10 @@ alert("iXPos: "+iXPos);
 /*				//removed by Mike, 20261117
 				if (arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_ANIMATION_COUNT]>arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_ANIMATION_COUNT_MAX]) {
 */									
-					////bHasReducedOpponentManaOutput=reduceOpponentMana(iManaCostOpponentMeleeAttack);
+					
+					//added by Mike, 20261122
+					//rapid pressing causing loss of stamina
+					bHasReducedOpponentManaOutput=reduceOpponentMana(iManaCostOpponentMeleeAttack);
 
 					//alert(bHasReducedHeroManaOutput);
 
@@ -22067,6 +22399,8 @@ alert("iXPos: "+iXPos);
 			//if ((e.code==='KeyJ') || (e.code==='NumpadEnter')) {
 			if ((e.code==='KeyJ') || (e.code==='NumpadEnter') || (e.code==='Enter')) {
 				if (processLeftClickStartScreens()) {
+				
+					e.preventDefault(); //added by Mike, 20261122
 					return;
 				}		
 			}
@@ -22184,6 +22518,8 @@ alert("iXPos: "+iXPos);
 					else if (textLevelUpSpeedDiv.style.backgroundColor===optionBgColorHover) {
 						executeHeroLeveledUp(SPEED_STAT_ID);
 					}
+					
+					e.preventDefault(); //added by Mike, 20261122
 				}
 				
 				return;
@@ -22249,6 +22585,8 @@ alert("iXPos: "+iXPos);
 					executeStageTransition(53);
 					bIsGameOver=false;
 */				
+
+					e.preventDefault(); //added by Mike, 20261122
 				}
 				
 				//added by Mike, 2026119
@@ -22454,15 +22792,21 @@ alert("iXPos: "+iXPos);
 			if (!bIsVersusMode) {
 				if ((e.code==='KeyJ') || (e.code==='NumpadEnter') || (e.code==='Enter')) {
 					processKeyDownKeyJ(e);
+					
+					e.preventDefault(); //added by Mike, 20261122
 				}
 			}
 			else {
 				if ((e.code==='KeyJ') || (e.code==='Enter')) {
 					processKeyDownKeyJ(e);
+
+					e.preventDefault(); //added by Mike, 20261122
 				}
 				
 				if (e.code==='NumpadEnter') {
 					processKeyDownKeyJ2P();
+
+					e.preventDefault(); //added by Mike, 20261122
 				}
 			}
 
@@ -22543,9 +22887,16 @@ alert("iXPos: "+iXPos);
 				//bHasFired=true;
 			}
 
+			//added by Mike, 20261122
+			if (e.code==='NumpadEnter') {
+				e.preventDefault(); 
+			}
 
 		//}
-		});
+		//edited by Mike, 20261122
+		//reference: GOOGLE AI Overview; "Iframe focus loss on fullscreen"
+		//});
+		}, { capture: true, passive: false });
 
 		//edited by Mike, 20260925; from 20220822
 		//document.body.onkeyup = function(e){
@@ -22671,15 +23022,21 @@ alert("iXPos: "+iXPos);
 			if (!bIsVersusMode) {
 				if ((e.code==='KeyJ') || (e.code==='NumpadEnter') || (e.code==='Enter')) {
 					processKeyUpKeyJ();
+
+					e.preventDefault(); //added by Mike, 20261122
 				}
 			}
 			else {
 				if ((e.code==='KeyJ') || (e.code==='Enter')) {
 					processKeyUpKeyJ();
+
+					e.preventDefault(); //added by Mike, 20261122
 				}
 				
 				if (e.code==='NumpadEnter') {
 					processKeyUpKeyJ2P();
+
+					e.preventDefault(); //added by Mike, 20261122
 				}
 			}
 
@@ -25325,6 +25682,15 @@ opting to put assets folder in "html_application" folder instead
 
 	<img id="faviconImageId" class="ImageTileFrame1" src="assets/images/favicon.png">
 	<img id="deathCountImageId" class="ImageDeathCountTileFrame1" src="assets/images/favicon.png">
+
+	<img id="heroCardSlotOneImageId" class="cardImage64x64Tile" src="assets/images/card.png">
+	<img id="heroCardSlotTwoImageId" class="cardImage64x64Tile" src="assets/images/card.png">
+	<img id="heroCardSlotThreeImageId" class="cardImage64x64Tile" src="assets/images/card.png">
+
+	<img id="opponentCardSlotOneImageId" class="cardImage64x64Tile" src="assets/images/card.png">
+	<img id="opponentCardSlotTwoImageId" class="cardImage64x64Tile" src="assets/images/card.png">
+	<img id="opponentCardSlotThreeImageId" class="cardImage64x64Tile" src="assets/images/card.png">
+
 
 	<img id="emperorImageTileId" class="ImageEmperorFrame1" src="assets/images/quest.png">
 	<img id="wolfImageTileId" class="ImageAnimalFrame1" src="assets/images/quest.png">
