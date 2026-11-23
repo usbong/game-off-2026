@@ -51,7 +51,7 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 https://github.com/usbong/game-off-2026/releases/tag/output
 
-#### 6) 20261117-20261121; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
+#### 6) 20261117-20261123; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
 
 20261117: First prototype of the two player versus mode. Unfair damage, wrong movement related to viewport, etc.
 
@@ -64,6 +64,10 @@ https://github.com/usbong/game-off-2026/releases/tag/output
 <img src="https://github.com/usbong/game-off-2026/blob/main/notes/gameOff2026DesignDocument20261102.jpg" width="60%" height="60%">
 
 20261121: Prototype#5. Fixed animations including the timers, so that the hero doesn't immediately return to idle animation upon getting hit. The stamina bar for 1P is now consumed from left to right, while for 2P it's from right to left.
+
+20261122: Prototype#6. Card Slots.
+
+20261123: Prototype#7. Combo Counts.
 
 
 ## Related link
