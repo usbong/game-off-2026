@@ -2093,6 +2093,10 @@ const iCoinAnimationCountMax=4; //8
 var iCoinAnimationDelayCount=0;
 const iCoinAnimationDelayCountMax=10;//1;
 
+//added by Mike, 20261123
+var iCoinShineAnimationCount=0;//-1; //0; //due to immediately +1 in execution;
+//const iCoinAnimationCountMax=4; //8
+
 var iCurrCoinCount=0;
 //edited by Mike, 20261108; from 20261107
 const iCurrCoinCountMax=26;//16;//16+1; //+1 for display icon
@@ -6265,38 +6269,36 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 
 		//added by Mike, 20251121
 		textLevelUpLifeDiv.innerHTML = "INCREASE MAX DEFENSE";//"守備力アップ";
-		textLevelUpLifeDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-textLevelUpLifeDiv.clientWidth/2+"px";				
+		textLevelUpLifeDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-iImageFrameHeightMedium*0.5-textLevelUpLifeDiv.clientWidth/2+"px";				
 		textLevelUpLifeDiv.style.top= iVerticalOffsetInnerScreen+textLevelUpLifeDiv.clientHeight*1.6+"px";
 
-		////optionCardDefense.style.left = iHorizontalOffset+iViewportMaxWidth-iImageFrameHeightMedium*2+"px";
-		////optionCardDefense.style.top= iVerticalOffsetInnerScreen+textLevelUpLifeDiv.clientHeight*1.6+"px";
+		optionCardDefense.style.left = iHorizontalOffset+iViewportMaxWidth-iImageFrameHeightMedium*2.5+"px";
+		optionCardDefense.style.top= iVerticalOffsetInnerScreen+textLevelUpLifeDiv.clientHeight*1.6+"px";
 
 		
 		textLevelUpStaminaDiv.innerHTML = "INCREASE MAX STAMINA";//"スタミナアップ";
-		textLevelUpStaminaDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-textLevelUpStaminaDiv.clientWidth/2+"px";
+		textLevelUpStaminaDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-iImageFrameHeightMedium*0.5-textLevelUpStaminaDiv.clientWidth/2+"px";
 		textLevelUpStaminaDiv.style.top= iVerticalOffsetInnerScreen+textLevelUpStaminaDiv.clientHeight*3.6+"px";
 		
-		////optionCardStamina.style.left = iHorizontalOffset+iViewportMaxWidth-iImageFrameHeightMedium*2+"px";
-		////optionCardStamina.style.top= iVerticalOffsetInnerScreen+textLevelUpStaminaDiv.clientHeight*3.6+"px";
+		optionCardStamina.style.left = iHorizontalOffset+iViewportMaxWidth-iImageFrameHeightMedium*2.5+"px";
+		optionCardStamina.style.top= iVerticalOffsetInnerScreen+textLevelUpStaminaDiv.clientHeight*3.6+"px";
 
 
 		textLevelUpSpeedDiv.innerHTML = "INCREASE MAX SPEED"; //"速度アップ";
-		textLevelUpSpeedDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-textLevelUpSpeedDiv.clientWidth/2+"px";
+		textLevelUpSpeedDiv.style.left = iHorizontalOffset+iViewportMaxWidth/2-iImageFrameHeightMedium*0.5-textLevelUpSpeedDiv.clientWidth/2+"px";
 		textLevelUpSpeedDiv.style.top= iVerticalOffsetInnerScreen+textLevelUpSpeedDiv.clientHeight*5.6+"px";
 
-		////optionCardSpeed.style.left = iHorizontalOffset+iViewportMaxWidth-iImageFrameHeightMedium*2+"px";
-		////optionCardSpeed.style.top= iVerticalOffsetInnerScreen+textLevelUpSpeedDiv.clientHeight*5.6+"px";
+		optionCardSpeed.style.left = iHorizontalOffset+iViewportMaxWidth-iImageFrameHeightMedium*2.5+"px";
+		optionCardSpeed.style.top= iVerticalOffsetInnerScreen+textLevelUpSpeedDiv.clientHeight*5.6+"px";
 		
-		
-		//TODO: set this here after
+		//set this here after
 		textLevelUpLifeDiv.style.visibility="hidden";
 		textLevelUpStaminaDiv.style.visibility="hidden";
 		textLevelUpSpeedDiv.style.visibility="hidden";
 
 		optionCardDefense.style.visibility="hidden";
 		optionCardStamina.style.visibility="hidden";
-		optionCardSpeed.style.visibility="hidden";
-		
+		optionCardSpeed.style.visibility="hidden";		
 		
 		////var myCanvasTwo = document.getElementById("myCanvasTwoId");
 		////myCanvasTwo.style.visibility="hidden";
@@ -12043,6 +12045,40 @@ alert("iInputY: "+iInputY);
 		snowEffectImage.style.top=iSnowEffectPosY+"px";
 	}
 
+	//added by Mike, 20261123
+	function updateOptionCardsAnimation() {
+		var optionCardDefense = document.getElementById("optionCardDefenseImageId");
+		var optionCardStamina = document.getElementById("optionCardStaminaImageId");
+		var optionCardSpeed = document.getElementById("optionCardSpeedImageId");
+
+
+/*		//use updateCoin()
+		if (iCardAnimationDelayCount==iCardAnimationDelayCountMax) {
+			iCardAnimationCount=(iCardAnimationCount+1)%iCardAnimationCountMax;//5; //last hidden
+
+			iCardAnimationDelayCount=0;
+		}
+		else {
+			iCardAnimationDelayCount++;
+		}
+*/		
+		
+		//alert(iCardAnimationCount);
+		
+		if (iCardAnimationCount<iCardAnimationCountMax) {
+
+			optionCardDefense.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*2) + "px -" + iImageCardAnimationHeight*(0) + "px";
+
+			optionCardStamina.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*2) + "px -" + iImageCardAnimationHeight*(1) + "px";
+
+			optionCardSpeed.style.objectPosition = "-" + (iImageCardAnimationWidth*iCardAnimationCount+iImageCardAnimationWidth*2) + "px -" + iImageCardAnimationHeight*(2) + "px";
+		}
+		else {
+			iCardAnimationCount=0;
+		}				
+	}
+	
+
 	//added by Mike, 20261122
 	function drawCards() {
 		var heroCardSlotOne = document.getElementById("heroCardSlotOneImageId");
@@ -12211,9 +12247,28 @@ alert("iInputY: "+iInputY);
 				iCoinAnimationDelayCount++;
 			}
 		}
-		
+
+		//edited by Mike, 20261123
+		var iOffsetY=96;
+				
 		if (iCoinAnimationCount<iCoinAnimationCountMax) {
 			coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + 0 + "px";
+
+/*			
+			if (iCoinShineAnimationCount<10) {//5) {
+				coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + 0 + "px";
+			}
+			else {
+				if (iCoinShineAnimationCount>20) {//10) {
+					iCoinShineAnimationCount=0;
+				}
+				
+				if (iCoinShineAnimationCount==0) {
+					coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + offsetY + "px";
+				}
+			}			
+			iCoinShineAnimationCount++;			
+*/			
 		}
 		else {
 			iCoinAnimationCount=0;
@@ -12247,8 +12302,37 @@ alert("iInputY: "+iInputY);
 			}
 		}
 		
+
+
+/*		//edited by Mike, 20261123
 		if (iCoinAnimationCount<iCoinAnimationCountMax) {
 			coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + 0 + "px";
+		}
+		else {
+			iCoinAnimationCount=0;
+		}		
+*/		
+
+		//edited by Mike, 20261123
+		var iOffsetY=96;
+				
+		if (iCoinAnimationCount<iCoinAnimationCountMax) {
+			coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + 0 + "px";
+/*			
+			if (iCoinShineAnimationCount<10) {//5) {
+				coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + 0 + "px";
+			}
+			else {
+				if (iCoinShineAnimationCount>20) {//10) {
+					////iCoinShineAnimationCount=0;
+				}
+				
+				if (iCoinShineAnimationCount==0) {
+					coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + offsetY + "px";
+				}
+			}			
+			////iCoinShineAnimationCount++;	//drawHeroCoinDisplayIcon(...)
+*/			
 		}
 		else {
 			iCoinAnimationCount=0;
@@ -12319,9 +12403,33 @@ alert("iInputY: "+iInputY);
 			arrayCoinCountObject[MONSTER_ANIMATION_DELAY_COUNT]++;
 		}
 
+
+		//edited by Mike, 20261123
+		var iOffsetY=96;
 			
 		if (arrayCoinCountObject[MONSTER_ANIMATION_COUNT]<iCoinAnimationCountMax) {
 			arrayCoinCountObject[MONSTER_OBJECT].style.objectPosition = "-" + iImageCoinAnimationWidth*arrayCoinCountObject[MONSTER_ANIMATION_COUNT] + "px -" + 0 + "px";
+
+/*					
+				//alert(iCoinShineAnimationCount);
+				
+				if (iCoinShineAnimationCount<10) {//5) {
+					arrayCoinCountObject[MONSTER_OBJECT].style.objectPosition = "-" + iImageCoinAnimationWidth*arrayCoinCountObject[MONSTER_ANIMATION_COUNT] + "px -" + 0 + "px";
+				}
+				else {
+					if (iCoinShineAnimationCount>20) {//10) {
+						////iCoinShineAnimationCount=0;
+					}
+					
+					if (iCoinShineAnimationCount==0) {
+						//coinImage.style.objectPosition = "-" + iImageCoinAnimationWidth*iCoinAnimationCount + "px -" + offsetY + "px";
+
+						arrayCoinCountObject[MONSTER_OBJECT].style.objectPosition = "-" + iImageCoinAnimationWidth*arrayCoinCountObject[MONSTER_ANIMATION_COUNT] + "px -" + offsetY + "px";
+
+					}
+				}			
+				////iCoinShineAnimationCount++;	//drawHeroCoinDisplayIcon(...)
+*/
 		}
 		else {
 			arrayCoinCountObject[MONSTER_ANIMATION_COUNT]=0;
@@ -19024,6 +19132,11 @@ if (fDifferenceInXPos!=0) {
 		var textLevelUpStaminaDiv = document.getElementById("textLevelUpStaminaDivId");
 		var textLevelUpSpeedDiv = document.getElementById("textLevelUpSpeedDivId");
 
+		var optionCardDefense = document.getElementById("optionCardDefenseImageId");
+		var optionCardStamina = document.getElementById("optionCardStaminaImageId");
+		var optionCardSpeed = document.getElementById("optionCardSpeedImageId");
+
+
 		var mainImageTile = document.getElementById("mainImageTileImageId");
 
 		//added by Mike, 20231124
@@ -19670,13 +19783,15 @@ if (fDifferenceInXPos!=0) {
 				textLevelUpStaminaDiv.style.visibility="visible";
 				textLevelUpSpeedDiv.style.visibility="visible";
 				
-				////optionCardDefense.style.visibility="visible";
-				////optionCardStamina.style.visibility="visible";
-				////optionCardSpeed.style.visibility="visible";
+				optionCardDefense.style.visibility="visible";
+				optionCardStamina.style.visibility="visible";
+				optionCardSpeed.style.visibility="visible";
 				
 				textStatusDiv.style.visibility="visible";
 			}
 			iInputDelayAtLeveledUpCount++;
+			
+			updateOptionCardsAnimation();
 
 /*
 			if (iInputDelayAtLeveledUpCount>=iInputDelayAtLeveledUpCountMax*2) {
@@ -22839,8 +22954,6 @@ alert("iXPos: "+iXPos);
 				break;
 		}
 		
-		//TODO: -add: audio has solved
-		
 		var textLevelUpLifeDiv = document.getElementById("textLevelUpLifeDivId");
 		var textLevelUpStaminaDiv = document.getElementById("textLevelUpStaminaDivId");
 		var textLevelUpSpeedDiv = document.getElementById("textLevelUpSpeedDivId");
@@ -23181,6 +23294,10 @@ alert("iXPos: "+iXPos);
 		var textLevelUpStaminaDiv = document.getElementById("textLevelUpStaminaDivId");
 		var textLevelUpSpeedDiv = document.getElementById("textLevelUpSpeedDivId");
 
+		var optionCardDefense = document.getElementById("optionCardDefenseImageId");
+		var optionCardStamina = document.getElementById("optionCardStaminaImageId");
+		var optionCardSpeed = document.getElementById("optionCardSpeedImageId");
+
 		//document.body.onkeydown = function(e){	
 		window.addEventListener('keydown', (e) => {
 			
@@ -23230,9 +23347,9 @@ alert("iXPos: "+iXPos);
 				textLevelUpStaminaDiv.style.visibility="visible";
 				textLevelUpSpeedDiv.style.visibility="visible";			
 
-				////optionCardDefense.style.visibility="visible";
-				////optionCardStamina.style.visibility="visible";
-				////optionCardSpeed.style.visibility="visible";			
+				optionCardDefense.style.visibility="visible";
+				optionCardStamina.style.visibility="visible";
+				optionCardSpeed.style.visibility="visible";			
 
 			
 				if ((e.code==='KeyW') || (e.code==='ArrowUp')) {
@@ -24055,9 +24172,9 @@ alert("iXPos: "+iXPos);
 							textLevelUpStaminaDiv.style.visibility="visible";
 							textLevelUpSpeedDiv.style.visibility="visible";
 
-							////optionCardDefense.style.visibility="visible";
-							////optionCardStamina.style.visibility="visible";
-							////optionCardSpeed.style.visibility="visible";
+							optionCardDefense.style.visibility="visible";
+							optionCardStamina.style.visibility="visible";
+							optionCardSpeed.style.visibility="visible";
 						
 							
 							//alert("iXPos"+iXPos);
@@ -24256,13 +24373,17 @@ document.body.addEventListener('gestureend', function (e) {
 							var textLevelUpStaminaDiv = document.getElementById("textLevelUpStaminaDivId");
 							var textLevelUpSpeedDiv = document.getElementById("textLevelUpSpeedDivId");
 
+							var optionCardDefense = document.getElementById("optionCardDefenseImageId");
+							var optionCardStamina = document.getElementById("optionCardStaminaImageId");
+							var optionCardSpeed = document.getElementById("optionCardSpeedImageId");
+
 							textLevelUpLifeDiv.style.visibility="visible";
 							textLevelUpStaminaDiv.style.visibility="visible";
 							textLevelUpSpeedDiv.style.visibility="visible";
 							
-							////optionCardDefense.style.visibility="visible";
-							////optionCardStamina.style.visibility="visible";
-							////optionCardSpeed.style.visibility="visible";							
+							optionCardDefense.style.visibility="visible";
+							optionCardStamina.style.visibility="visible";
+							optionCardSpeed.style.visibility="visible";							
 						
 							//init(); //note: error; iCurrMapLocation could not be set;
 							//restarts where hero died;						
