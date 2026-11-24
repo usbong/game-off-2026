@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261123; from 20261122
+' @date updated: 20261124; from 20261123
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1429,7 +1429,7 @@ const iFontComboImageCountMax=12;//60;//6;
 
 //added by Mike, 20261123
 var fontComboStringImageArray = [];
-const iFontComboStringImageCountMax=12;//60;//6;
+const iFontComboStringImageCountMax=24;//12;//60;//6;
 
 
 const iHeroLifeBarStatusImageTileOffsetX=10;//2; //0;//edited by Mike, 20260813; from 20260809
@@ -1465,6 +1465,10 @@ var bIsLevelUp=false;
 const iInputDelayAtLeveledUpCountMax=100;
 var iInputDelayAtLeveledUpCount=0;
 
+//added by Mike, 20261124
+var bIsNextChallenger=false;
+var iChallengerCount=0;
+
 //added by Mike, 20261117
 var bIsVersusMode=false;//true; //false; debug
 
@@ -1480,6 +1484,7 @@ var bIsLeftClickPressed=false;//true;
 
 //added by Mike, 20260827
 var iTotalFontCharUsed=0;
+var sTotalFontStringUsed="";
 
 //added by Mike, 20261123
 var iTotalFontComboCharUsed=0;
@@ -1676,6 +1681,8 @@ var iCurrOpponentLifeAnimationCountMax=5;
 const sCurrOpponentLifeFillColorDefault="#ee7500"; //orange
 var sCurrOpponentLifeFillColor=sCurrOpponentLifeFillColorDefault;
 
+//added by Mike, 20261124
+var iCurrTrainingStringAnimationCount=0;
 
 var fCurrHeroLifeToBeDeducted=0;
 var fCurrHeroLifeToBeDeductedAnimation=0;
@@ -1700,6 +1707,13 @@ var iCurrOpponentLifeMax=iCurrHeroLifeMaxDefault;//15;//20;
 var iCurrOpponentLife=iCurrHeroLifeMax;
 var iCurrOpponentLifeAnimationDelayCount=0;
 var iCurrOpponentLifeAnimationDelayCountMax=5;
+
+//added by Mike, 20261124
+const iCurrOpponentStepXDefault=1;
+const iCurrOpponentStepYDefault=1;
+var iCurrOpponentStepX=iCurrOpponentStepXDefault;
+var iCurrOpponentStepY=iCurrOpponentStepYDefault;
+
 
 var fCurrOpponentLifeToBeDeducted=0;
 var fCurrOpponentLifeToBeDeductedAnimation=0;
@@ -3021,6 +3035,9 @@ var bIsHeroFacingUp=true;//false;
 
 
 	function executeStageTransition(iInputCurrMapLocation) {
+		//added by Mike, 20261124
+		iCurrOpponentCoinCount=0;
+	
 		//added by Mike, 20261120
 		if (iInputDelayAtStageTransitionCount<iInputDelayAtStageTransitionCountMax) {
 			iInputDelayAtStageTransitionCount++;
@@ -3063,9 +3080,11 @@ var bIsHeroFacingUp=true;//false;
 
 		verifyIfHeroLeveledUp();
 		
+		
 		//bIsShowingStage1End=true;
 		iInputDelayAtStageTransitionCount=0;
 		iInputDelayAtLeveledUpCount=0;
+		
 		
 		//edited by Mike, 20261113
 		if (bIsLevelUp) {
@@ -3075,7 +3094,25 @@ var bIsHeroFacingUp=true;//false;
 			//executeHeroContinue(true);
 		}
 		else {
-			executeHeroContinue(true);
+			//setAllActorsToHidden();
+		
+			if (iChallengerCount==0) { //challenger#1
+				//CARD_SLOT_TYPE_STAMINA;
+				//CARD_SLOT_TYPE_SPEED;
+			
+				arrayOpponentCardSlot[0][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_DEFENSE;
+				arrayOpponentCardSlot[0][CARD_SLOT_LEVEL]=1;
+				arrayOpponentCardSlot[1][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_SPEED;
+				arrayOpponentCardSlot[1][CARD_SLOT_LEVEL]=1;
+				
+				//alert(arrayOpponentCardSlot[0][CARD_SLOT_TYPE]);
+			}
+		
+			//edited by Mike, 20261124
+			bIsNextChallenger=true;
+			iChallengerCount++;		
+			 
+			//executeHeroContinue(true);
 		}
 	}
 
@@ -3397,7 +3434,45 @@ alert("iColumn: "+iColumn);
 		fontImageArray[iCount].style.left = fDefaultObjectPosX+"px";	
 		fontImageArray[iCount].style.top = fDefaultObjectPosY+"px";
 	  }
+	  
+	  iTotalFontCharUsed=0;
+	  sTotalFontStringUsed="";
 	}
+
+	//added by Mike, 20261124
+	function clearStringFromEnd(sInput) {
+	   	//alert("DITO!!"+iFontImageCountMax);
+		
+	   if (sTotalFontStringUsed.indexOf(sInput)===-1) {
+		return;
+	   }
+		
+	   var iPos=iTotalFontCharUsed-sInput.length;
+	   
+	   iTotalFontCharUsed=-sInput.length;
+
+		
+		//alert(iTotalFontCharUsed);
+	
+//	   for (iCount=iPos; iCount<iFontImageCountMax; iCount++) {
+	   for (iCount=iFontImageCountMax-1; iCount>iPos; iCount--) {
+
+	   	  //alert("iCount: "+iCount);
+
+		fontImageArray[iCount]=document.getElementById("fontImageId"+iCount);
+
+/*		//removed by Mike, 20261115;
+		//no need to proceed if has reached fDefaultObjectPosX;
+		if (parseFloat(fontImageArray[iCount].style.left)==fDefaultObjectPosX) {
+			break;
+		}
+*/
+		
+		fontImageArray[iCount].style.left = fDefaultObjectPosX+"px";	
+		fontImageArray[iCount].style.top = fDefaultObjectPosY+"px";
+	  }
+	}
+
 
 	//added by Mike, 20261123
 	function clearStringCombo() {
@@ -3546,9 +3621,12 @@ alert("iColumn: "+iColumn);
 		
 		iTotalFontCharUsed++;
 		
+		sTotalFontStringUsed=sTotalFontStringUsed.concat(sInput[i]);
+		
 	    //added by Mike, 20260827; reset;
 		if (iTotalFontCharUsed>=iFontImageCountMax) {
 		  iTotalFontCharUsed=0;
+		  sTotalFontStringUsed=""; //added by Mike, 20261124
 		}
 	  }
 	}	
@@ -4140,8 +4218,7 @@ alert("iColumn: "+iColumn);
 		var iHeroLifeBarHeight=8; //4		
 		var iHeroLifeBarSpacing=0;//1;
 */
-		
-		
+				
 		iXPosUpdated=iXPos+iHeroLifeBarStatusImageTileOffsetX;
 		
 		//var iCurrHeroLife=10;
@@ -5505,6 +5582,7 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		//textHeroComboStatusDiv.innerHTML = "OCx"+iCurrOpponentComboCount;		
 		//textHeroComboStatusDiv.innerHTML = "HCx"+iCurrHeroComboCount+"; OCx"+iCurrOpponentComboCount;		
 
+		//textHeroComboStatusDiv.innerHTML = "CCx"+iChallengerCount;		
 	}
 
 	//added by Mike, 20261123
@@ -5579,6 +5657,14 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 
 		textOpponentCoinStatusDiv.innerHTML = "x"+iCurrOpponentCoinCount;
 */
+
+/*		//removed by Mike, 20261124
+		//added by Mike, 20261124
+		if (bIsNextChallenger) {
+			return;
+		}
+*/
+
 		if (iCurrOpponentCoinCount>iCoinCountMax) {
 			iCurrOpponentCoinCount=iCoinCountMax;
 		}
@@ -5801,6 +5887,10 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		bIsGameOverVersusMode=false;
 
 		bIsLevelUp=false;		
+		
+		//added by Mike, 20261124
+		bIsNextChallenger=false;
+		iChallengerCount=0;
 
 		//added by Mike, 20260806
 		bIsRightClickHeld=false;
@@ -12089,6 +12179,28 @@ alert("iInputY: "+iInputY);
 		var opponentCardSlotTwo = document.getElementById("opponentCardSlotTwoImageId");
 		//var opponentCardSlotThree = document.getElementById("opponentCardSlotThreeImageId");
 
+
+		//removed by Mike, 20261124
+/*
+		if (bIsNextChallenger) {
+			opponentCardSlotOne.style.left=fDefaultObjectPosX+"px";
+			opponentCardSlotOne.style.top=fDefaultObjectPosY+"px";
+
+			opponentCardSlotTwo.style.left=fDefaultObjectPosX+"px";
+			opponentCardSlotTwo.style.top=fDefaultObjectPosY+"px";
+		}
+		else {
+			//noted; also set in another part of the code;
+			opponentCardSlotOne.style.left=(0+iViewportMaxWidth/2+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*4+iImageFrameWidthMedium*0.6*1)+"px";
+			
+			opponentCardSlotOne.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+
+			opponentCardSlotTwo.style.left=(0+iViewportMaxWidth/2+iImageFrameHeightMedium*0.4+iImageFrameWidthDefault*4+iImageFrameWidthMedium*0.6*2)+"px";
+
+			opponentCardSlotTwo.style.top=(0+iViewportMaxHeight-iImageFrameWidthMedium*0.8-iImageFrameHeightDefault*0.2)+"px";
+		}
+*/
+
 /*
 		if (coinImage.style.visibility=="hidden") {
 			return;
@@ -13346,6 +13458,10 @@ if (arrayWalkOnSnowEffectCount==1) {
 		if (bIsVersusMode) {
 			return;
 		}
+		
+		//added by Mike, 20261124
+		//bIsLevelUp=false;
+		//return; //debug
 	
 		if (iCurrHeroLevel<1) {
 			if (iCurrMonsterDeathCount>=iMonsterDeathCountToLevel1Min) {
@@ -13368,7 +13484,7 @@ if (arrayWalkOnSnowEffectCount==1) {
 		}
 		else if (iCurrHeroLevel<2) {
 			if (iCurrMonsterDeathCount>=iMonsterDeathCountToLevel2Min) {
-				bIsLevelUp=true;
+				bIsLevelUp=true;//false;//true; //max two only
 				iCurrHeroLevel++;
 				setAllActorsToHidden();	
 				resetOptions(); //added by Mike, 20261107
@@ -14677,30 +14793,22 @@ if (fDifferenceInXPos!=0) {
 						if ((iCurrHeroComboCount==0) || (iCurrHeroMana<=0)) {
 							//added by Mike, 20261117
 							if (!bIsVersusMode) {
-						
-							//heroHitByMonster(mainImageTilePosX,mainImageTilePosY, inputArrayWraithMonsterWithIdCount[MONSTER_POSX],inputArrayWraithMonsterWithIdCount[MONSTER_POSY],iMonsterAttackDamageDefault);
-
-	/*						//removed by Mike, 20261115
-							if (!bHasHeroHitMonster) {
-	*/
-							
-							//decide if will attack; 
-	/*							
-								//noted; AI; always attacking
-								//inputArrayWraithMonsterWithIdCount[MONSTER_CURRENT_STATE]=ATTACKING_STATE;
-
-								var bHasReducedOpponentManaOutput=reduceOpponentMana(iManaCostHeroMeleeAttack);
-
-								if (!bHasReducedOpponentManaOutput) {
-									return;
-								}
-
-								inputArrayWraithMonsterWithIdCount[MONSTER_CURRENT_STATE]=ATTACKING_STATE;
-	*/
-								//added by Mike, 20261115
-								//inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_DELAY]++;
 
 								//MONSTER_ATTACK_ANIMATION_COUNT_MAX
+								
+								//AI; added by Mike, 20261124
+								if (iChallengerCount==1) {
+									inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_DELAY_MAX]=20;//25;//50;
+									
+									if (iCurrOpponentComboCount>4) {
+										inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_DELAY_MAX]=40;
+									}
+									else {
+										inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_DELAY_MAX]=20;
+									}
+								}
+								
+								
 
 								if (inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_DELAY]>=inputArrayWraithMonsterWithIdCount[MONSTER_ATTACK_DELAY_MAX]) {
 								
@@ -19515,6 +19623,9 @@ if (fDifferenceInXPos!=0) {
 			if (fCurrDivStoryOpacity>1.0) {
 				fCurrDivStoryOpacity=1.0;
 			}
+			
+			//added by Mike, 20261124
+			//bIsNextChallenger=true; //debug
 
 			switch (iCurrMissionIntroPage) {
 				case 0:
@@ -19671,8 +19782,7 @@ if (fDifferenceInXPos!=0) {
 */			
 			return;
 		}
-
-//added by Mike, 20251121
+		//added by Mike, 20251121
 		else if (bIsLevelUp) {
 			executeTimeDisplay();
 		
@@ -19747,6 +19857,20 @@ if (fDifferenceInXPos!=0) {
 			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 
+			clearString();
+			clearStringCombo();
+			clearStringComboString();
+	
+			drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
+
+			drawOpponentCoinStatus(myCanvasTwoContext,0+iViewportMaxWidth/2+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
+
+			//drawHeroXYPosStatus(myCanvasTwoContext, 0+iViewportMaxWidth-iImageFrameHeightLarge*2, 0+iViewportMaxHeight-iImageFrameHeightLarge*1.25);			
+
+			drawString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2,(0+iViewportMaxHeight*0.01),"KO");
+	
+
+
 /*
 			if (bIsBossBattle) {
 				drawBossLifeBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left)+50, 00+iViewportMaxHeight*0.35,false); 
@@ -19792,6 +19916,9 @@ if (fDifferenceInXPos!=0) {
 			iInputDelayAtLeveledUpCount++;
 			
 			updateOptionCardsAnimation();
+			
+			//added by Mike, 20261124
+			//clearStringFromEnd("PRACTICE");
 
 /*
 			if (iInputDelayAtLeveledUpCount>=iInputDelayAtLeveledUpCountMax*2) {
@@ -19806,6 +19933,144 @@ if (fDifferenceInXPos!=0) {
 			/*return;
 			*/
 		}		
+		//added by Mike, 20261124
+		else if (bIsNextChallenger) {
+			executeTimeDisplay();
+
+/*			//removed by Mike, 20261124
+			mainImageTile.style.visibility="hidden";
+			mainImageTileTankBody.style.visibility="hidden";
+*/
+			
+			//edited by Mike, 20261122
+			//mainImageTileHeroBody.style.visibility="hidden";
+			mainImageTileHeroBody.style.left=fDefaultObjectPosX+"px";
+			mainImageTileHeroBody.style.top=fDefaultObjectPosY+"px";
+
+
+/*			//removed by Mike, 20261124
+			mainImageTileHeroBody0.style.visibility="hidden";
+			mainImageTileHeroBody1.style.visibility="hidden";
+			mainImageTileHeroBody2.style.visibility="hidden";
+
+			wolfImageTile.style.visibility="hidden";
+*/
+
+			setAllActorsToHidden();				
+
+			//==========================================
+			var myAudioEffectSolved = document.getElementById("myAudioEffectSolvedId");
+
+			myAudioEffectSolved.setAttribute("src", sAudioEffectSolved);
+
+			//fMyAudioEffectVolume=0.2;
+			myAudioEffectSolvedVolume=1.0;
+			myAudioEffectSolved.volume=myAudioEffectSolvedVolume;
+			myAudioEffectSolved.loop=false;
+			myAudioEffectSolved.play();
+			//==========================================	
+
+/*			//removed by Mike, 20261124; from 20261115
+			sText = "";//"NEXT CHALENGER!!!";
+			textStatusDiv.innerHTML = sText; //sCurrText
+
+			//textStatusDiv.style.left=iInnerHorizontalOffset+iViewportMaxHeight/2-textStatusDiv.clientWidth/2;
+			
+			//textStatusDiv.style.left=iInnerHorizontalOffset+iImageFrameWidthLarge/8;
+
+			//textStatusDiv.style.left=iViewportMaxHeight/2-textStatusDiv.clientWidth/2;
+
+			//textStatusDiv.style.left=iViewportMaxHeight/2;//-textStatusDiv.clientWidth/2;
+
+			textStatusDiv.style.left=0;
+
+			//textStatusDiv.style.top = 0+(iViewportMaxHeight*0.30)+"px";
+			//textStatusDiv.style.top = 0+iInnerVerticalOffset+textStatusDiv.clientHeight+"px";
+			
+			textStatusDiv.style.top = 0+iViewportMaxHeight*0.1;
+*/
+	
+  			////textStatusDiv.style.visibility="visible";
+  			//textStatusDiv.style.visibility="hidden";
+/*
+			clearStringComboString();
+
+			drawStringComboString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2,(0+iViewportMaxHeight*0.2),"NEXT CHALLENGER");
+*/
+			clearString();
+			clearStringCombo();
+			clearStringComboString();
+	
+			drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
+
+			drawOpponentCoinStatus(myCanvasTwoContext,0+iViewportMaxWidth/2+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
+
+			//drawHeroXYPosStatus(myCanvasTwoContext, 0+iViewportMaxWidth-iImageFrameHeightLarge*2, 0+iViewportMaxHeight-iImageFrameHeightLarge*1.25);			
+
+			drawString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2,(0+iViewportMaxHeight*0.01),"KO");
+	
+			drawStringComboString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*2,"NEXT CHALLENGER");
+			
+
+			//clearString();
+			//drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*2,"NEXT CHALLENGER");
+
+
+/*			//removed by Mike, 20261124
+			mainImageTileHeroBody.style.left=parseInt(textStatusDiv.style.left)+(iImageFrameWidthLarge*0.8)+"px";
+			mainImageTileHeroBody.style.top=parseInt(textStatusDiv.style.top)+iImageFrameHeightLarge+"px";
+*/
+
+/*
+			bIsHeroFacingLeftOrRight=true;
+			bIsHeroFacingLeft=false;
+			bIsHeroFacingUpOrDown=false;
+*/
+			//black tint
+			myCanvasTwoContext.fillStyle = "#111111"; //"#000000"; //"#000077";//"#550000";//red tint
+			myCanvasTwoContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
+
+/*			//edited by Mike, 20260809
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+*/
+			
+			
+			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+
+			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
+
+			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
+
+			drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+
+			drawCoinDisplayIcon(iCurrCoinCountMax); 
+			drawOpponentCoinDisplayIcon(iCurrCoinCountMaxTwo);
+
+			drawCards();
+
+/*			//TODO: -update: this
+			if (iInputDelayAtLeveledUpCount>=iInputDelayAtLeveledUpCountMax/2) {
+				textLevelUpLifeDiv.style.visibility="visible";
+				textLevelUpStaminaDiv.style.visibility="visible";
+				textLevelUpSpeedDiv.style.visibility="visible";
+				
+				optionCardDefense.style.visibility="visible";
+				optionCardStamina.style.visibility="visible";
+				optionCardSpeed.style.visibility="visible";
+				
+				textStatusDiv.style.visibility="visible";
+			}
+			iInputDelayAtLeveledUpCount++;
+			
+			updateOptionCardsAnimation();
+*/
+
+			return;
+		}		
+
+
+
+
 /*		//removed by Mike, 20261119
 		else {
 			textStatusBackgroundDiv.style.visibility="hidden";
@@ -20066,12 +20331,41 @@ if (fDifferenceInXPos!=0) {
 	//drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthLarge, 0+iViewportMaxHeight*0.77); 
 	drawHeroCoinStatus(myCanvasTwoContext,0+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
 
-	//added by Mike, 20261114
+	//edited by Mike, 20261114
 	drawOpponentCoinStatus(myCanvasTwoContext,0+iViewportMaxWidth/2+iImageFrameWidthDefault*1.5, 0+iViewportMaxHeight-iImageFrameHeightDefault*1.2-iImageFrameHeightDefault*0.1);  
 
 	drawHeroXYPosStatus(myCanvasTwoContext, 0+iViewportMaxWidth-iImageFrameHeightLarge*2, 0+iViewportMaxHeight-iImageFrameHeightLarge*1.25);			
 
 	drawString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2,(0+iViewportMaxHeight*0.01),"KO");
+
+	//added by Mike, 20261124
+	//noted conditions; don't remove the "PRACTICE" text
+	if ((iChallengerCount==0) && (!bIsNextChallenger) && (!bIsLevelUp)) {
+		//drawStringComboString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2-iImageFrameWidthDefault*2,(0+iViewportMaxHeight*0.01+iImageFrameHeightDefault*1.2),"TRAINING");
+
+		if (iCurrTrainingStringAnimationCount<10) {//5) {
+			//drawStringTrainingString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2-iImageFrameWidthDefault*2,(0+iViewportMaxHeight*0.01+iImageFrameHeightDefault*1.2),"TRAINING");
+			
+			//drawString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2-iImageFrameWidthDefault*5,(0+iViewportMaxHeight*0.01+iImageFrameHeightDefault*1.2),"TRAINING FIRST");
+			
+			drawString(0+iViewportMaxWidth/2-iImageFrameWidthDefault*1+2-iImageFrameWidthDefault*2.5,(0+iViewportMaxHeight*0.01+iImageFrameHeightDefault*1.2),"PRACTICE");
+
+		}
+		else {
+			if (iCurrTrainingStringAnimationCount>20) {//10) {
+				iCurrTrainingStringAnimationCount=0;
+			}
+			
+			if (iCurrTrainingStringAnimationCount==0) {
+				//sCurrHeroLifeFillColor="#eeda00"; //yellow
+			}
+		}			
+		iCurrTrainingStringAnimationCount++;			
+		//---
+	}
+		
+
+
 
 	//added by Mike, 20261123
 	drawHeroComboStatus(myCanvasTwoContext,0+iImageFrameWidthDefault*0.5, 0+iViewportMaxHeight/2-iImageFrameHeightLarge*1.25);  
@@ -20128,6 +20422,11 @@ if (fDifferenceInXPos!=0) {
 		}
 
 		if (bIsLevelUp) {
+			return;
+		}
+
+		//added by Mike, 20261124
+		if (bIsNextChallenger) {
 			return;
 		}
 
@@ -20275,19 +20574,17 @@ if (fDifferenceInXPos!=0) {
 						arrayActors[iArrayActorsCount]["iCount"]=iCount;
 
 						//-----
-/*						
-						arrayWraithMonsterCountId[iCount][MONSTER_ANIMATION_DELAY_COUNT]=10;
-						arrayWraithMonsterCountId[iCount][MONSTER_ANIMATION_DELAY_COUNT_MAX]=5;//6;	
 
-						arrayWraithMonsterCountId[iCount][MONSTER_ANIMATION_COUNT]=-1;		
-						arrayWraithMonsterCountId[iCount][MONSTER_ANIMATION_COUNT_MAX]=4;//5;		
+						//added by Mike, 20261124
+						//apply cards
+						if (iChallengerCount>=1) {
+							initOpponentCards();
+						}
 
-						arrayWraithMonsterCountId[iCount][MONSTER_STEP_DELAY]=0;		
-						arrayWraithMonsterCountId[iCount][MONSTER_STEP_DELAY_MAX]=15*(iCount+1);
-						arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_STATE]=IDLE_STATE;
-*/
+/*						//removed by Mike, 20261124
 						arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP]=WRAITH_MONSTER_HP_MAX;
 						arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_MANA]=WRAITH_MONSTER_MANA_MAX;
+*/
 						
 						//added by Mike, 20261115
 						arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_STATE]=IDLE_STATE;
@@ -20317,15 +20614,29 @@ if (fDifferenceInXPos!=0) {
 						iCurrHeroManaToBeDeductedAnimationMain=iCurrHeroManaMax;
 						iHeroInvincibleCount=iHeroInvincibleCountMax;
 
-						iCurrOpponentLife=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
-						iCurrOpponentLifeMax=WRAITH_MONSTER_HP_MAX;
+						//edited by Mike, 20261124
+						////iCurrOpponentLife=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP];
+						////iCurrOpponentLifeMax=WRAITH_MONSTER_HP_MAX;
+						iCurrOpponentLife=iCurrOpponentLifeMax;
+	
 						
 						fCurrOpponentLifeToBeDeducted=0;
-						iCurrOpponentToBeDeductedAnimationMain=iCurrOpponentLifeMax;
-						iCurrOpponentMana=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_MANA]
+						fCurrOpponentLifeToBeDeductedAnimationMain=iCurrOpponentLifeMax;
+						////iCurrOpponentMana=arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_MANA];
+						
+						iCurrOpponentMana=iCurrOpponentManaMax;
+
 						iCurrOpponentManaToBeDeducted=0;
 						iCurrOpponentManaToBeDeductedAnimationMain=iCurrOpponentManaMax;
 					
+						//added by Mike, 20261124
+						////arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP]=WRAITH_MONSTER_HP_MAX;
+						////arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_MANA]=WRAITH_MONSTER_MANA_MAX;
+
+						arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_HP]=iCurrOpponentLife;
+						arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_MANA]=iCurrOpponentManaMax;
+
+
 						//done later;
 						//arrayWraithMonsterCountId[iCount][MONSTER_ANIMATION_INVINCIBLE_COUNT]=WRAITH_ANIMATION_INVINCIBLE_COUNT_MAX_PLUS;
 						//------------------------
@@ -20349,9 +20660,13 @@ if (fDifferenceInXPos!=0) {
 						arrayWraithMonsterCountId[iCount][MONSTER_HAS_HIT_WALL_FACING_UP]=false;
 						arrayWraithMonsterCountId[iCount][MONSTER_HAS_HIT_WALL_FACING_DOWN]=false;
 						
-						//added by Mike, 20260924
-						arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=1;
-						arrayWraithMonsterCountId[iCount][MONSTER_STEPY]=1;
+						//edited by Mike, 20261124; from 20260924
+						////arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=1;
+						////arrayWraithMonsterCountId[iCount][MONSTER_STEPY]=1;
+						arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=iCurrOpponentStepX;
+						arrayWraithMonsterCountId[iCount][MONSTER_STEPY]=iCurrOpponentStepY;
+						
+						//alert(iCurrOpponentStepX);
 						
 
 						//removed by Mike, 20261115; from 20261112
@@ -20364,6 +20679,7 @@ if (fDifferenceInXPos!=0) {
 						//added by Mike, 20260627
 						arrayWraithMonsterCountId[iCount][MONSTER_DEATH_ANIMATION_TYPE]=MONSTER_DEATH_ANIMATION_TYPE_DEFAULT;
 						//-----
+
 
 						arrayActors[iArrayActorsCount].style.zIndex=iZIndexDefault+iArrayActorsCount;
 						
@@ -22700,6 +23016,10 @@ alert("iXPos: "+iXPos);
 		if (!bIsContinue) {		
 			//NEW GAME
 			iCurrBossMonsterLife=iCurrBossMonsterLifeMax;
+			
+			//added by Mike, 20261124
+			bIsNextChallenger=false;
+			iChallengerCount=0;
 		
 			//added by Mike, 20261122
 			iCurrHeroCardSlotOneLevel=0;
@@ -22883,6 +23203,30 @@ alert("iXPos: "+iXPos);
 		mainImageTileProjectileStepY=mainImageTileProjectileStepYMin;
 		mainImageTileProjectileStepX=mainImageTileProjectileStepYMin;
 		//----------------------
+	}
+	
+	//added by Mike, 20261124
+	function initOpponentCards() {
+		iCurrOpponentLifeMax=iCurrOpponentLifeMaxDefault;
+		iCurrOpponentManaMax=iCurrOpponentManaMaxDefault;
+		iCurrOpponentStepX=iCurrOpponentStepXDefault;
+		iCurrOpponentStepY=iCurrOpponentStepYDefault;
+	
+		for (iCount=0; iCount<iCurrHeroCardSlotCountMax; iCount++) {
+		
+			//alert(arrayOpponentCardSlot[iCount][CARD_SLOT_TYPE]);
+		
+			if (arrayOpponentCardSlot[iCount][CARD_SLOT_TYPE]==CARD_SLOT_TYPE_DEFENSE) {
+				iCurrOpponentLifeMax+=5;
+			}
+			else if (arrayOpponentCardSlot[iCount][CARD_SLOT_TYPE]==CARD_SLOT_TYPE_STAMINA) {
+				iCurrOpponentManaMax+=5;
+			}
+			else if (arrayOpponentCardSlot[iCount][CARD_SLOT_TYPE]==CARD_SLOT_TYPE_SPEED) {
+				iCurrOpponentStepX+=1;
+				iCurrOpponentStepY+=1;
+			}
+		}
 	}
 	
 	//added by Mike, 20251121
@@ -23443,6 +23787,16 @@ alert("iXPos: "+iXPos);
 					}
 					
 					e.preventDefault(); //added by Mike, 20261122
+				}
+				
+				return;
+			}
+			//added by Mike, 20261124
+			else if (bIsNextChallenger) {
+				if ((e.code==='KeyJ') || (e.code==='Enter') || (e.code==='NumpadEnter')) {
+					bIsNextChallenger=false;
+					executeHeroContinue(true);
+					e.preventDefault();
 				}
 				
 				return;
@@ -26790,6 +27144,19 @@ opting to put assets folder in "html_application" folder instead
 	<img id="fontComboStringImageId9" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
 	<img id="fontComboStringImageId10" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
 	<img id="fontComboStringImageId11" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+
+	<img id="fontComboStringImageId12" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId13" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId14" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId15" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId16" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId17" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId18" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId19" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId20" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId21" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId22" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
+	<img id="fontComboStringImageId23" class="FontImage32x32Tile" src="assets/images/fontComboString2026.png?lastmod=20261123T1522">	
 
 
 	
