@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261124; from 20261123
+' @date updated: 20261125; from 20261124
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -1716,8 +1716,8 @@ var iCurrOpponentLifeAnimationDelayCount=0;
 var iCurrOpponentLifeAnimationDelayCountMax=5;
 
 //added by Mike, 20261124
-const iCurrOpponentStepXDefault=1;
-const iCurrOpponentStepYDefault=1;
+const iCurrOpponentStepXDefault=1.5;//1;
+const iCurrOpponentStepYDefault=1.5;//1;
 var iCurrOpponentStepX=iCurrOpponentStepXDefault;
 var iCurrOpponentStepY=iCurrOpponentStepYDefault;
 
@@ -2367,7 +2367,7 @@ const iHeroIdleAnimationDelayCountMax=8;
 //added by Mike, 20260625
 var iHeroAttackComboResetDelayCount=0;
 //edited by Mike, 20260916; at 5; too fast mouse clicks lead to combo count not increasing;
-const iHeroAttackComboResetDelayCountMax=50;//100;//20;//5;
+const iHeroAttackComboResetDelayCountMax=25;//50;//100;//20;//5;
 
 //edited by Mike, 20261123
 var iHeroHitAnimationCount=0;
@@ -5626,7 +5626,12 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 
 		//textHeroComboStatusDiv.innerHTML = "LMx"+iCurrHeroLifeMax+";"+iCurrHeroLife;		
 		//textHeroComboStatusDiv.innerHTML = "LMx"+iCurrOpponentLifeMax+";"+iCurrOpponentLife;		
+	
+		//textHeroComboStatusDiv.innerHTML = "OSx"+iCurrOpponentStepX+";"+arrayWraithMonsterCountId[0][MONSTER_STEPX];		
+
+		//textHeroComboStatusDiv.innerHTML = "OSx"+mainImageTileProjectileStepX;		
 	}
+	
 
 	//added by Mike, 20261123
 	function drawHeroComboStatus(myCanvasContext, iXPos, iYPos) {		
@@ -9968,7 +9973,15 @@ alert("iInputY: "+iInputY);
 				inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT_MAX]=5;
 			}
 	*/
-			inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT_MAX]=5;
+	
+			//edited by Mike, 20261125
+			//inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT_MAX]=4;
+			if (iCurrOpponentStepX<2) {
+				inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT_MAX]=5;
+			}
+			else {
+				inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT_MAX]=4;//parseInt(5/iCurrOpponentStepX);
+			}
 			
 			//inputArrayWraithMonsterWithIdCount[MONSTER_ANIMATION_DELAY_COUNT_MAX]=8;
 			
@@ -9981,6 +9994,10 @@ alert("iInputY: "+iInputY);
 				//added by Mike, 20261124
 				if (iChallengerCount>=CHALLENGER_TYPE_LIZARD_WOLF_TWO) { //#2
 					inputArrayWraithMonsterWithIdCount[MONSTER_STEP_DELAY_MAX]=0; //debug
+				}
+				else {
+					//default;
+					inputArrayWraithMonsterWithIdCount[MONSTER_STEP_DELAY_MAX]=15*(0+1);
 				}
 				
 				if (inputArrayWraithMonsterWithIdCount[MONSTER_STEP_DELAY]>=inputArrayWraithMonsterWithIdCount[MONSTER_STEP_DELAY_MAX]) {
@@ -23065,6 +23082,9 @@ alert("iXPos: "+iXPos);
 				arrayOpponentCardSlot[iCount][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_EMPTY;
 				arrayOpponentCardSlot[iCount][CARD_SLOT_LEVEL]=0;
 			}
+
+			initOpponentCards(); //added by Mike, 20261125
+
 
 /*		
 			arrayHeroCardSlot[0][CARD_SLOT_TYPE]=CARD_SLOT_TYPE_EMPTY;
