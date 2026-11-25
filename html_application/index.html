@@ -5225,13 +5225,13 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 			//myCanvasContext.strokeStyle = 'red'; //white
 
 			if (iCurrHeroManaAnimationDelayCount<10) {//5) {
-				myCanvasContext.strokeStyle = "#000000"//"#cc0000";
+				myCanvasContext.strokeStyle = "#000000"; //"#ed9800"; //yellow //"#cc0000";
 			}
 			else {
-				myCanvasContext.strokeStyle = "#ffffff"; //"#ff0000"; //white
+				myCanvasContext.strokeStyle = "#ff0000"; //"#ffffff"; //"#ff0000"; //white
 			}
 
-			myCanvasContext.lineWidth = 0.2;//5;//2; 
+			myCanvasContext.lineWidth = 1;//0.2;//5;//2; 
 			myCanvasContext.strokeRect(0+iXPosUpdated, 0+iYPos, iHeroManaBarWidth*iCurrHeroManaMax, iHeroManaBarHeight); 
 		}
 		else {
@@ -5908,6 +5908,8 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		//-----------------------------
 		var myCanvas = document.getElementById("myCanvasId");
 		var myCanvasTwo = document.getElementById("myCanvasTwoId");
+		var myCanvasThree = document.getElementById("myCanvasThreeId");
+
 		var myCanvasGrid = document.getElementById("myCanvasGridId");
 		var myCanvasTint = document.getElementById("myCanvasTintId");
 		
@@ -5931,6 +5933,9 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		//added by Mike, 20260930
 		myCanvasTwo.style.width=637; //640;
 		myCanvasTwo.style.height=357; //360;
+
+		myCanvasThree.style.width=637; //640;
+		myCanvasThree.style.height=357; //360;
 
 		//added by Mike, 20261020
 		myCanvasGrid.style.width=637; //640;
@@ -6162,6 +6167,8 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		var textStatusDiv = document.getElementById("textStatusDivId");
 		var textStatusBackgroundDiv = document.getElementById("textStatusBackgroundDivId");
 		var myCanvasTwo = document.getElementById("myCanvasTwoId");
+		var myCanvasThree = document.getElementById("myCanvasThreeId");
+
 		var myCanvasGrid = document.getElementById("myCanvasGridId");
 
 		var myCanvasTint = document.getElementById("myCanvasTintId");
@@ -6285,6 +6292,8 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		textStatusDiv.style.visibility="hidden";
 		textStatusBackgroundDiv.style.visibility="hidden";
 		myCanvasTwo.style.visibility="hidden";
+		myCanvasThree.style.visibility="hidden";
+
 		myCanvasGrid.style.visibility="hidden";
 
 		//myCanvasTint.style.visibility="hidden";
@@ -6406,6 +6415,9 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 
 		myCanvasTwo.style.top = (iVerticalOffsetInnerScreen+0)+"px";
 		myCanvasTwo.style.left = iHorizontalOffset+"px";
+
+		myCanvasThree.style.top = (iVerticalOffsetInnerScreen+0)+"px";
+		myCanvasThree.style.left = iHorizontalOffset+"px";
 
 		myCanvasGrid.style.top = (iVerticalOffsetInnerScreen+0)+"px";
 		myCanvasGrid.style.left = iHorizontalOffset+"px";
@@ -19394,6 +19406,10 @@ if (fDifferenceInXPos!=0) {
     var myCanvasTwo = document.getElementById("myCanvasTwoId");
     var myCanvasTwoContext = myCanvasTwo.getContext("2d");
 
+    var myCanvasThree = document.getElementById("myCanvasThreeId");
+    var myCanvasThreeContext = myCanvasThree.getContext("2d");
+
+
 	//added by Mike, 20261020
     var myCanvasGrid = document.getElementById("myCanvasGridId");
     var myCanvasGridContext = myCanvasGrid.getContext("2d");
@@ -19403,6 +19419,8 @@ if (fDifferenceInXPos!=0) {
 	
 	//added by Mike, 20261020; from 20261017
 	myCanvasTwoContext.clearRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
+
+	myCanvasThreeContext.clearRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
 
 	//added by Mike, 20261017
 	//drawGrid(myCanvasTwoContext,0,0);
@@ -19460,6 +19478,9 @@ if (fDifferenceInXPos!=0) {
 
     myCanvasTwo.style.top = myCanvas.style.top;
     myCanvasTwo.style.left = myCanvas.style.left;
+
+    myCanvasThree.style.top = myCanvas.style.top;
+    myCanvasThree.style.left = myCanvas.style.left;
 
     myCanvasGrid.style.top = myCanvas.style.top;
     myCanvasGrid.style.left = myCanvas.style.left;
@@ -19527,6 +19548,8 @@ if (fDifferenceInXPos!=0) {
 			else {
 				//----------------------------------
 				myCanvasTwo.style.visibility="visible";
+				myCanvasThree.style.visibility="visible";
+
 				myCanvasGrid.style.visibility="visible";
 
 /*				//removed by Mike, 20261119
@@ -19868,16 +19891,19 @@ if (fDifferenceInXPos!=0) {
 */
 			//black tint
 			myCanvasTwoContext.fillStyle = "#111111"; //"#000000"; //"#000077";//"#550000";//red tint
-			
 			myCanvasTwoContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
 
 /*			//edited by Mike, 20260809
-			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+			drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
 */
-			
-			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
+			//black tint
+			myCanvasThreeContext.fillStyle = "#111111"; //"#000000"; //"#000077";//"#550000";//red tint
+			myCanvasThreeContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
+			
+			drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+
+			drawOpponentLifeBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 
 			clearString();
@@ -19901,19 +19927,19 @@ if (fDifferenceInXPos!=0) {
 */
 
 /*			//edited by Mike, 20260809
-			drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76+5,false);		
+			drawHeroManaBar(myCanvasThreeContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76+5,false);		
 */			
 
 			//edited by Mike, 20261112
-			//drawHeroManaBar(myCanvasTwoContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);
+			//drawHeroManaBar(myCanvasThreeContext,parseInt(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01+5,false);
 
-			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
-
-			//added by Mike, 20261114
-			//drawOpponentManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
+			drawHeroManaBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
 
 			//added by Mike, 20261114
-			drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+			//drawOpponentManaBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
+
+			//added by Mike, 20261114
+			drawOpponentManaBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 			//mainImageTileHeroBody.style.visibility="visible";
 		
@@ -20118,17 +20144,18 @@ if (fDifferenceInXPos!=0) {
 			myCanvasTwoContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
 
 /*			//edited by Mike, 20260809
-			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
+			drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight/76,false); 
 */
+			myCanvasThreeContext.fillStyle = "#111111"; //"#000000"; //"#000077";//"#550000";//red tint
+			myCanvasThreeContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
 			
-			
-			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-			drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
+			drawOpponentLifeBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
-			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
+			drawHeroManaBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
 
-			drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+			drawOpponentManaBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 			drawCoinDisplayIcon(iCurrCoinCountMax); 
 			drawOpponentCoinDisplayIcon(iCurrCoinCountMaxTwo);
@@ -20244,19 +20271,22 @@ if (fDifferenceInXPos!=0) {
 
 			//drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*0,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*2.75,"THANKS FOR PLAYING!");
 
-			drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*0,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*2.75,"TO PLAY 2P MODE!");
+			drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*0,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*2.75,"TO PLAY 2P MODE!!");
 
 			//black tint
 			myCanvasTwoContext.fillStyle = "#111111"; //"#000000"; //"#000077";//"#550000";//red tint
 			myCanvasTwoContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
+
+			myCanvasThreeContext.fillStyle = "#111111"; //"#000000"; //"#000077";//"#550000";//red tint
+			myCanvasThreeContext.fillRect(0, 0, iViewportMaxWidth, iViewportMaxHeight);
 			
-			drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+			drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-			////drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
+			////drawOpponentLifeBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
-			drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
+			drawHeroManaBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);			
 
-			////drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+			////drawOpponentManaBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 			drawCoinDisplayIcon(iCurrCoinCountMax); 
 			////drawOpponentCoinDisplayIcon(iCurrCoinCountMaxTwo);
@@ -20460,28 +20490,28 @@ if (fDifferenceInXPos!=0) {
 		heroLifeBarStatusImageTile.style.visibility="visible";
 		opponentLifeBarStatusImageTile.style.visibility="visible";
 
-		drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+		drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-		drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
+		drawOpponentLifeBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 		//edited by Mike, 20261112		
-		drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);		
+		drawHeroManaBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);		
 		
 		//added by Mike, 20261114
-		drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+		drawOpponentManaBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 */		
 	}
 /*	//removed by Mike, 20261119
 	else {
 
-		drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,true) 
+		drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,true) 
 
-		drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,true); 
+		drawOpponentLifeBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,true); 
 
-		drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,true);
+		drawHeroManaBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,true);
 
 		//edited by Mike, 20261118; from 20261114
-		drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,true);
+		drawOpponentManaBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,true);
 	}
 */
 
@@ -20489,15 +20519,15 @@ if (fDifferenceInXPos!=0) {
 		heroLifeBarStatusImageTile.style.visibility="visible";
 		opponentLifeBarStatusImageTile.style.visibility="visible";
 
-		drawHeroLifeBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
+		drawHeroLifeBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+iViewportMaxHeight*0.01,false); 
 
-		drawOpponentLifeBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
+		drawOpponentLifeBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+iViewportMaxHeight*0.01,false); 
 
 		//edited by Mike, 20261112		
-		drawHeroManaBar(myCanvasTwoContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);		
+		drawHeroManaBar(myCanvasThreeContext,parseFloat(heroLifeBarStatusImageTile.style.left), 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);		
 		
 		//added by Mike, 20261114
-		drawOpponentManaBar(myCanvasTwoContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
+		drawOpponentManaBar(myCanvasThreeContext,0+iViewportMaxWidth/2/2, 0+parseFloat(heroLifeBarStatusImageTile.style.top)+iHeroLifeBarHeight,false);
 
 	
 	//removed by Mike, 20261118
@@ -27233,6 +27263,9 @@ function unlockOrientation() {
 
 				
   <canvas id="myCanvasTwoId" class="myCanvasTwo">
+	</canvas>
+
+  <canvas id="myCanvasThreeId" class="myCanvasTwo">
 	</canvas>
 
   <canvas id="myCanvasGridId" class="myCanvasTwo">
