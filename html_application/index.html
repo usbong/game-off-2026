@@ -1451,6 +1451,7 @@ const fDefaultObjectPosY=-999999;
 const fDefaultObjectPosXMin=-900000;
 const fDefaultObjectPosYMin=-900000;
 
+
 //added by Mike, 20260907
 var bIsMobile=false;
 var bIsUsingAppleWebKit=false;
@@ -2864,10 +2865,10 @@ var bIsHeroFacingUp=true;//false;
 	const iHeroCountMax=1;
 
 	//added by Mike, 20251108
-	var arrayWraithMonsterCountId = [[],[],[],[]];
+	var arrayWraithMonsterCountId = [[],[],[],[],[],[]];
 
 	//edited by Mike, 20261102
-	const iWraithMonsterCountMax=1;//4;//2;
+	const iWraithMonsterCountMax=6;//1;//4;//2;
 
 	var arrayRunningWraithMonsterCountId = [[],[],[],[]];
 	const iRunningWraithMonsterCountMax=4;
@@ -3057,6 +3058,10 @@ var bIsHeroFacingUp=true;//false;
 
 	var iInnerVerticalOffset=iImageFrameHeight/4;//2;
 
+
+	//added by Mike, 20261125
+	const fDefaultBoxerStartPosX=iInnerHorizontalOffset+iImageFrameWidthLarge*5;
+	const fDefaultBoxerStartPosY=iInnerVerticalOffset+iViewportMaxHeight*0.005+iImageFrameHeightLarge/2;
 
 
 	function executeStageTransition(iInputCurrMapLocation) {
@@ -5570,7 +5575,7 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		if (iCurrHeroDeathCount>999) {
 			iCurrHeroDeathCount=999; //BAD ENDING...? how to reach 999? the faster?!
 		}		
-				
+		
 		textHeroDeathStatusDiv.innerHTML = "x"+iCurrHeroDeathCount;		
 	}
 	
@@ -5982,7 +5987,7 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		
 		//added by Mike, 20261124
 		bIsNextChallenger=false;
-		iChallengerCount=0;
+		iChallengerCount=0;//1;//0; //debug
 
 		//added by Mike, 20260806
 		bIsRightClickHeld=false;
@@ -6621,16 +6626,29 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		snakeMonsterImageTile.style.visibility="hidden";
 */
 
-		//added by Mike, 20251108
-		for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+
+		//added by Mike, 20261125
+		var iCount=0;
+		var iCountMax=iCount+1;
+		if (!bIsVersusMode) {
+			iCount=iChallengerCount;
+			iCountMax=iChallengerCount+1;
+		}
+
+		//edited by Mike, 20261125; from 20251108
+		//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+		//for (iCount=iCount; iCount<iCountMax; iCount++) {
+		for (iCount=iCount; iCount<iWraithMonsterCountMax; iCount++) {
+
 			arrayWraithMonsterCountId[iCount][MONSTER_OBJECT]=document.getElementById("wraithMonsterImageId"+iCount);
-			
+						
 			//removed by Mike, 20261116
 			//arrayWraithMonsterCountId[iCount][MONSTER_OBJECT].style.visibility="hidden";			
 			arrayWraithMonsterCountId[iCount][MONSTER_IS_ACTIVE]=false;
-
-			arrayWraithMonsterCountId[iCount][MONSTER_POSX]=fDefaultObjectPosX;//0;
-			arrayWraithMonsterCountId[iCount][MONSTER_POSY]=fDefaultObjectPosY;//0;
+			
+			//edited by Mike, 20261125
+			arrayWraithMonsterCountId[iCount][MONSTER_POSX]=fDefaultBoxerStartPosX;//0;//fDefaultObjectPosX;//0;
+			arrayWraithMonsterCountId[iCount][MONSTER_POSY]=fDefaultBoxerStartPosY;//0;//fDefaultObjectPosY;//0;
 			arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=iCurrOpponentStepX;//2;
 			arrayWraithMonsterCountId[iCount][MONSTER_STEPY]=iCurrOpponentStepY;//2;			
 
@@ -8032,6 +8050,9 @@ alert("iInputY: "+iInputY);
 		
 		bIsHeroWalking=true;
 		bHasAttacked=false; //added by Mike, 20261123
+		
+		//TODO: -reverify: this
+		bHasReleasedKeyJ=true; //added by Mike, 20261125
 
 		//added by Mike, 20261125
 		mainImageTileHeroBody.style.visibility="visible";
@@ -9955,6 +9976,13 @@ alert("iInputY: "+iInputY);
 		inputArrayWraithMonsterWithIdCount[MONSTER_STEPX]=iCurrOpponentStepX;
 		inputArrayWraithMonsterWithIdCount[MONSTER_STEPY]=iCurrOpponentStepY;
 
+/*		//removed by Mike, 20261125
+		//TODO: -reverify: this
+		if (bIsVersusMode) {
+			//bHasReleasedKeyJ2P=true; //added by Mike, 20261125
+		}
+*/
+
 /*
 		//added by Mike, 20261102
 		bIsHeroFacingUpOrDown=false;
@@ -10448,9 +10476,20 @@ alert("iInputY: "+iInputY);
 	
 	//added by Mike, 20261103
 	function updateHeroFacingDirectionTowardOpponent() {
+
+		//added by Mike, 20261125
+		var iCount=0;
+		var iCountMax=iCount+1;
+		if (!bIsVersusMode) {
+			iCount=iChallengerCount;
+			iCountMax=iChallengerCount+1;
+		}
+
+		//edited by Mike, 20261125; from 20251108
+		//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+		for (iCount=iCount; iCount<iCountMax; iCount++) {
 		//let hero face directly left or right
-		for (var iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
-		
+				
 			//TODO: -reverify: this
 			//fDynamicViewportX=(iViewportMaxWidth/2-iImageFrameWidthLarge/2)+Math.abs(mainImageTilePosX-arrayWraithMonsterCountId[iCount][MONSTER_POSX])/2;
 			//fDynamicViewportX=Math.abs(mainImageTilePosX-arrayWraithMonsterCountId[iCount][MONSTER_POSX])/2;
@@ -13016,7 +13055,19 @@ if (arrayWalkOnSnowEffectCount==1) {
 		
 		//added by Mike, 20261117
 		if (bIsVersusMode) {
-			for (var iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+
+			//added by Mike, 20261125
+			var iCount=0;
+			var iCountMax=iCount+1;
+			if (!bIsVersusMode) {
+				iCount=iChallengerCount;
+				iCountMax=iChallengerCount+1;
+			}
+
+			//edited by Mike, 20261125
+			//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+			for (iCount=iCount; iCount<iCountMax; iCount++) {
+
 		
 	/*			//TODO: -update: this
 				if ((arrayKeyPressed[iKEY_D_2P]) && (arrayKeyPressed[iKEY_W_2P])) { //key RIGHT; UP
@@ -14483,6 +14534,7 @@ if (fDifferenceInXPos!=0) {
 						bHasAttacked=bHasFired;
 					}
 */
+
 
 
 					//edited by Mike, 20261123; from 20261105
@@ -20175,7 +20227,15 @@ if (fDifferenceInXPos!=0) {
 			//myFavicon.style.zIndex=parseInt(myCanvasTwo.style.zIndex)+1;
 			myFavicon.style.zIndex=999999;//parseInt(myCanvasTwo.style.zIndex)+1;
 
-			drawStringComboString(iViewportMaxWidth/2+iImageFrameWidthDefault*4+iImageFrameWidthDefault*3,iImageFrameHeightDefault*1.15,"x"+iCurrHeroDeathCount);
+			//added by Mike, 20261125
+			//TODO: -reverify this;
+
+			//drawStringComboString(iViewportMaxWidth/2+iImageFrameWidthDefault*4+iImageFrameWidthDefault*3,iImageFrameHeightDefault*1.15,"x"+iCurrHeroDeathCount);
+			
+			//due to use of executeHeroContinue(...) even without dying
+			drawStringComboString(iViewportMaxWidth/2+iImageFrameWidthDefault*4+iImageFrameWidthDefault*3,iImageFrameHeightDefault*1.15,"x"+(iCurrHeroDeathCount-5));
+
+
 			//drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*1,iImageFrameHeightDefault*2+(iImageFrameHeightDefault*1.7)*1,"YOU GOT 2P MODE!");
 
 			drawStringComboString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*1,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*0.75,"THE POWERSHIFT GLOVE");
@@ -20504,8 +20564,17 @@ if (fDifferenceInXPos!=0) {
 //--------------------	
 		var dustEffectImage = document.getElementById("dustEffectImageId");
 
-		//added by Mike, 20251110
-		for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+		//added by Mike, 20261125
+		var iCount=0;
+		var iCountMax=iCount+1;
+		if (!bIsVersusMode) {
+			iCount=iChallengerCount;
+			iCountMax=iChallengerCount+1;
+		}
+		
+		//edited by Mike, 20261125; from 20251110
+		//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+		for (iCount=iCount; iCount<iCountMax; iCount++) {
 			arrayWraithMonsterCountId[iCount][MONSTER_OBJECT]= document.getElementById("wraithMonsterImageId"+iCount);
 			
 			//removed by Mike, 20261118
@@ -20692,11 +20761,21 @@ if (fDifferenceInXPos!=0) {
 */
 					//------------------------------------------------
 
-					for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+					//added by Mike, 20261125
+					var iCount=0;
+					var iCountMax=iCount+1;
+					if (!bIsVersusMode) {
+						iCount=iChallengerCount;
+						iCountMax=iChallengerCount+1;
+					}
+
+					//edited by Mike, 20261125
+					//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+					for (iCount=iCount; iCount<iCountMax; iCount++) {
 						arrayWraithMonsterCountId[iCount][MONSTER_IS_ACTIVE]=true;
 						arrayWraithMonsterCountId[iCount][MONSTER_OBJECT].style.visibility="visible";
 						arrayWraithMonsterCountId[iCount][MONSTER_IS_IN_RIVER]=false;
-						
+										
 						
 						arrayActors[iArrayActorsCount]=arrayWraithMonsterCountId[iCount][MONSTER_OBJECT];
 						
@@ -20844,10 +20923,9 @@ if (fDifferenceInXPos!=0) {
 
 					//arrayWraithMonsterCountId[0][MONSTER_POSX]=iInnerHorizontalOffset+iImageFrameWidthLarge*3.5;
 					
-					arrayWraithMonsterCountId[0][MONSTER_POSX]=iInnerHorizontalOffset+iImageFrameWidthLarge*5;
-
-					
-					arrayWraithMonsterCountId[0][MONSTER_POSY]=iInnerVerticalOffset+iViewportMaxHeight*0.005+iImageFrameHeightLarge/2;
+					//edited by Mike, 20261125
+					arrayWraithMonsterCountId[iChallengerCount][MONSTER_POSX]=fDefaultBoxerStartPosX;//iInnerHorizontalOffset+iImageFrameWidthLarge*5;
+					arrayWraithMonsterCountId[iChallengerCount][MONSTER_POSY]=fDefaultBoxerStartPosY;//iInnerVerticalOffset+iViewportMaxHeight*0.005+iImageFrameHeightLarge/2;
 
 /*
 					//BOTTOM-LEFT
@@ -21177,8 +21255,18 @@ if (fDifferenceInXPos!=0) {
 				//added by Mike, 20260615
 				//bHasAttacked=bHasFired; //if always true; noted delay in the second attack
 				//var bHasFiredTemp=bHasFired; //if always true; noted delay in the second attack
-								
-				for (var iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+
+				//added by Mike, 20261125
+				var iCount=0;
+				var iCountMax=iCount+1;
+				if (!bIsVersusMode) {
+					iCount=iChallengerCount;
+					iCountMax=iChallengerCount+1;
+				}
+
+				//edited by Mike, 20261125
+				//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+				for (iCount=iCount; iCount<iCountMax; iCount++) {
 
 					//bIsVisible=true;
 
@@ -22045,7 +22133,17 @@ if (fDifferenceInXPos!=0) {
 							iHasHeldKeyJ2P++;
 						
 							//executeHeroAttackingAnimation();
-							for (var iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+							//added by Mike, 20261125
+							var iCount=0;
+							var iCountMax=iCount+1;
+							if (!bIsVersusMode) {
+								iCount=iChallengerCount;
+								iCountMax=iChallengerCount+1;
+							}
+
+							//edited by Mike, 20261125
+							//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+							for (iCount=iCount; iCount<iCountMax; iCount++) {
 								arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_STATE]=ATTACKING_STATE;
 							}
 						}
@@ -23451,7 +23549,17 @@ alert("iXPos: "+iXPos);
 			arrayOpponentCardSlot[iCount][CARD_SLOT_LEVEL]=0;
 		}
 
-		for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {	
+		//added by Mike, 20261125
+		var iCount=0;
+		var iCountMax=iCount+1;
+		if (!bIsVersusMode) {
+			iCount=iChallengerCount;
+			iCountMax=iChallengerCount+1;
+		}
+
+		//edited by Mike, 20261125
+		//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+		for (iCount=iCount; iCount<iCountMax; iCount++) {
 			arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=iCurrOpponentStepX;
 			arrayWraithMonsterCountId[iCount][MONSTER_STEPX]=iCurrOpponentStepX;
 		}
@@ -23555,7 +23663,18 @@ alert("iXPos: "+iXPos);
 	function processKeyUpKeyJ2P() {
 		//bHasReducedOpponentManaOutput=false;
 
-		for (var iCount=0; iCount<iWraithMonsterCountMax; iCount++) {	
+		//added by Mike, 20261125
+		var iCount=0;
+		var iCountMax=iCount+1;
+		if (!bIsVersusMode) {
+			iCount=iChallengerCount;
+			iCountMax=iChallengerCount+1;
+		}
+
+		//edited by Mike, 20261125; from 20251108
+		//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+		for (iCount=iCount; iCount<iCountMax; iCount++) {
+
 
 			//alert(arrayWraithMonsterCountId[iCount][MONSTER_ATTACK_ANIMATION_COUNT]);
 /*
@@ -23600,7 +23719,17 @@ alert("iXPos: "+iXPos);
 		}
 		
 		
-		for (var iCount=0; iCount<iWraithMonsterCountMax; iCount++) {	
+		//added by Mike, 20261125
+		var iCount=0;
+		var iCountMax=iCount+1;
+		if (!bIsVersusMode) {
+			iCount=iChallengerCount;
+			iCountMax=iChallengerCount+1;
+		}
+
+		//edited by Mike, 20261125; from 20251108
+		//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+		for (iCount=iCount; iCount<iCountMax; iCount++) {
 			//arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_STATE]=ATTACKING_STATE;
 			//bIsHeroWalking=false;
 
@@ -23798,8 +23927,6 @@ alert("iColumn: "+iColumn);
 					bIsVersusMode=true;
 					executeHeroContinue(false);
 					bIsGameOver=false;
-
-
 
 					//location.reload();					
 					return;
@@ -24012,6 +24139,9 @@ alert("iColumn: "+iColumn);
 				//added by Mike, 2026119
 				if (bIsVersusMode) {
 					bIsGameOver=false;
+					
+					//added by Mike, 20261125
+					//return;
 				}
 				//added by Mike, 20261120
 				else {
@@ -24527,7 +24657,17 @@ alert("iColumn: "+iColumn);
 					////bHasHeroHitWall=false;
 					bHasReleasedDirectionalKey2P=true;
 
-					for (var iCount=0; iCount<iWraithMonsterCountMax; iCount++) {	
+					//added by Mike, 20261125
+					var iCount=0;
+					var iCountMax=iCount+1;
+					if (!bIsVersusMode) {
+						iCount=iChallengerCount;
+						iCountMax=iChallengerCount+1;
+					}
+
+					//edited by Mike, 20261125
+					//for (iCount=0; iCount<iWraithMonsterCountMax; iCount++) {
+					for (iCount=iCount; iCount<iCountMax; iCount++) {
 						arrayWraithMonsterCountId[iCount][MONSTER_CURRENT_STATE]=IDLE_STATE;
 					}
 				}
@@ -27392,11 +27532,12 @@ opting to put assets folder in "html_application" folder instead
 		<img id="runningWraithMonsterImageId2" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 		<img id="runningWraithMonsterImageId3" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 -->
-		<img id="wraithMonsterImageId0" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRed.png?lastmod=20261116T2001>
-		<img id="wraithMonsterImageId1" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
-
-		<img id="wraithMonsterImageId2" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
-		<img id="wraithMonsterImageId3" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerSkel.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId0" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRed.png?lastmod=20261116T2001">
+		<img id="wraithMonsterImageId1" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedOne.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId2" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedTwo.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId3" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedThree.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId4" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedFour.png?lastmod=20261109T1536">
+		<img id="wraithMonsterImageId5" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedFive.png?lastmod=20261109T1536">
 
 		<img id="runningWraithMonsterImageId0" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 		<img id="runningWraithMonsterImageId1" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
