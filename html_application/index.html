@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261125; from 20261124
+' @date updated: 20261125; from 20261125
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -214,6 +214,16 @@
 			
 			transform: scale(0, 0);
 		}
+
+		
+		.ImageTalk {
+			position: absolute;
+
+			clip: rect(0px,160px,160px,0px);
+			visibility: hidden; 
+			
+			z-index: 999999;
+		}		
 
 		.ImageDeathCountTileFrame1 {
 			position: absolute;
@@ -2112,6 +2122,12 @@ const iSnowEffectAnimationDelayCountMax=10;//1;
 var iCurrSnowEffectCount=0;
 const iCurrSnowEffectCountMax=16;
 
+//added by Mike, 20261126
+var iRedTalkAnimationCount=0;
+const iRedTalkAnimationCountMax=2;
+var iRedTalkAnimationDelayCount=0;
+const iRedTalkAnimationDelayCountMax=10;
+
 //added by Mike, 20260727
 var iCoinAnimationCount=-1; //0; //due to immediately +1 in execution;
 const iCoinAnimationCountMax=4; //8
@@ -2502,6 +2518,10 @@ var iImageFrameHeightDefault=32;
 //added by Mike, 20260730
 const iImageFrameWidthBgTile=128;
 const iImageFrameHeightBgTile=128;
+
+//added by Mike, 20261126
+const iImageFrameWidthTalk=160;
+const iImageFrameHeightTalk=160;
 
 //added by Mike, 20231121
 var iMouseInputImageWidth=64;
@@ -3228,7 +3248,6 @@ var bIsHeroFacingUp=true;//false;
 		heroLifeBarStatusImageTile.style.visibility="hidden";
 	}
 
-
 	function setAllActorsToHidden() {
 /*
 		var dustEffectImage = document.getElementById("dustEffectImageId");
@@ -3299,6 +3318,35 @@ var bIsHeroFacingUp=true;//false;
 				snowEffectImage.style.visibility="hidden";
 		}		
 	}
+
+	//added by Mike, 20261126
+	function drawRedTalk() {
+		var redTalkImage = document.getElementById("redTalkImageId"); 
+		
+		redTalkImage.style.visibility="visible";
+		
+		redTalkImage.style.left=(iViewportMaxWidth-iImageFrameWidthTalk-iImageFrameWidthDefault)+"px";
+		redTalkImage.style.top=(iViewportMaxHeight-iImageFrameHeightTalk-iImageFrameHeightDefault)+"px";
+
+		if (iRedTalkAnimationDelayCount==iRedTalkAnimationDelayCountMax) {
+			iRedTalkAnimationCount=(iRedTalkAnimationCount+1)%iRedTalkAnimationCountMax;//5; //last hidden
+
+			iRedTalkAnimationDelayCount=0;
+		}
+		else {
+			iRedTalkAnimationDelayCount++;
+		}
+		
+		//alert(iRedTalkAnimationCount);
+
+		redTalkImage.style.objectPosition = "-" + iImageFrameWidthTalk*iRedTalkAnimationCount + "px -" + iImageFrameHeightTalk*0 + "px";
+	}
+/*
+	//added by Mike, 20261126
+	function updateTalk() {
+		var redTalkImage = document.getElementById("redTalkImageId"); 
+	}
+*/
 
 	//added by Mike, 20251103
 	//reminder: font512x512Rescaled.png; 32x32px; width x height;  
@@ -19757,12 +19805,20 @@ if (fDifferenceInXPos!=0) {
 				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7,"CLICK TO START!");
 */
 
-				////if (!bIsVersusMode) {
+				if (!bIsVersusMode) {
+					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.5,"LET'S PLAY!!");
+					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*3.5,"BEAT MY FIVE BOXERS");
+					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*5.5,"TO WIN THE GAME.");
+					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7.5,"CLICK TO START!");
+				}
+				else {
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.5,"LET'S PLAY!!");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*3.5,"WHOEVER GETS THE MOST");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*5.5,"MONEY WINS THE GAME!");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7.5,"CLICK TO START!");
-				////}
+				}
+				
+				drawRedTalk();
 				
 				//drawString(0,0,"!");
 			
@@ -23294,7 +23350,11 @@ alert("iXPos: "+iXPos);
 		var bossBattleBgImageBeach = document.getElementById("bossBattleBgImageBeachId");
 
 		var heroAttackEffectImage = document.getElementById("heroAttackEffectImageId");	
+
+		//added by Mike, 20261126
+		var redTalkImage = document.getElementById("redTalkImageId"); 
 		
+		redTalkImage.style.visibility="hidden";
 		
 		//edited by Mike, 20261118
 		//myFavicon.style.visibility="hidden";	
@@ -23502,6 +23562,9 @@ alert("iXPos: "+iXPos);
 			//added by Mike, 20261111
 			mainImageTileProjectileVelocityY=mainImageTileProjectileVelocityYDefault;
 			mainImageTileProjectileVelocityX=mainImageTileProjectileVelocityXDefault;
+			
+			//added by Mike, 20261126
+			setAllActorsToHidden();
 		}
 
 		//added by Mike, 20261009
@@ -25313,6 +25376,12 @@ function initTouchInput() {
 					}
 */					
 						bHasViewedMissionIntro=true;
+
+
+						//added by Mike, 20261126
+						var redTalkImage = document.getElementById("redTalkImageId"); 
+						redTalkImage.style.visibility="hidden";
+
 						
 						//added by Mike, 20261115
 						clearString();
@@ -27571,6 +27640,10 @@ opting to put assets folder in "html_application" folder instead
 		<img id="wraithMonsterImageId3" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedThree.png?lastmod=20261109T1536">
 		<img id="wraithMonsterImageId4" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedFour.png?lastmod=20261109T1536">
 		<img id="wraithMonsterImageId5" class="ImageHeroBody" src="assets/images/inputImageLarge2026BoxerRedFive.png?lastmod=20261109T1536">
+
+
+		<img id="redTalkImageId" class="ImageTalk" src="assets/images/redTalk.png?lastmod=20261126T0921">
+
 
 		<img id="runningWraithMonsterImageId0" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
 		<img id="runningWraithMonsterImageId1" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
