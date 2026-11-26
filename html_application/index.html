@@ -11,7 +11,7 @@
 ' @company: USBONG
 ' @author: SYSON, MICHAEL B.
 ' @date created: 20221214
-' @date updated: 20261125; from 20261125
+' @date updated: 20261126; from 20261125
 ' @website: www.usbong.ph
 '
 ' References: GitHub itch.io Game Off 2021, 2022, 2023, 2024, 2025
@@ -3152,6 +3152,7 @@ var bIsHeroFacingUp=true;//false;
 			iChallengerCount++;		
 			
 			//iChallengerCount=CHALLENGER_TYPE_LIZARD_LIZARD_FIVE+1; //debug
+			//iChallengerCount=3;//2;
 			
 			if (iChallengerCount>CHALLENGER_TYPE_LIZARD_LIZARD_FIVE) {
 				bIsMissionDone=true;
@@ -19805,21 +19806,22 @@ if (fDifferenceInXPos!=0) {
 				drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7,"CLICK TO START!");
 */
 
+
 				if (!bIsVersusMode) {
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.5,"LET'S PLAY!!");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*3.5,"BEAT MY FIVE BOXERS");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*5.5,"TO WIN THE GAME.");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7.5,"CLICK TO START!");
+					
+					drawRedTalk();
 				}
 				else {
-					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.5,"LET'S PLAY!!");
+					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.5,"2P MODE!!");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*3.5,"WHOEVER GETS THE MOST");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*5.5,"MONEY WINS THE GAME!");
 					drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7.5,"CLICK TO START!");
 				}
-				
-				drawRedTalk();
-				
+								
 				//drawString(0,0,"!");
 			
 				textStoryDiv.style.left=0+iViewportMaxWidth*0.15;
@@ -20321,9 +20323,9 @@ if (fDifferenceInXPos!=0) {
 
 			//drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*1,iImageFrameHeightDefault*2+(iImageFrameHeightDefault*1.7)*1,"YOU GOT 2P MODE!");
 
-			drawStringComboString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*1,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*0.75,"THE POWERSHIFT GLOVE");
+			drawStringComboString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*0,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*0.75,"THE POWERSHIFT GLOVE");
 
-			drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*1,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*1.75,"PRESS SHIFT + ENTER");
+			drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*0,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*1.75,"PRESS SHIFT + ENTER");
 
 			//drawString(iImageFrameWidthDefault*1+iImageFrameWidthDefault*0,iImageFrameHeightDefault*2.5+(iImageFrameHeightDefault*1.7)*2.75,"THANKS FOR PLAYING!");
 
@@ -20350,6 +20352,8 @@ if (fDifferenceInXPos!=0) {
 			drawCards();
 			
 			setOpponentStatusToHidden();
+			
+			drawRedTalk();
 	  }
       else {
 
