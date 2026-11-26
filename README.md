@@ -51,7 +51,7 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 https://github.com/usbong/game-off-2026/releases/tag/output
 
-#### 6) 20261117-20261125; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
+#### 6) 20261117-20261126; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
 
 20261117: First prototype of the two player versus mode. Unfair damage, wrong movement related to viewport, etc.
 
@@ -72,6 +72,8 @@ https://github.com/usbong/game-off-2026/releases/tag/output
 20261124: Prototype#8. Stage Transitions. PRACTICE Mode before NEXT CHALLENGER. More challenging AI opponent.
 
 20261125: Prototype#9. Start to End. With New Game+ via 2P mode. More background graphics and animations to come. 
+
+20261126: Prototype#10. More animating sprite images. 
 
 ## Related link
 
