@@ -225,6 +225,18 @@
 			z-index: 999999;
 		}		
 
+		.ImageStar {
+			position: absolute;
+
+			clip: rect(0px,160px,32px,0px);
+			visibility: hidden; 
+/*
+			clip: rect(0px,32px,32px,0px);
+			visibility: hidden; 
+*/			
+			z-index: 999999;
+		}	
+
 		.ImageDeathCountTileFrame1 {
 			position: absolute;
 
@@ -2128,6 +2140,13 @@ const iRedTalkAnimationCountMax=2;
 var iRedTalkAnimationDelayCount=0;
 const iRedTalkAnimationDelayCountMax=10;
 
+//added by Mike, 20261127
+var iBoxerPortraitAnimationCount=0;
+const iBoxerPortraitAnimationCountMax=1;//2;
+var iBoxerPortraitAnimationDelayCount=0;
+const iBoxerPortraitAnimationDelayCountMax=18;//10;
+
+
 //added by Mike, 20260727
 var iCoinAnimationCount=-1; //0; //due to immediately +1 in execution;
 const iCoinAnimationCountMax=4; //8
@@ -3319,6 +3338,93 @@ var bIsHeroFacingUp=true;//false;
 				snowEffectImage.style.visibility="hidden";
 		}		
 	}
+
+
+
+	//added by Mike, 20261127
+	function clearStars() {	
+	  const iStarCountMax=5;
+	  for (iStarCount=0; iStarCount<iStarCountMax; iStarCount++) {
+	    var starImage = document.getElementById("starImageId"+iStarCount);
+		starImage.style.visibility="hidden";
+	  }
+	}
+	
+	//added by Mike, 20261127	
+	function drawStar(iInputPosX, iInputPosY, iStarCount, iNumStars) {
+		var starImage = document.getElementById("starImageId"+iStarCount);
+		
+		////alert(iStarCount);
+		////alert(iNumStars);
+
+		////alert(iStarCount);
+		////alert(iImageFrameHeightDefault*(iNumStars-1));
+		
+		starImage.style.visibility="visible";
+/*		
+		boxerPortraitImage.style.left=(iViewportMaxWidth-iImageFrameWidthTalk-iImageFrameWidthDefault)+"px";
+		boxerPortraitImage.style.top=(iViewportMaxHeight-iImageFrameHeightTalk-iImageFrameHeightDefault)+"px";
+*/
+		starImage.style.left=(iInputPosX)+"px";
+		starImage.style.top=(iInputPosY)+"px";
+/*
+		if (iBoxerPortraitAnimationDelayCount==iBoxerPortraitAnimationDelayCountMax) {
+			iBoxerPortraitAnimationCount=(iBoxerPortraitAnimationCount+1)%iBoxerPortraitAnimationCountMax;
+
+			iBoxerPortraitAnimationDelayCount=0;
+		}
+		else {
+			iBoxerPortraitAnimationDelayCount++;
+		}
+
+		////alert(iBoxerPortraitAnimationDelayCount);
+		////alert(iBoxerPortraitAnimationCount);
+
+		boxerPortraitImage.style.objectPosition = "-" + iImageFrameWidthTalk*iBoxerPortraitAnimationCount + "px -" + iImageFrameHeightTalk*0 + "px";
+*/		
+
+		//alert(iImageFrameHeightDefault*iNumStars)
+
+		starImage.style.objectPosition = "-" + 0 + "px -" + iImageFrameHeightDefault*(iNumStars-1) + "px";
+	}
+
+
+
+//added by Mike, 20261127
+	function clearBoxerPortrait() {
+		var boxerPortraitImage = document.getElementById("boxerPortraitImageId"); 
+		boxerPortraitImage.style.visibility="hidden";
+	}
+	
+	//added by Mike, 20261126
+	function drawBoxerPortrait(iInputChallengerCount) {
+		var boxerPortraitImage = document.getElementById("boxerPortraitImageId"); 
+		
+		boxerPortraitImage.style.visibility="visible";
+/*		
+		boxerPortraitImage.style.left=(iViewportMaxWidth-iImageFrameWidthTalk-iImageFrameWidthDefault)+"px";
+		boxerPortraitImage.style.top=(iViewportMaxHeight-iImageFrameHeightTalk-iImageFrameHeightDefault)+"px";
+*/
+		boxerPortraitImage.style.left=(iViewportMaxWidth-iImageFrameWidthTalk-iImageFrameWidthDefault)+"px";
+		boxerPortraitImage.style.top=(iViewportMaxHeight-iImageFrameHeightTalk-iImageFrameHeightDefault*2)+"px";
+
+		if (iBoxerPortraitAnimationDelayCount==iBoxerPortraitAnimationDelayCountMax) {
+			iBoxerPortraitAnimationCount=(iBoxerPortraitAnimationCount+1)%iBoxerPortraitAnimationCountMax;
+
+			iBoxerPortraitAnimationDelayCount=0;
+		}
+		else {
+			iBoxerPortraitAnimationDelayCount++;
+		}
+
+		////alert(iBoxerPortraitAnimationDelayCount);
+		////alert(iBoxerPortraitAnimationCount);
+
+		boxerPortraitImage.style.objectPosition = "-" + iImageFrameWidthTalk*iBoxerPortraitAnimationCount + "px -" + iImageFrameHeightTalk*(iInputChallengerCount-1) + "px";
+	}
+	
+	
+
 
 	//added by Mike, 20261126
 	function drawRedTalk() {
@@ -4883,6 +4989,8 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 			iCurrHeroLife=0;
 			fCurrHeroLifeToBeDeducted=0;
 			//iCurrHeroManaToBeDeductedAnimation=0;
+			
+			iCurrHeroCoinCount=0; //added by Mike, 20261127
 
 			//edited by Mike, 20261112
 			//fCurrHeroLifeToBeDeductedAnimationMain=iCurrHeroLifeMax;
@@ -6673,12 +6781,17 @@ alert((iHeroLifeBarWidth*iLifeBarWidthTotalPoints)-((iCurrHeroLife/iCurrHeroLife
 		heroLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.014)+"px"; 
 		heroLifeBarStatusImageTile.style.top=(0+iViewportMaxHeight*0.02)+"px";
 
+		//edited by Mike, 20261127
+/*
 		opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.95)+"px"; 
-		//opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.25)+"px"; 
-		//opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth/2)+"px"; 
 		opponentLifeBarStatusImageTile.style.top=(0+iViewportMaxHeight*0.02)+"px";
 
 		opponentLifeBarStatusImageTile.style.objectPosition = "-" + iImageFrameWidthDefault + "px -" + 0 + "px";
+*/
+		opponentLifeBarStatusImageTile.style.left=(0+iViewportMaxWidth*0.95)+"px"; 
+		opponentLifeBarStatusImageTile.style.top=(0+iViewportMaxHeight*0.02)+"px";
+
+		opponentLifeBarStatusImageTile.style.objectPosition = "-" + (iImageFrameWidthDefault+iImageFrameWidthDefault*iChallengerCount) + "px -" + 0 + "px";
 
 
 				
@@ -19711,7 +19824,6 @@ if (fDifferenceInXPos!=0) {
 			bIsNextChallenger=true; //debug
 			iChallengerCount=1;
 */
-
 			switch (iCurrMissionIntroPage) {
 				case 0:
 					//edited by Mike, 20261111
@@ -20147,36 +20259,77 @@ if (fDifferenceInXPos!=0) {
 			drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*2+iImageFrameHeightDefault*1.25*3,"SPEED:    "+(sSpeedText));
 */
 
+
+			var iCurrStarCount=0;
+			const iDefaultStarCount=3;
+
 			sDefenseText="NORMAL";
 			sStaminaText="NORMAL";
 			sSpeedText="NORMAL";
+			sName="";
+
+			iDefenseStarCount=3;
+			iStaminaStarCount=3;
+			iSpeedStarCount=3;
 
 			if (iChallengerCount==CHALLENGER_TYPE_LION_WOLF_ONE) { //challenger#1
 				sDefenseText="GREAT";
 				//sStaminaText="GREAT";
 				sSpeedText="GREAT";
+				
+				iDefenseStarCount=4;
+				iStaminaStarCount=3;
+				iSpeedStarCount=4;
+				
+				sName="MIKE";
 			}
 			else if (iChallengerCount==CHALLENGER_TYPE_LIZARD_WOLF_TWO) { //challenger#2
 				//sDefenseText="GREAT";
 				sStaminaText="GREAT";
 				sSpeedText="GREAT";
+
+				iDefenseStarCount=3;
+				iStaminaStarCount=4;
+				iSpeedStarCount=4;
+
+				sName="KAGE";
 			}
 			else if (iChallengerCount==CHALLENGER_TYPE_LION_LION_THREE) { //challenger#3
 				sDefenseText="SUPERIOR";
 				//sStaminaText="GREAT";
 				//sSpeedText="GREAT";
+
+				iDefenseStarCount=5;
+				iStaminaStarCount=3;
+				iSpeedStarCount=3;
+
+				sName="LEO";
 			}
 			else if (iChallengerCount==CHALLENGER_TYPE_WOLF_WOLF_FOUR) { //challenger#4
 				//sDefenseText="SUPERIOR";
 				//sStaminaText="GREAT";
 				sSpeedText="SUPERIOR";
+
+				iDefenseStarCount=3;
+				iStaminaStarCount=3;
+				iSpeedStarCount=5;
+
+				sName="OKAMI";
 			}
 			else if (iChallengerCount==CHALLENGER_TYPE_LIZARD_LIZARD_FIVE) { //challenger#5
 				//sDefenseText="SUPERIOR";
 				sStaminaText="SUPERIOR";
 				//sSpeedText="SUPERIOR";
+
+				iDefenseStarCount=3;
+				iStaminaStarCount=5;
+				iSpeedStarCount=3;
+
+				sName="LEE";
 			}
 
+
+/*
 			drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*2+iImageFrameHeightDefault*1.25,"DEFENSE: "+(sDefenseText));
 
 			drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*2+iImageFrameHeightDefault*1.25*2,"STAMINA: "+(sStaminaText));
@@ -20185,6 +20338,52 @@ if (fDifferenceInXPos!=0) {
 
 			//clearString();
 			//drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*2,"NEXT CHALLENGER");
+*/
+
+			drawString((iViewportMaxWidth-(iImageFrameWidthTalk)),iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25,sName);
+
+			drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*2,"ATTACK:  ");
+
+			//drawString(iImageFrameWidthDefault*1*8+iImageFrameWidthDefault*0.35,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*2,""+(sDefenseText));
+/*			
+			iDefenseStarCount=4;
+			iStaminaStarCount=3;
+			iSpeedStarCount=4;
+*/
+			clearStars();
+
+			drawStar(iImageFrameWidthDefault*1*8+iImageFrameWidthDefault*0.35,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*2,iCurrStarCount,iDefaultStarCount);
+			iCurrStarCount++;
+			//drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*3,"DEFENSE: "+(sDefenseText));
+
+			drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*3,"DEFENSE: ");
+
+			drawStar(iImageFrameWidthDefault*1*8+iImageFrameWidthDefault*0.35,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*3,iCurrStarCount,iDefenseStarCount);
+			iCurrStarCount++;
+
+			//drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*4,"STAMINA: "+(sStaminaText));
+			
+			drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*4,"STAMINA: ");
+
+			drawStar(iImageFrameWidthDefault*1*8+iImageFrameWidthDefault*0.35,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*4,iCurrStarCount,iStaminaStarCount);
+			iCurrStarCount++;			
+			//drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*5,"SPEED:    "+(sSpeedText));
+
+			drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*5,"SPEED:    ");
+
+			drawStar(iImageFrameWidthDefault*1*8+iImageFrameWidthDefault*0.35,iImageFrameHeightDefault*1.75+iImageFrameHeightDefault*1.25*5,iCurrStarCount,iSpeedStarCount);
+			iCurrStarCount++;
+
+			//clearString();
+			//drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*2,"NEXT CHALLENGER");
+
+			//added by Mike, 20261127
+			clearBoxerPortrait();
+			drawBoxerPortrait(iChallengerCount);
+
+
+
+
 
 
 /*			//removed by Mike, 20261124
@@ -20762,7 +20961,7 @@ if (fDifferenceInXPos!=0) {
 				//added by Mike, 20260802
 				var myCanvasTint = document.getElementById("myCanvasTintId");
 
-				if (!hasInitMapLocation) {				
+				if (!hasInitMapLocation) {
 				
 					//alert("DITO!!");
 					
@@ -20770,6 +20969,10 @@ if (fDifferenceInXPos!=0) {
 					if (bIsVersusMode) {
 						mainImageTileHeroBody.style.visibility="visible";
 					}
+					
+					//added by Mike, 20261127
+					clearStars();
+					clearBoxerPortrait();
 										
 					//added by Mike, 20261120
 					iInputDelayAtStageTransitionCount=0;
@@ -21319,6 +21522,11 @@ if (fDifferenceInXPos!=0) {
 
 					//drawString(iImageFrameWidthDefault*1,iImageFrameHeightDefault*7,"the quick brown fox");
 */
+
+					//added by Mike, 20261127
+					//var opponentLifeBarStatusImageTile = document.getElementById("opponentLifeBarStatusImageTileId");
+
+					opponentLifeBarStatusImageTile.style.objectPosition = "-" + (iImageFrameWidthDefault+iImageFrameWidthDefault*iChallengerCount) + "px -" + 0 + "px";
 
 					hasInitMapLocation=true;					
 				}
@@ -23371,7 +23579,6 @@ alert("iXPos: "+iXPos);
 		textNewGameDiv.style.visibility="hidden";		
 		textContinueGameDiv.style.visibility="hidden";
 		explosionEffectImage.style.visibility="hidden";		
-				
 		
 		if (!bIsContinue) {		
 			//NEW GAME
@@ -23503,7 +23710,8 @@ alert("iXPos: "+iXPos);
 			iCurrHeroWallBounceCount=0;
 */			
 			//added by Mike, 20260727
-			iCurrHeroCoinCount=0;
+			
+			//iCurrHeroCoinCount=0; //removed by Mike, 20261127
 			iCurrOpponentCoinCount=0; //added by Mike, 20261114
 			
 			//added by Mike, 20260801
@@ -27647,6 +27855,14 @@ opting to put assets folder in "html_application" folder instead
 
 
 		<img id="redTalkImageId" class="ImageTalk" src="assets/images/redTalk.png?lastmod=20261126T0921">
+
+		<img id="boxerPortraitImageId" class="ImageTalk" src="assets/images/boxerPortrait.png?lastmod=20261127T0902">
+
+		<img id="starImageId0" class="ImageStar" src="assets/images/stars.png?lastmod=20261127T1149">
+		<img id="starImageId1" class="ImageStar" src="assets/images/stars.png?lastmod=20261127T1149">
+		<img id="starImageId2" class="ImageStar" src="assets/images/stars.png?lastmod=20261127T1149">
+		<img id="starImageId3" class="ImageStar" src="assets/images/stars.png?lastmod=20261127T1149">
+		<img id="starImageId4" class="ImageStar" src="assets/images/stars.png?lastmod=20261127T1149">
 
 
 		<img id="runningWraithMonsterImageId0" class="ImageHeroFrame1" src="assets/images/inputImageLarge2025RunningWraith.png?lastmod=20251123T0946">
