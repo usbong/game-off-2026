@@ -51,7 +51,7 @@ This is the GitHub repository of our entry for Game Off 2026 with the theme SHIF
 
 https://github.com/usbong/game-off-2026/releases/tag/output
 
-#### 6) 20261117-20261126; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
+#### 6) 20261117-20261127; https://masarapmabuhay.itch.io/game-off-2026-prototypem1-1
 
 20261117: First prototype of the two player versus mode. Unfair damage, wrong movement related to viewport, etc.
 
@@ -74,6 +74,8 @@ https://github.com/usbong/game-off-2026/releases/tag/output
 20261125: Prototype#9. Start to End. With New Game+ via 2P mode. More background graphics and animations to come. 
 
 20261126: Prototype#10. More animating sprite images. 
+
+20261127: Prototype#11. More graphics with fewer and simpler words. Known issue: Animation seems to skip frames when browser has too many tabs. 1P could get locked, unable to punch until he gets punched. 2P could accept NUMPAD ENTER, reducing stamina, but won't punch, while at the same time walking, instead of stopping from walking and punching as with the case of 1P.
 
 ## Related link
 
